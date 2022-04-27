@@ -1,0 +1,22 @@
+<form [formGroup]="readmeForm" (ngSubmit)="updateReadme()">
+  <fieldset>
+    <div class="form-field">
+      <label>Readme:</label>
+      <textarea name="readme" formControlName="readme"></textarea>
+    </div>
+    <span class="error" *ngIf="(readme.touched || readme.dirty) && readme.invalid">
+      {{ readme.hasError('maxlength') ? "Name must have at most 32 characters" : "" }}
+    </span>
+    <br />
+  </fieldset>
+  <div class="form-buttons">
+    <button [disabled]="readmeForm.invalid && readmeForm.touched" class="button button-primary" type="submit">
+      Update Readme
+    </button>
+  </div>
+</form>
+
+
+<p class="error">
+  {{ errorCode == 409 ? "You already have a share with that name" : "" }}
+</p>

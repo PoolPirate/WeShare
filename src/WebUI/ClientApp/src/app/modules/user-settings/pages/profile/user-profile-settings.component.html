@@ -1,0 +1,31 @@
+<legend>Public Profile</legend>
+<mat-form-field appearance="fill">
+  <mat-label>Nickname</mat-label>
+  <input matInput [formControl]="nickname"
+         placeholder="mySupercoolNickname" autocomplete="off">
+  <button *ngIf="nickname.value" matSuffix mat-icon-button (click)="nickname.reset()" class="borderless">
+    <mat-icon>close</mat-icon>
+  </button>
+  <mat-error *ngIf="nickname.invalid">
+    {{ nickname.hasError('minlength') ? "Name must have at least 3 characters" : "" }}
+    {{ nickname.hasError('maxlength') ? "Name must have at most 20 characters" : "" }}
+  </mat-error>
+</mat-form-field>
+<br />
+
+<mat-slide-toggle [formControl]="likesPublished">
+  Likes Published
+</mat-slide-toggle>
+
+<br /><br />
+
+<div class="form-buttons">
+  <button [disabled]="isInvalid()" class="button button-primary" (click)="updateProfile()">
+    Update Public Profile
+  </button>
+</div>
+
+<p>
+  {{ errorCode == 200 ? "Saved!" : "" }}
+</p>
+

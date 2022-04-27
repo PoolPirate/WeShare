@@ -1,0 +1,18 @@
+<span role="button" [matMenuTriggerFor]="profileMenu" class="d-flex">
+  {{ displayName }}
+  <mat-icon>more_vert</mat-icon>
+</span>
+<mat-menu #profileMenu>
+  <a mat-menu-item [routerLink]="['profile', username, 'overview']">
+    <span>Profile</span>
+  </a>
+  <a mat-menu-item [routerLink]="['profile', username, 'shares']">
+    <span>Shares</span>
+  </a>
+  <a mat-menu-item [routerLink]="['user', 'settings']">
+    <span>Settings</span>
+  </a>
+  <a mat-menu-item [routerLink]="['logout']">
+    <span>Logout</span>
+  </a>
+</mat-menu>

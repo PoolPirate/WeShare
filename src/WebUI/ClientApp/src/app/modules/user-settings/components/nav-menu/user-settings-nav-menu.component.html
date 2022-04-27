@@ -1,0 +1,14 @@
+<nav mat-tab-nav-bar class="border mb-3">
+  <a mat-tab-link [routerLink]="['./profile']"
+     (click)="activeLink = 'profile'"
+     [active]="activeLink == 'profile'">
+    Profile
+  </a>
+  <a mat-tab-link [routerLink]="['./personal']"
+     (click)="activeLink = 'personal'"
+     [active]="activeLink == 'personal'"
+     class="push-right">
+    Personal Data
+  </a>
+</nav>
+

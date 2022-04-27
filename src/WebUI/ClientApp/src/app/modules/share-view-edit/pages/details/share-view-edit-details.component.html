@@ -1,0 +1,33 @@
+<form [formGroup]="detailsForm" (ngSubmit)="updateDetails()">
+  <fieldset>
+    <div class="form-field">
+      <label>Name:</label>
+      <input name="name" formControlName="name"
+             type="text" autocomplete="off">
+    </div>
+    <span class="error" *ngIf="(name.touched || name.dirty) && name.invalid">
+      {{ name.hasError('required') ? "Name is required" : "" }}
+      {{ name.hasError('minlength') ? "Name must have at least 3 characters" : "" }}
+      {{ name.hasError('maxlength') ? "Name must have at most 32 characters" : "" }}
+    </span>
+    <br />
+    <div class="form-field">
+      <label>Description:</label>
+      <input name="description" formControlName="description"
+             type="text" autocomplete="off">
+    </div>
+    <span class="error" *ngIf="(description.touched || description.dirty) && description.invalid">
+      {{ description.hasError('maxlength') ? "Description must have at most 256 characters" : "" }}
+    </span>
+    <br />
+  </fieldset>
+  <div class="form-buttons">
+    <button [disabled]="detailsForm.invalid && detailsForm.touched" class="button button-primary" type="submit">
+      Update Details
+    </button>
+  </div>
+</form>
+
+<p class="error">
+  {{ errorCode == 409 ? "You already have a share with that name" : "" }}
+</p>

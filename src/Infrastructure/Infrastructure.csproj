@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace>WeShare.Infrastructure</RootNamespace>
+        <AssemblyName>WeShare.Infrastructure</AssemblyName>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <NoWarn>1701;1702;8618;0649</NoWarn>
+      <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <NoWarn>1701;1702;8618;0649</NoWarn>
+      <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Hangfire.PostgreSql" Version="1.9.7" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.4" />
+        <PackageReference Include="Hangfire.AspNetCore" Version="1.7.28" />
+        <PackageReference Include="Hangfire.Core" Version="1.7.28" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.4" />
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+		<PackageReference Include="SendGrid" Version="9.27.0" />
+		<PackageReference Include="SendGrid.Extensions.DependencyInjection" Version="1.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Application\Application.csproj" />
+    </ItemGroup>
+
+</Project>

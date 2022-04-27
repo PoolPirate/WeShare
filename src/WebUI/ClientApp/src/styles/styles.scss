@@ -1,0 +1,41 @@
+@use '@angular/material' as mat;
+@use '../app/modules/shared/components/like-button/like-button.component.scss' as like-button;
+@use '../app/modules/share-view/pages/overview/share-view-overview.component.scss' as overview;
+
+$primary: mat.define-palette(mat.$indigo-palette, 500);
+$accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$warn: mat.define-palette(mat.$red-palette);
+
+$my-theme: mat.define-light-theme((
+ color: (
+   primary: $primary,
+   accent: $accent,
+   warn: $warn,
+ )
+));
+
+@include mat.all-component-themes($my-theme);
+@include like-button.color($my-theme);
+@include overview.color($my-theme);
+
+a {
+  color: #0366d6;
+}
+
+code {
+  color: #e01a76;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

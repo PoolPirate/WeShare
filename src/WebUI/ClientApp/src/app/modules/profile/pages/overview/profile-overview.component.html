@@ -1,0 +1,16 @@
+<h1>{{ userSnippet.nickname }}</h1>
+<p>@{{ userSnippet.username }}</p>
+
+<div>
+  <h3>Popular shares</h3>
+  <ul *ngIf="popularShareSnippets && popularShareSnippets.length != 0">
+    <li *ngFor="let share of popularShareSnippets">
+      <shared-share-snippet [shareSnippet]="share"></shared-share-snippet>
+
+    </li>
+  </ul>
+
+  <p *ngIf="popularShareSnippets && popularShareSnippets.length == 0">
+    Nothing here...
+  </p>
+</div>

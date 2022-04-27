@@ -1,0 +1,24 @@
+<form [formGroup]="resetForm" (ngSubmit)="reset()">
+  <fieldset>
+    <legend>Request a password reset</legend>
+    <div class="form-field">
+      <label>Email Address:</label>
+      <input name="email" formControlName="email" type="email" />
+    </div>
+    <span class="error" *ngIf="(email.touched || email.dirty) && email.invalid">
+      {{ email.hasError('required') ? "Email is required" : "" }}
+      {{ email.hasError('email') ? "Must be a valid email address" : "" }}
+      {{ email.hasError('maxlength') ? "Email must have at most 128 characters" : "" }}
+    </span>
+    <br />
+  </fieldset>
+  <div class="form-buttons">
+    <button [disabled]="resetForm.invalid && resetForm.touched" class="button button-primary" type="submit">
+      Register
+    </button>
+  </div>
+</form>
+
+<p *ngIf="errorCode == 200">
+  Please check your inbox
+</p>

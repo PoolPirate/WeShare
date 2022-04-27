@@ -1,0 +1,13 @@
+<nav mat-tab-nav-bar class="border mb-3">
+  <a mat-tab-link [routerLink]="['./details']"
+     (click)="activeLink = 'details'"
+     [active]="activeLink == 'details'">
+    Details
+  </a>
+  <a mat-tab-link [routerLink]="['./readme']"
+     (click)="activeLink = 'readme'"
+     [active]="activeLink == 'readme'">
+    Readme
+  </a>
+</nav>
+

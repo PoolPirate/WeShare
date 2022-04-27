@@ -1,0 +1,28 @@
+<form [formGroup]="usernameForm" (ngSubmit)="updateUsername()">
+  <fieldset>
+    <legend>Personal Data</legend>
+    <div class="form-field">
+      <label>Username:</label>
+      <input name="username" formControlName="username" autocomplete="off">
+    </div>
+    <span class="error" *ngIf="(username.touched || username.dirty) && username.invalid">
+      {{ username.hasError('required') ? "Name is required" : "" }}
+      {{ username.hasError('minlength') ? "Name must have at least 3 characters" : "" }}
+      {{ username.hasError('maxlength') ? "Name must have at most 20 characters" : "" }}
+    </span>
+    <br />
+  </fieldset>
+  <div class="form-buttons">
+    <button [disabled]="usernameForm.invalid && usernameForm.touched" class="button button-primary" type="submit">
+      Update Personal Data
+    </button>
+  </div>
+</form>
+
+<p class="error" *ngIf="errorCode != 0">
+  {{ errorCode == 409 ? "Username already taken" : "" }}
+</p>
+<p>
+  {{ errorCode == 200 ? "Saved!" : "" }}
+</p>
+

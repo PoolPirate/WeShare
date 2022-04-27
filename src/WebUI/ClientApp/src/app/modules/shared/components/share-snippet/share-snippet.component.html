@@ -1,0 +1,14 @@
+<div class="container rounded border bg-dark text-white p-3">
+  <h3>
+    <a [routerLink]="['/profile', shareSnippet.ownerUsername]">
+      @{{ shareSnippet.ownerUsername }}
+    </a>
+    /
+    <a [routerLink]="['/share/view', shareSnippet.id]">
+      {{ shareSnippet.name }}
+    </a>
+  </h3>
+
+
+  <p>{{ shareSnippet.description }}</p>
+</div>

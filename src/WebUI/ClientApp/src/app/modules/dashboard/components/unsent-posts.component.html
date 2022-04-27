@@ -1,0 +1,16 @@
+<mat-card>
+  <mat-card-title>Missed Posts</mat-card-title>
+
+  <div *ngFor="let compound of subscriptionPostMap">
+    <mat-card>
+      <div *ngFor="let unsentPost of compound.unsentPosts; let isFirstPost = first">
+        <mat-card>
+          <div>
+            <p>{{ unsentPost.id }}</p>
+            <button *ngIf="isFirstPost">Clear</button>
+          </div>
+        </mat-card>
+      </div>
+    </mat-card>
+  </div>
+</mat-card>

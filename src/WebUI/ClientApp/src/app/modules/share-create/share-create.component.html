@@ -1,0 +1,6 @@
+<body>
+  <div class="container">
+    <basic-share-create *ngIf="step==0" (onSubmit)="submitBasic($event)"></basic-share-create>
+    <readme-share-create *ngIf="step==1"(onSubmit)="submitReadme($event)"></readme-share-create>
+  </div>
+</body>

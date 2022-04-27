@@ -1,0 +1,17 @@
+<div>
+  <h3>Shares</h3>
+  <ul *ngIf="shareSnippets && shareSnippets.length != 0">
+    <li *ngFor="let share of shareSnippets">
+      <shared-share-snippet [shareSnippet]="share"></shared-share-snippet>
+    </li>
+  </ul>
+
+  <p *ngIf="shareSnippets && shareSnippets.length == 0">
+    Nothing here...
+  </p>
+</div>
+
+<div *ngIf="isOwnProfile">
+  <button [routerLink]="'/share/create'">Create New</button>
+</div>
+

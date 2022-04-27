@@ -1,0 +1,13 @@
+<div *ngIf="posts.length != 0">
+  <h3>Posts</h3>
+  <ul>
+    <li *ngFor="let post of posts">
+      <p>{{ post.id }}</p>
+    </li>
+  </ul>
+</div>
+
+<p *ngIf="posts.length == 0">
+  Nothing posted yet...
+</p>
+

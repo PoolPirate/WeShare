@@ -1,0 +1,48 @@
+<form [formGroup]="registerForm" (ngSubmit)="register()">
+  <fieldset>
+    <legend>Register</legend>
+    <div class="form-field">
+      <label>Username:</label>
+      <input name="username" formControlName="username">
+    </div>
+    <span class="error" *ngIf="(username.touched || username.dirty) && username.invalid">
+      {{ username.hasError('required') ? "Name is required" : "" }}
+      {{ username.hasError('minlength') ? "Name must have at least 3 characters" : "" }}
+      {{ username.hasError('maxlength') ? "Name must have at most 20 characters" : "" }}
+    </span>
+    <br />
+    <div class="form-field">
+      <label>Email Address:</label>
+      <input name="email" formControlName="email" type="email" />
+    </div>
+    <span class="error" *ngIf="(email.touched || email.dirty) && email.invalid">
+      {{ email.hasError('required') ? "Email is required" : "" }}
+      {{ email.hasError('email') ? "Must be a valid email address" : "" }}
+      {{ email.hasError('maxlength') ? "Email must have at most 128 characters" : "" }}
+    </span>
+    <br />
+    <div class="form-field">
+      <label>Password:</label>
+      <input name="password" formControlName="password"
+             type="password">
+    </div>
+    <span class="error" *ngIf="(password.touched || password.dirty) && password.invalid">
+      {{ password.hasError('required') ? "Password is required" : "" }}
+      {{ password.hasError('minlength') ? "Password must have at least 8 characters" : "" }}
+      {{ password.hasError('maxlength') ? "Password must have at most 64 characters" : "" }}
+    </span>
+    <br />
+  </fieldset>
+  <div class="form-buttons">
+    <button [disabled]="registerForm.invalid && registerForm.touched" class="button button-primary" type="submit">
+      Register
+    </button>
+  </div>
+</form>
+
+<p class="error" *ngIf="errorCode != 0">
+  {{ errorCode == 400 ? "Weak password" : "" }}
+  {{ errorCode == 409 ? "Username or Email already taken" : "" }}
+</p>
+
+<p>Already have an account? <a [routerLink]="['/login']">Login!</a></p>

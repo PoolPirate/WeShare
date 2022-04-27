@@ -1,0 +1,20 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($theme) {
+  // Get the color config from the theme.
+  $color-config: mat.get-color-config($theme);
+
+  // Get the primary color palette from the color-config.
+  $primary-palette: map.get($color-config, 'primary');
+
+  .liketext {
+    // Read the 400 hue from the primary color palette.
+    color: mat.get-color-from-palette($primary-palette, 400);
+  }
+
+  .likebg {
+    // Read the 100 hue from the primary color palette.
+    background-color: mat.get-color-from-palette($primary-palette, 100);
+  }
+}

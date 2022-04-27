@@ -1,0 +1,20 @@
+<form [formGroup]="readmeForm" (ngSubmit)="submit()">
+  <fieldset>
+    <legend>Create Share</legend>
+
+    <div class="form-field">
+      <label>Readme:</label>
+      <input name="shareReadme" formControlName="shareReadme" />
+    </div>
+    <span class="error" *ngIf="(shareReadme.touched || shareReadme.dirty) && shareReadme.invalid">
+      {{ shareReadme.hasError('maxlength') ? "Readme must have at most 4096 characters" : "" }}
+    </span>
+    <br />
+  </fieldset>
+  <div class="form-buttons">
+    <button [disabled]="readmeForm.invalid" class="button button-primary" type="submit">
+      Next >>>
+    </button>
+  </div>
+
+</form>

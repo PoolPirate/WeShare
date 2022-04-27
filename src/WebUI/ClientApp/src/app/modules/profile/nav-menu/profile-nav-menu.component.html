@@ -1,0 +1,19 @@
+<nav mat-tab-nav-bar class="border mb-3">
+  <a mat-tab-link [routerLink]="['./overview']"
+     (click)="activeLink = 'overview'"
+     [active]="activeLink == 'overview'">
+    Overview
+  </a>
+  <a mat-tab-link [routerLink]="['./shares']"
+     (click)="activeLink = 'shares'"
+     [active]="activeLink == 'shares'">
+    Shares
+  </a>
+  <a *ngIf="showLikesTab"
+     mat-tab-link [routerLink]="['./likes']"
+     (click)="activeLink = 'likes'"
+     [active]="activeLink == 'likes'">
+    Likes
+  </a>
+</nav>
+

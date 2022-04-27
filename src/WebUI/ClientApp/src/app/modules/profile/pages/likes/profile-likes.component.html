@@ -1,0 +1,12 @@
+<div>
+  <h3>Liked Shares</h3>
+  <ul *ngIf="likedShareSnippets && likedShareSnippets.length != 0">
+    <li *ngFor="let share of likedShareSnippets">
+      <shared-share-snippet [shareSnippet]="share"></shared-share-snippet>
+    </li>
+  </ul>
+
+  <p *ngIf="likedShareSnippets && likedShareSnippets.length == 0">
+    Nothing here...
+  </p>
+</div>
