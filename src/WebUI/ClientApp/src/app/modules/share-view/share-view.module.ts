@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ShareViewComponent } from './share-view.component';
-import { ShareViewNavMenuComponent } from './nav-menu/share-view-nav-menu.component';
+import { ShareViewNavMenuComponent } from './components/nav-menu/share-view-nav-menu.component';
 import { ShareViewOverviewComponent } from './pages/overview/share-view-overview.component';
 import { ShareViewPostsComponent } from './pages/posts/share-view-posts.component';
 import { MaterialModule } from '../material/material.module';
@@ -12,6 +12,7 @@ import { ViewSharePostsResolver } from './resolvers/share-view-posts.resolver';
 import { ViewShareSecretsResolver } from './resolvers/share-view-secrets.resolver';
 import { ShareViewSettingsComponent } from '../share-view-settings/share-view-settings.component';
 import { ShareViewEditComponent } from '../share-view-edit/share-view-edit.component';
+import { ShareViewSubscribeButtonComponent } from './components/subscribe-button/share-view-subscribe-button.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'overview' },
@@ -36,7 +37,8 @@ const routes: Routes = [
     ShareViewComponent,
     ShareViewNavMenuComponent,
     ShareViewOverviewComponent,
-    ShareViewPostsComponent
+    ShareViewPostsComponent,
+    ShareViewSubscribeButtonComponent,
   ],
   imports: [
     MaterialModule,

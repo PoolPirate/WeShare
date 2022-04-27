@@ -11,6 +11,7 @@
 
 
   <div class="likebg">
+    <share-view-subscribe-button (onStatusUpdate)="subscribeStatusUpdate($event)" [subscribed]="shareUserData != null && shareUserData.subscribed"></share-view-subscribe-button>
     <shared-like-button class="likebutton" (onLike)="like($event)" [liked]="shareUserData != null && shareUserData.liked"></shared-like-button>
   </div>
   <!--

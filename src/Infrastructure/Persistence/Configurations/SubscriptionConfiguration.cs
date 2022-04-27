@@ -9,6 +9,7 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
     {
         builder.Property(x => x.Id)
         .ValueGeneratedOnAdd()
+        .HasValueGenerator<StronglyTypedIdValueGenerator<SubscriptionId>>()
         .UseIdentityAlwaysColumn();
         builder.HasKey(x => x.Id);
 

@@ -47,7 +47,11 @@ public class GetShareUserData
                 .Where(x => x.ShareId == request.ShareId && x.OwnerId == request.UserId)
                 .AnyAsync(cancellationToken);
 
-            var shareUserData = new ShareUserDataDto(liked);
+            bool subscribed = await DbContext.Subscriptions
+                .Where(x => x.ShareId == request.ShareId && x.UserId == request.UserId)
+                .AnyAsync(cancellationToken);
+
+            var shareUserData = new ShareUserDataDto(liked, subscribed);
 
             if (liked)
             {

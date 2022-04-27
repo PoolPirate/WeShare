@@ -9,6 +9,7 @@ public class CallbackConfiguration : IEntityTypeConfiguration<Callback>
     {
         builder.Property(x => x.Id)
         .ValueGeneratedOnAdd()
+        .HasValueGenerator<StronglyTypedIdValueGenerator<CallbackId>>()
         .UseIdentityAlwaysColumn();
         builder.HasKey(x => x.Id);
 

@@ -9,6 +9,7 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
     {
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd()
+            .HasValueGenerator<StronglyTypedIdValueGenerator<PostId>>()
             .UseIdentityAlwaysColumn();
         builder.HasKey(x => x.Id);
 

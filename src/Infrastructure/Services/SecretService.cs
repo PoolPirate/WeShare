@@ -26,10 +26,10 @@ public class SecretService : Singleton, ISecretService
         => BCrypt.Net.BCrypt.EnhancedVerify(input.Value, passwordHash);
 
     public CallbackSecret GenerateCallbackSecret()
-        => CallbackSecret.From(GenerateRandomString(SecurityOptions.CallbackSecretLength));
+        => CallbackSecret.From(GenerateRandomString(DomainConstraints.CallbackSecretLength));
 
     public ShareSecret GenerateShareSecret()
-        => ShareSecret.From(GenerateRandomString(SecurityOptions.ShareSecretLength));
+        => ShareSecret.From(GenerateRandomString(DomainConstraints.ShareSecretLength));
 
     private string GenerateRandomString(int length)
     {

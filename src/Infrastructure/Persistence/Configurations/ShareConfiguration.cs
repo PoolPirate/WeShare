@@ -10,6 +10,7 @@ public class ShareConfiguration : IEntityTypeConfiguration<Share>
     {
         builder.Property(x => x.Id)
         .ValueGeneratedOnAdd()
+        .HasValueGenerator<StronglyTypedIdValueGenerator<ShareId>>()
         .UseIdentityAlwaysColumn();
         builder.HasKey(x => x.Id);
 

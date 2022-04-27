@@ -24,6 +24,12 @@ export class ShareViewOverviewComponent {
     this.shareUserData = shareService.shareUserData;
   }
 
+  subscribeStatusUpdate(subscribed: boolean) {
+    if (this.authService.isLoggedOut()) {
+      this.router.navigateByUrl("/login");
+    }
+  }
+
   like(liked: boolean) {
     if (this.authService.isLoggedOut()) {
       this.router.navigateByUrl("/login");

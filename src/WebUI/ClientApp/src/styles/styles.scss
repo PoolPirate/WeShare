@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
 @use '../app/modules/shared/components/like-button/like-button.component.scss' as like-button;
+@use '../app/modules/share-view/components/subscribe-button/share-view-subscribe-button.component.scss' as subscribe-button;
 @use '../app/modules/share-view/pages/overview/share-view-overview.component.scss' as overview;
 
 $primary: mat.define-palette(mat.$indigo-palette, 500);
@@ -17,6 +18,7 @@ $my-theme: mat.define-light-theme((
 @include mat.all-component-themes($my-theme);
 @include like-button.color($my-theme);
 @include overview.color($my-theme);
+@include subscribe-button.color($my-theme);
 
 a {
   color: #0366d6;

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../../services/authservice';
-import { ShareService } from '../services/shareservice';
+import { AuthService } from '../../../../services/authservice';
+import { ShareService } from '../../services/shareservice';
 
 @Component({
   selector: 'share-view-nav-menu',

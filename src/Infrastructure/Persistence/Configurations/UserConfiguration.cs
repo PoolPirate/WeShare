@@ -12,6 +12,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(x => x.Id)
         .ValueGeneratedOnAdd()
+        .HasValueGenerator<StronglyTypedIdValueGenerator<UserId>>()
         .UseIdentityAlwaysColumn();
         builder.HasKey(x => x.Id);
 

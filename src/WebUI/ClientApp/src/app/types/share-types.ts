@@ -8,7 +8,7 @@ export class ShareSnippet {
 }
 
 export class ShareSecrets {
-  bodyProcessingType: number;
+  payloadProcessingType: number;
   headerProcessingType: number;
   secret: string;
 }
@@ -20,6 +20,7 @@ export class ShareData {
 
 export class ShareUserData {
   liked: boolean;
+  subscribed: boolean;
 }
 
 export class ShareInfo {

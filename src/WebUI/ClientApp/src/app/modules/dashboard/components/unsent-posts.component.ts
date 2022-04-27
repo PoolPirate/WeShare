@@ -9,16 +9,35 @@ import { DashboardService } from '../services/dashboardservice';
   templateUrl: './unsent-posts.component.html'
 })
 export class UnsentPostsComponent {
-  subscriptionPostMap: Compound[] = [];
+  subscriptionPostMap: Compound[] | null = null;
 
-  constructor(dashboardService: DashboardService, weShareClient: WeShareClient) {
+  constructor(private dashboardService: DashboardService, private weShareClient: WeShareClient) {
     dashboardService.subscriptionInfos.forEach(subscriptionInfo => {
       weShareClient.getUnsentPosts(subscriptionInfo.id)
         .subscribe(response => {
           const compound = new Compound(subscriptionInfo, response.items);
+
+          if (!this.subscriptionPostMap) {
+            this.subscriptionPostMap = [];
+          }
+          if (response.items.length == 0) {
+            return;
+          }
+
           this.subscriptionPostMap.push(compound);
         });
     });
+  }
+
+  markAsRead(compound: Compound) {
+    this.weShareClient.markPostAsSent(compound.subscriptionInfo.id, compound.unsentPosts[0].id)
+      .subscribe(
+        success => {
+          compound.unsentPosts.splice(0, 1);
+        },
+        error => {
+          alert(error.status);
+        });
   }
 }
 
