@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../../services/authservice';
+import { AuthService } from '../../../../services/authservice';
 import { ProfileStore } from '../services/profile-store';
 
 @Component({

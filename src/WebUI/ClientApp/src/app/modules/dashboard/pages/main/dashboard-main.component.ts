@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../../../services/authservice';
-import { PaginatedResponse, Resolved } from '../../../../types/general-types';
-import { SubscriptionInfo } from '../../../../types/subscription-types';
+import { AuthService } from '../../../../../services/authservice';
+import { PaginatedResponse, Resolved } from '../../../../../types/general-types';
+import { SubscriptionSnippet } from '../../../../../types/subscription-types';
 import { DashboardService } from '../../services/dashboardservice';
 
 @Component({
@@ -12,8 +12,8 @@ import { DashboardService } from '../../services/dashboardservice';
 })
 export class DashboardMainComponent {
   errorCode: number = 0;
-  subscriptionInfosResponse: PaginatedResponse<SubscriptionInfo>;
-  subscriptionInfos: SubscriptionInfo[];
+  subscriptionInfosResponse: PaginatedResponse<SubscriptionSnippet>;
+  subscriptionInfos: SubscriptionSnippet[];
 
   constructor(authService: AuthService, router: Router, route: ActivatedRoute, dashboardService: DashboardService) {
     if (authService.isLoggedOut()) {
@@ -21,7 +21,7 @@ export class DashboardMainComponent {
     }
 
     route.data.subscribe(data => {
-      const subscriptionInfosResponse: Resolved<PaginatedResponse<SubscriptionInfo>> = data.subscriptionInfosResponse;
+      const subscriptionInfosResponse: Resolved<PaginatedResponse<SubscriptionSnippet>> = data.subscriptionSnippetsResponse;
 
       if (subscriptionInfosResponse.ok) {
         this.subscriptionInfosResponse = subscriptionInfosResponse.content!;

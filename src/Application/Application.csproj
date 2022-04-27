@@ -22,7 +22,6 @@
     <ItemGroup>
       <Folder Include="Actions\Post\Queries\" />
       <Folder Include="Actions\User\Commands\VerifyEmail\" />
-      <Folder Include="DataTransferObjects\Post\" />
     </ItemGroup>
 
 </Project>

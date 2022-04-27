@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WeShareClient } from '../../../../services/weshareclient';
+import { WeShareClient } from '../../../../../services/weshareclient';
 
 @Component({
   selector: 'app-verify-email',

@@ -53,7 +53,7 @@ public class GetShareUserData
 
             var shareUserData = new ShareUserDataDto(liked, subscribed);
 
-            if (liked)
+            if (liked || subscribed)
             {
                 return new Result(Status.Success, shareUserData);
             }

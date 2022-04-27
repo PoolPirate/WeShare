@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { SubscriptionInfo } from "../../../types/subscription-types";
+import { SubscriptionSnippet } from "../../../../types/subscription-types";
 
 @Injectable()
 export class DashboardService {
-  subscriptionInfos: SubscriptionInfo[];
+  subscriptionInfos: SubscriptionSnippet[];
 }

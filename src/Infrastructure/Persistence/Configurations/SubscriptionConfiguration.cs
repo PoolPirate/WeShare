@@ -16,6 +16,7 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
         builder.Property(x => x.CreatedAt);
 
         builder.Property(x => x.Type);
+        builder.Property(x => x.Name);
 
         builder.Property(x => x.ShareId);
         builder.Property(x => x.UserId);

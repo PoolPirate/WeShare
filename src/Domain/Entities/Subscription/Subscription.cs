@@ -14,6 +14,11 @@ public class Subscription : AuditableEntity
     public SubscriptionType Type { get; set; }
 
     /// <summary>
+    /// The name of the subscription.
+    /// </summary>
+    public SubscriptionName Name { get; set; }
+
+    /// <summary>
     /// The user who created this subscription.
     /// </summary>
     public User? User { get; init; }
@@ -43,15 +48,16 @@ public class Subscription : AuditableEntity
     /// </summary>
     public PostId? LastReceivedPostId { get; set; } = null;
 
-    public static Subscription Create(SubscriptionType type, UserId userId, ShareId shareId, PostId? lastReceivedPostId)
+    public static Subscription Create(SubscriptionType type, SubscriptionName name, UserId userId, ShareId shareId, PostId? lastReceivedPostId)
     {
-        var subscription = new Subscription(type, userId, shareId, lastReceivedPostId);
+        var subscription = new Subscription(type, name, userId, shareId, lastReceivedPostId);
         return subscription;
     }
 
-    private Subscription(SubscriptionType type, UserId userId, ShareId shareId, PostId? lastReceivedPostId)
+    private Subscription(SubscriptionType type, SubscriptionName name, UserId userId, ShareId shareId, PostId? lastReceivedPostId)
     {
         Type = type;
+        Name = name;
         UserId = userId;
         ShareId = shareId;
         LastReceivedPostId = lastReceivedPostId;

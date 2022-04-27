@@ -10,7 +10,7 @@ namespace WeShare.WebAPI.Controllers;
 public class SharePostsInfoController : ExtendedControllerBase
 {
     [HttpGet("Metadata/{shareId}/{page}/{pageSize}")]
-    public async Task<ActionResult<PaginatedList<PostMetadataDto>>> GetPostMetadatasAsync([FromRoute] long shareId,
+    public async Task<ActionResult<PaginatedList<PostSnippetDto>>> GetPostMetadatasAsync([FromRoute] long shareId,
         [FromRoute] ushort page, [FromRoute] ushort pageSize,
         CancellationToken cancellationToken)
     {

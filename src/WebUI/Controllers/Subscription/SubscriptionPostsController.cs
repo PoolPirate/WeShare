@@ -10,7 +10,7 @@ namespace WeShare.WebAPI.Controllers;
 public class SubscriptionPostsController : ExtendedControllerBase
 {
     [HttpGet("Unsent/Id/{subscriptionId}/{page}/{pageSize}")]
-    public async Task<ActionResult<PaginatedList<PostMetadataDto>>> GetUnsentPostMetadatasAsync([FromRoute] long subscriptionId,
+    public async Task<ActionResult<PaginatedList<PostSnippetDto>>> GetUnsentPostMetadatasAsync([FromRoute] long subscriptionId,
         [FromRoute] ushort page, [FromRoute] ushort pageSize,
         CancellationToken cancellationToken)
     {

@@ -42,6 +42,7 @@ public class ShareDbContext : MergingDbContext, IShareContext
 
         configurationBuilder.Properties<Username>().HaveConversion<Username.EfCoreValueConverter>();
         configurationBuilder.Properties<Nickname>().HaveConversion<Nickname.EfCoreValueConverter>();
+        configurationBuilder.Properties<SubscriptionName>().HaveConversion<SubscriptionName.EfCoreValueConverter>();
 
         configurationBuilder.Properties<CallbackSecret>().HaveConversion<CallbackSecret.EfCoreValueConverter>();
 

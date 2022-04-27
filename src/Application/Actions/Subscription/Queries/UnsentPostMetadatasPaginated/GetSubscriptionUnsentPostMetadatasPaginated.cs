@@ -38,7 +38,7 @@ public class GetSubscriptionUnsentPostMetadatasPaginated
         SubscriptionNotFound,
     }
 
-    public record Result(Status Status, PaginatedList<PostMetadataDto>? PostMetadatas = null);
+    public record Result(Status Status, PaginatedList<PostSnippetDto>? PostMetadatas = null);
 
     public class Handler : IRequestHandler<Query, Result>
     {
@@ -80,7 +80,7 @@ public class GetSubscriptionUnsentPostMetadatasPaginated
             var postMetadatas = await DbContext.Posts
                 .Where(x => x.ShareId == subscriptionData.ShareId)
                 .Where(x => x.CreatedAt > lastReceivedPostCreatedAt)
-                .ProjectTo<PostMetadataDto>(Mapper.ConfigurationProvider)
+                .ProjectTo<PostSnippetDto>(Mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.Page, request.PageSize, cancellationToken);
 
             return new Result(Status.Success, postMetadatas);

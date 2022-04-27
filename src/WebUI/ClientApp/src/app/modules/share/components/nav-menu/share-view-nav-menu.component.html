@@ -1,0 +1,32 @@
+<nav mat-tab-nav-bar class="border mb-3">
+  <a mat-tab-link [routerLink]="['./overview']"
+     (click)="activeLink = 'overview'"
+     [active]="activeLink == 'overview'">
+    Overview
+  </a>
+  <a mat-tab-link [routerLink]="['./posts']"
+     (click)="activeLink = 'posts'"
+     [active]="activeLink == 'posts'">
+    Posts
+  </a>
+  <a mat-tab-link [routerLink]="['./subscriptions']"
+     (click)="activeLink = 'subscriptions'"
+     [active]="activeLink == 'subscriptions'"
+     class="push-right">
+    My Subscriptions
+  </a>
+  <a *ngIf="isOwnProfile"
+     mat-tab-link [routerLink]="['./edit']"
+     (click)="activeLink = 'edit'"
+     [active]="activeLink == 'edit'"
+     class="push-right">
+    Edit
+  </a>
+  <a *ngIf="isOwnProfile"
+     mat-tab-link [routerLink]="['./settings']"
+     (click)="activeLink = 'settings'"
+     [active]="activeLink == 'settings'">
+    Settings
+  </a>
+</nav>
+

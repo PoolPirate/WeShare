@@ -173,6 +173,10 @@ namespace WeShare.Infrastructure.Migrations
                     b.Property<long?>("LastReceivedPostId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<long>("ShareId")
                         .HasColumnType("bigint");
 
@@ -183,6 +187,8 @@ namespace WeShare.Infrastructure.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LastReceivedPostId");
 
                     b.HasIndex("ShareId");
 
@@ -292,6 +298,10 @@ namespace WeShare.Infrastructure.Migrations
 
             modelBuilder.Entity("WeShare.Domain.Entities.Subscription", b =>
                 {
+                    b.HasOne("WeShare.Domain.Entities.Post", "LastReceivedPost")
+                        .WithMany()
+                        .HasForeignKey("LastReceivedPostId");
+
                     b.HasOne("WeShare.Domain.Entities.Share", "Share")
                         .WithMany()
                         .HasForeignKey("ShareId")
@@ -303,6 +313,8 @@ namespace WeShare.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("LastReceivedPost");
 
                     b.Navigation("Share");
 

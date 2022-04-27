@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PaginatedResponse, Resolved } from '../../types/general-types';
-import { SubscriptionInfo } from '../../types/subscription-types';
 import { DashboardService } from './services/dashboardservice';
 
 @Component({

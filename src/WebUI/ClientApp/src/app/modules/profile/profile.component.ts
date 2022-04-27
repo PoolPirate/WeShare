@@ -1,9 +1,9 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Resolved } from '../../types/general-types';
-import { ProfileInfo } from '../../types/profile-types';
-import { UserSnippet } from '../../types/user-types';
+import { Resolved } from '../../../types/general-types';
+import { ProfileInfo } from '../../../types/profile-types';
+import { UserSnippet } from '../../../types/user-types';
 import { ProfileStore } from './services/profile-store';
 
 @Component({

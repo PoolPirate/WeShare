@@ -1,10 +1,9 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../../../services/authservice';
-import { PaginatedResponse, Resolved } from '../../../../types/general-types';
-import { ShareSnippet } from '../../../../types/share-types';
-import { UserSnippet } from '../../../../types/user-types';
+import { AuthService } from '../../../../../services/authservice';
+import { PaginatedResponse, Resolved } from '../../../../../types/general-types';
+import { ShareSnippet } from '../../../../../types/share-types';
 import { ProfileStore } from '../../services/profile-store';
 
 @Component({

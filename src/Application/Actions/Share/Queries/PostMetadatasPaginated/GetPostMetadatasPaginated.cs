@@ -36,7 +36,7 @@ public class GetPostMetadatasPaginated
         ShareNotFound,
     }
 
-    public record Result(Status Status, PaginatedList<PostMetadataDto>? Metadatas = null);
+    public record Result(Status Status, PaginatedList<PostSnippetDto>? Metadatas = null);
 
     public class Handler : IRequestHandler<Query, Result>
     {
@@ -57,7 +57,7 @@ public class GetPostMetadatasPaginated
 
             var metaDatas = await DbContext.Posts
                 .Where(x => x.ShareId == request.ShareId)
-                .ProjectTo<PostMetadataDto>(Mapper.ConfigurationProvider)
+                .ProjectTo<PostSnippetDto>(Mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.Page, request.PageSize, cancellationToken);
 
             return metaDatas.TotalCount == 0 && !await DbContext.Shares.AnyAsync(x => x.Id == request.ShareId, cancellationToken)

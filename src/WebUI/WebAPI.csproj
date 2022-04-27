@@ -60,6 +60,12 @@
         <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="ClientApp\src\app\modules\post-view\pages\headers\" />
+      <Folder Include="ClientApp\src\app\modules\post-view\pages\payload\" />
+      <Folder Include="ClientApp\src\app\modules\post-view\resolvers\" />
+    </ItemGroup>
+
     <!--<PropertyGroup>
         <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     </PropertyGroup>

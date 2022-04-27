@@ -8,6 +8,9 @@ public static class DomainConstraints
     public const int NicknameLengthMinimum = 3;
     public const int NicknameLengthMaximum = 20;
 
+    public const int SubscriptionnameLengthMinimum = 1;
+    public const int SubscriptionnameLengthMaximum = 16;
+
     public const int EmailLengthMaximum = 128;
 
     public const int PasswordLengthMinimum = 8;

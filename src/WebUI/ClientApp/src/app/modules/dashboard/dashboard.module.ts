@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from '../material/material.module';
 import { DashboardMainComponent } from './pages/main/dashboard-main.component';
 import { UnsentPostsComponent } from './components/unsent-posts.component';
-import { DashboardSubscriptionInfosResolver } from './resolvers/dashboard-subscriptioninfos.resolver';
+import { DashboardSubscriptionSnippetsResolver } from './resolvers/dashboard-subscriptionsnippets.resolver';
 
 const routes: Routes = [
   { path: '', redirectTo: 'main' },
   {
     path: 'main', component: DashboardMainComponent,
-    resolve: { subscriptionInfosResponse: DashboardSubscriptionInfosResolver }
+    resolve: { subscriptionSnippetsResponse: DashboardSubscriptionSnippetsResolver }
   }
 ]
 

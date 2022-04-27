@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WeShare.Application.Actions.Commands;
 using WeShare.Domain.Entities;
+using WeShare.WebAPI.Forms;
 
 namespace WeShare.WebAPI.Controllers;
 [Route("Api/Subscription")]
@@ -8,11 +9,12 @@ namespace WeShare.WebAPI.Controllers;
 public class SubscriptionManageController : ExtendedControllerBase
 {
     [HttpPost("Create/{shareId}/{userId}")]
-    public async Task<ActionResult<long>> CreateSubscriptionAsync([FromRoute] long shareId, [FromRoute] long userId,
+    public async Task<ActionResult<long>> CreateSubscriptionAsync([FromBody] SubscriptionCreateForm createForm,
         CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new SubscriptionCreateAction
-            .Command(new ShareId(shareId), new UserId(userId), SubscriptionType.Dashboard), cancellationToken);
+            .Command(SubscriptionType.Dashboard, SubscriptionName.From(createForm.Name),
+            new ShareId(createForm.ShareId), new UserId(createForm.UserId)), cancellationToken);
 
         return result.Status switch
         {

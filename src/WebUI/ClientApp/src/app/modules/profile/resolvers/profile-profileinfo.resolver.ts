@@ -3,10 +3,9 @@ import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
 import { Observable, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
-import { WeShareClient } from "../../../services/weshareclient";
-import { Resolved } from "../../../types/general-types";
-import { ProfileInfo } from "../../../types/profile-types";
-import { UserSnippet } from "../../../types/user-types";
+import { WeShareClient } from "../../../../services/weshareclient";
+import { Resolved } from "../../../../types/general-types";
+import { ProfileInfo } from "../../../../types/profile-types";
 
 @Injectable()
 export class ProfileProfileInfoResolver implements Resolve<Resolved<ProfileInfo>> {

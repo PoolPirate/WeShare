@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ProfileNavMenuComponent } from './nav-menu/profile-nav-menu.component';
 import { ProfileOverviewComponent } from './pages/overview/profile-overview.component';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../../shared/shared.module';
 import { ProfileSharesComponent } from './pages/shares/profile-shares.component';
 import { MaterialModule } from '../material/material.module';
 import { ProfilePopularSharesResolver } from './resolvers/profile-popular-shares.resolver';

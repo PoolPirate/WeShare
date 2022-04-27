@@ -11,16 +11,19 @@ public class SubscriptionCreateAction
 {
     public class Command : IRequest<Result>
     {
-        public ShareId ShareId { get; }
-        public UserId UserId { get; }
         [EnumDataType(typeof(SubscriptionType))]
         public SubscriptionType Type { get; }
+        public SubscriptionName Name { get; }
+        public ShareId ShareId { get; }
+        public UserId UserId { get; }
 
-        public Command(ShareId shareId, UserId userId, SubscriptionType type)
+
+        public Command(SubscriptionType type, SubscriptionName name, ShareId shareId, UserId userId)
         {
+            Type = type;
+            Name = name;
             ShareId = shareId;
             UserId = userId;
-            Type = type;
         }
     }
 
@@ -57,13 +60,18 @@ public class SubscriptionCreateAction
                 return new Result(Status.ShareNotFound);
             }
 
-            var subscription = Subscription.Create(request.Type, request.UserId, request.ShareId, mostRecentPostId);
+            var subscription = Subscription.Create(request.Type, request.Name, request.UserId, request.ShareId, mostRecentPostId);
 
             await Authorizer.EnsureAuthorizationAsync(subscription, SubscriptionCommandOperation.Create, cancellationToken);
 
-            DbContext.Subscriptions.Add(subscription);
+            var transaction = await DbContext.BeginTransactionAsync(cancellationToken);
 
-            var saveResult = await DbContext.SaveChangesAsync(cancellationToken: cancellationToken);
+            DbContext.Subscriptions.Add(subscription);
+            await DbContext.Shares
+                .Where(x => x.Id == request.ShareId)
+                .UpdateFromQueryAsync(x => new Share() { LikeCount = x.LikeCount + 1 }, cancellationToken: cancellationToken);
+
+            var saveResult = await DbContext.SaveChangesAsync(transaction: transaction, cancellationToken: cancellationToken);
 
             return saveResult.Status switch
             {

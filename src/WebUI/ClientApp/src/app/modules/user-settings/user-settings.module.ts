@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from '../material/material.module';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../../shared/shared.module';
 import { UserSettingsNavMenuComponent } from './components/nav-menu/user-settings-nav-menu.component';
 import { UserAccountSettingsComponent } from './pages/account/user-account-settings.component';
 import { UserProfileSettingsComponent } from './pages/profile/user-profile-settings.component';

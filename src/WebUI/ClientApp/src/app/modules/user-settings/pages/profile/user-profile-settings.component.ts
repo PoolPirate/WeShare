@@ -2,11 +2,11 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../../../services/authservice';
-import { WeShareClient } from '../../../../services/weshareclient';
-import { Resolved } from '../../../../types/general-types';
-import { ProfileInfo } from '../../../../types/profile-types';
-import { ProfileStore } from '../../../profile/services/profile-store';
+import { AuthService } from '../../../../../services/authservice';
+import { WeShareClient } from '../../../../../services/weshareclient';
+import { Resolved } from '../../../../../types/general-types';
+import { ProfileInfo } from '../../../../../types/profile-types';
+
 
 @Component({
   selector: 'user-profile-settings',

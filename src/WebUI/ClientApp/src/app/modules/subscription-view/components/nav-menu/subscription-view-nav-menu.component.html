@@ -1,0 +1,18 @@
+<nav mat-tab-nav-bar class="border mb-3">
+  <a mat-tab-link [routerLink]="['./overview']"
+     (click)="activeLink = 'overview'"
+     [active]="activeLink == 'overview'">
+    Overview
+  </a>
+  <a mat-tab-link [routerLink]="['./config']"
+     (click)="activeLink = 'config'"
+     [active]="activeLink == 'config'">
+    Config
+  </a>
+  <a mat-tab-link [routerLink]="['./posts']"
+     (click)="activeLink = 'posts'"
+     [active]="activeLink == 'posts'">
+    Posts
+  </a>
+</nav>
+

@@ -25,7 +25,8 @@ public class SubscriptionQueryAuthorizationHandler : AuthorizationHandler<Subscr
 
         return operation switch
         {
-            SubscriptionQueryOperation.ReadUnsentPostMetadata 
+            SubscriptionQueryOperation.ReadUnsentPostMetadata or
+            SubscriptionQueryOperation.ReadInfo
                 => await DbContext.Subscriptions.Where(x => x.Id == entity).AllAsync(x => x.UserId == userId, cancellationToken),
             _ => throw new NotImplementedException(nameof(operation)),
         };
