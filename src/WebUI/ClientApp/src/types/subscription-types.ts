@@ -1,7 +1,7 @@
 export class SubscriptionInfo {
   id: number;
   createdAt: Date;
-  type: number;
+  type: SubscriptionType;
   name: string;
 }
 
@@ -11,6 +11,13 @@ export class SubscriptionSnippet {
 }
 
 enum SubscriptionType {
-  Dashboard,
+  Dashboard = 0,
 
+  AndroidPushNotification = 100,
+
+  MessagerDiscord = 200,
+
+  Email = 300,
+
+  Webhook = 400,
 }
