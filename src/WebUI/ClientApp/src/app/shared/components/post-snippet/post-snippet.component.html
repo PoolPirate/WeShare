@@ -13,7 +13,10 @@
         <p>HeaderSize: {{ postSnippet.headersSize }}</p>
         <p>PayloadSize: {{ postSnippet.payloadSize }}</p>
       </div>
-      <button [routerLink]="['/post', postSnippet.id]" mat-raised-button color="primary">View</button>
+      <div class="parallel">
+        <ng-content></ng-content>
+        <button [routerLink]="['/post', postSnippet.id]" mat-raised-button color="primary">View</button>
+      </div>
     </div>
   </mat-expansion-panel>
 </mat-accordion>

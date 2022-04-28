@@ -17,10 +17,6 @@ public class PaginatedList<T>
         Items = items;
     }
 
-    public bool HasPreviousPage => PageNumber > 1;
-
-    public bool HasNextPage => PageNumber < TotalPages;
-
     public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
         int count = await source.CountAsync(cancellationToken);

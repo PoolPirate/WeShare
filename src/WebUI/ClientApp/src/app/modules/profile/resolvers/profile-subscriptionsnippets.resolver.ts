@@ -16,7 +16,7 @@ export class ProfileSubscriptionSnippetsResolver implements Resolve<Resolved<Pag
     }
 
     const userId = this.authService.getUserId()!;
-    return this.weShareClient.getSubscriptionSnippets(userId, 0, 10)
+    return this.weShareClient.getSubscriptionSnippets(userId, null, 0, 10)
       .pipe(
         map(value => (Resolved.success(value))),
         catchError(error => of(Resolved.error<PaginatedResponse<SubscriptionSnippet>>(error))),

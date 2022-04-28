@@ -10,14 +10,9 @@
     <div *ngFor="let compound of subscriptionPostMap">
       <mat-card>
         <div *ngFor="let unsentPost of compound.unsentPosts; let isFirstPost = first">
-          <mat-card>
-            <div>
-              <p>
-                {{ unsentPost.id }}
-              </p>
-              <button *ngIf="isFirstPost" (click)="markAsRead(compound)">Mark as Read</button>
-            </div>
-          </mat-card>
+          <shared-post-snippet [postSnippet]="unsentPost">
+            <button *ngIf="isFirstPost" (click)="markAsRead(compound)" mat-raised-button color="accent">Mark as Read</button>
+          </shared-post-snippet>
         </div>
       </mat-card>
     </div>

@@ -10,7 +10,7 @@ export class SubscriptionSnippet {
   name: string;
 }
 
-enum SubscriptionType {
+export enum SubscriptionType {
   Dashboard = 0,
 
   AndroidPushNotification = 100,

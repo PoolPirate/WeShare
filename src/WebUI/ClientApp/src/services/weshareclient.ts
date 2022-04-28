@@ -8,7 +8,7 @@ import { PaginatedResponse } from "../types/general-types";
 import { PostSnippet } from "../types/post-types";
 import { ProfileInfo } from "../types/profile-types";
 import { ShareData, ShareInfo, ShareSecrets, ShareSnippet, ShareUserData } from "../types/share-types";
-import { SubscriptionInfo, SubscriptionSnippet } from "../types/subscription-types";
+import { SubscriptionInfo, SubscriptionSnippet, SubscriptionType } from "../types/subscription-types";
 import { UserSnippet } from "../types/user-types";
 import { AuthService } from "./authservice";
 
@@ -130,8 +130,9 @@ export class WeShareClient {
       .pipe(shareReplay(1));
   }
 
-  getSubscriptionSnippets(userId: number, page: number, pageSize: number) {
-    return this.client.get<PaginatedResponse<SubscriptionSnippet>>("Api/User/Subscription/Snippets/Id/" + userId + "/" + page + "/" + pageSize, { headers: this.getHeaders() })
+  getSubscriptionSnippets(userId: number, type: SubscriptionType | null, page: number, pageSize: number) {
+    return this.client.get<PaginatedResponse<SubscriptionSnippet>>("Api/User/Subscription/Snippets/Id/" + userId + "/" + page + "/" + pageSize + (type != null ? "?type=" + type : ""),
+      { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 

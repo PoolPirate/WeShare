@@ -5,3 +5,8 @@
 mat-accordion {
     margin-left: 0.1%;
 }
+
+.parallel {
+  display: grid;
+  grid-auto-flow: column;
+}

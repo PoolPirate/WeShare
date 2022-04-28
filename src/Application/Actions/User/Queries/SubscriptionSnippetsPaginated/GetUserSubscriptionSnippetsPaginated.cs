@@ -16,15 +16,20 @@ public class GetUserSubscriptionSnippetsPaginated
     {
         public UserId UserId { get; }
 
+        [EnumDataType(typeof(SubscriptionType))]
+        public SubscriptionType? Type { get; }
+
         [Range(0, UInt16.MaxValue)]
         public ushort Page { get; }
 
         [Range(3, 100)]
         public ushort PageSize { get; }
 
-        public Query(UserId userId, ushort page, ushort pageSize)
+
+        public Query(UserId userId, SubscriptionType? type, ushort page, ushort pageSize)
         {
             UserId = userId;
+            Type = type;
             Page = page;
             PageSize = pageSize;
         }
@@ -62,6 +67,7 @@ public class GetUserSubscriptionSnippetsPaginated
 
             var subscriptionInfos = await DbContext.Subscriptions
                 .Where(x => x.UserId == request.UserId)
+                .Where(x => !request.Type.HasValue || x.Type == request.Type.Value)
                 .ProjectTo<SubscriptionSnippetDto>(Mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.Page, request.PageSize, cancellationToken);
 

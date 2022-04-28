@@ -12,11 +12,11 @@ public class UserSubscriptionController : ExtendedControllerBase
     [HttpGet("Snippets/Id/{userId}/{page}/{pageSize}")]
     public async Task<ActionResult<PaginatedList<SubscriptionSnippetDto>>> GetShareSnippetsAsync([FromRoute] long userId,
         [FromRoute] ushort page, [FromRoute] ushort pageSize,
-        [FromQuery] ShareOrdering ordering,
+        [FromQuery] SubscriptionType? type, 
         CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new GetUserSubscriptionSnippetsPaginated
-            .Query(new UserId(userId), page, pageSize), cancellationToken);
+            .Query(new UserId(userId), type, page, pageSize), cancellationToken);
 
         return result.Status switch
         {
@@ -25,4 +25,6 @@ public class UserSubscriptionController : ExtendedControllerBase
             _ => throw new InvalidOperationException(),
         };
     }
+
+
 }

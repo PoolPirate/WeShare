@@ -44,7 +44,7 @@ export class ProfileSubscriptionsComponent {
   }
 
   refreshList(pageEvent: PageEvent) {
-    this.weShareClient.getSubscriptionSnippets(this.userSnippet.id, pageEvent.pageIndex, pageEvent.pageSize)
+    this.weShareClient.getSubscriptionSnippets(this.userSnippet.id, null, pageEvent.pageIndex, pageEvent.pageSize)
       .subscribe(success => {
         this.subscriptionSnippetsResponse = success;
         this.subscriptionSnippets = this.subscriptionSnippetsResponse.items;
