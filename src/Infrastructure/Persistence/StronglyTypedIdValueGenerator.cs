@@ -7,7 +7,7 @@ public class StronglyTypedIdValueGenerator<T> : ValueGenerator<T> where T : stru
     public override bool GeneratesTemporaryValues
         => true;
 
-    public override T Next(EntityEntry entry) 
+    public override T Next(EntityEntry entry)
         => new T();
 }
 

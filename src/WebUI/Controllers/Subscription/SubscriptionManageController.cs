@@ -22,10 +22,10 @@ public class SubscriptionManageController : ExtendedControllerBase
             SubscriptionCreateAction.Status.ShareNotFound => NotFound(),
             _ => throw new InvalidOperationException(),
         };
-    } 
+    }
 
     [HttpPost("{subscriptionId}/MarkAsSent/{postId}")]
-    public async Task<ActionResult> MarkPostAsSentAsync([FromRoute] long subscriptionId, [FromRoute] long postId, 
+    public async Task<ActionResult> MarkPostAsSentAsync([FromRoute] long subscriptionId, [FromRoute] long postId,
         CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new SubscriptionMarkPostAsReceivedAction

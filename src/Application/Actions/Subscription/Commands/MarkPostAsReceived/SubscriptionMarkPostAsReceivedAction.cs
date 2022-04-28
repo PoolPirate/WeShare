@@ -55,7 +55,7 @@ public class SubscriptionMarkPostAsReceivedAction
             }
 
             await Authorizer.EnsureAuthorizationAsync(subscription, SubscriptionCommandOperation.MarkPostAsSent, cancellationToken);
-            
+
             if (!subscription.Type.SupportsMarkAsReceivedAction())
             {
                 return new Result(Status.NotAllowedForSubscriptionType);

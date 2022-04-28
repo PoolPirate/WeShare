@@ -37,7 +37,7 @@ public class UserQueryAuthorizationHandler : AuthorizationHandler<UserId, UserQu
                 .Where(x => x.Id == entity)
                 .AllAsync(x => x.LikesPublished, cancellationToken),
             UserQueryOperation.ReadAccount or
-            UserQueryOperation.ReadSubscriptions 
+            UserQueryOperation.ReadSubscriptions
                 => userId == entity,
             _ => throw new NotImplementedException(nameof(operation)),
         };

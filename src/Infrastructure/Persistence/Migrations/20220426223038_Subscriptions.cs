@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -50,7 +49,7 @@ public partial class Subscriptions : Migration
             column: "UserId");
     }
 
-    protected override void Down(MigrationBuilder migrationBuilder) 
+    protected override void Down(MigrationBuilder migrationBuilder)
         => migrationBuilder.DropTable(
             name: "Subscriptions");
 }

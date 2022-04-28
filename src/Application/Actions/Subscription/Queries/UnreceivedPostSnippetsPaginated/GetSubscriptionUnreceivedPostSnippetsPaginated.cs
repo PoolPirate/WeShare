@@ -2,9 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using WeShare.Application.Common.Mappings;
 using WeShare.Application.Common.Models;
 using WeShare.Application.DTOs;
@@ -59,7 +57,8 @@ public class GetSubscriptionUnreceivedPostSnippetsPaginated
 
             var subscriptionData = await DbContext.Subscriptions
                 .Where(x => x.Id == request.SubscriptionId)
-                .Select(x => new {
+                .Select(x => new
+                {
                     x.ShareId,
                     x.LastReceivedPostId,
                 })
@@ -76,7 +75,7 @@ public class GetSubscriptionUnreceivedPostSnippetsPaginated
                     .Select(x => x.CreatedAt)
                     .SingleOrDefaultAsync(cancellationToken)
                 : DateTimeOffset.MinValue;
- 
+
             var postMetadatas = await DbContext.Posts
                 .Where(x => x.ShareId == subscriptionData.ShareId)
                 .Where(x => x.CreatedAt > lastReceivedPostCreatedAt)
