@@ -1,11 +1,15 @@
 <div *ngIf="posts.length != 0">
-  <h3>Posts</h3>
-  <ul>
-    <li *ngFor="let post of posts">
-      <p>{{ post.id }}</p>
-    </li>
-  </ul>
+  <mat-paginator [length]="postsResponse.totalCount"
+                 [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                 (page)="refreshList($event)">
+  </mat-paginator>
+
+  <div *ngFor="let post of posts">
+    <shared-post-snippet [postSnippet]="post"></shared-post-snippet>
+  </div>
 </div>
+
+
 
 <p *ngIf="posts.length == 0">
   Nothing posted yet...

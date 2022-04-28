@@ -18,6 +18,9 @@ export class Resolved<T> {
   public static error<T>(error: HttpErrorResponse) {
     return new Resolved<T>(null, error.status, false);
   }
+  public static errorCode<T>(status: number) {
+    return new Resolved<T>(null, status, false);
+  }
 
   constructor(content: T | null, status: number, ok: boolean) {
     this.content = content;

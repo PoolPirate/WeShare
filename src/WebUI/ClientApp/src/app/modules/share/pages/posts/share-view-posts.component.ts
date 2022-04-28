@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
+import { WeShareClient } from '../../../../../services/weshareclient';
 import { PaginatedResponse, Resolved } from '../../../../../types/general-types';
-import { PostMetadata } from '../../../../../types/post-types';
+import { PostSnippet } from '../../../../../types/post-types';
 import { ShareData } from '../../../../../types/share-types';
 import { ShareService } from '../../services/shareservice';
 
@@ -13,19 +15,19 @@ import { ShareService } from '../../services/shareservice';
 export class ShareViewPostsComponent {
   shareData: ShareData;
 
-  postsData: PaginatedResponse<PostMetadata>;
-  posts: PostMetadata[];
+  postsResponse: PaginatedResponse<PostSnippet>;
+  posts: PostSnippet[];
   errorCode: number;
 
-  constructor(shareService: ShareService, router: Router, route: ActivatedRoute) {
+  constructor(private weShareClient: WeShareClient, shareService: ShareService, router: Router, route: ActivatedRoute) {
     this.shareData = shareService.shareData;
 
     route.data.subscribe(data => {
-      var postsResponse: Resolved<PaginatedResponse<PostMetadata>> = data.postsResponse;
+      var postsResponse: Resolved<PaginatedResponse<PostSnippet>> = data.postsResponse;
 
       if (postsResponse.ok) {
-        this.postsData = postsResponse.content!;
-        this.posts = this.postsData.items;
+        this.postsResponse = postsResponse.content!;
+        this.posts = this.postsResponse.items;
         shareService.shareData = this.shareData;
       } else {
         if (postsResponse.status == 404) {
@@ -37,5 +39,15 @@ export class ShareViewPostsComponent {
         return;
       }
     });
+  }
+
+  refreshList(pageEvent: PageEvent) {
+    this.weShareClient.getPosts(this.shareData.shareInfo.id, pageEvent.pageIndex, pageEvent.pageSize)
+      .subscribe(success => {
+        this.postsResponse = success;
+        this.posts = this.postsResponse.items;
+      }, error => {
+        alert("There was an error while loading the data!");
+      });
   }
 }

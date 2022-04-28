@@ -1,0 +1,19 @@
+<mat-accordion>
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Id: {{ postSnippet.id }}
+      </mat-panel-title>
+      <mat-panel-description>
+        <b>CreatedAt: {{ postSnippet.createdAt }}</b>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div class="grid">
+      <div>
+        <p>HeaderSize: {{ postSnippet.headersSize }}</p>
+        <p>PayloadSize: {{ postSnippet.payloadSize }}</p>
+      </div>
+      <button [routerLink]="['/post', postSnippet.id]" mat-raised-button color="primary">View</button>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

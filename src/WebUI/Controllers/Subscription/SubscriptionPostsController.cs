@@ -14,13 +14,13 @@ public class SubscriptionPostsController : ExtendedControllerBase
         [FromRoute] ushort page, [FromRoute] ushort pageSize,
         CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new GetSubscriptionUnsentPostMetadatasPaginated
+        var result = await Mediator.Send(new GetSubscriptionUnreceivedPostSnippetsPaginated
             .Query(new SubscriptionId(subscriptionId), page, pageSize), cancellationToken);
 
         return result.Status switch
         {
-            GetSubscriptionUnsentPostMetadatasPaginated.Status.Success => Ok(result.PostMetadatas),
-            GetSubscriptionUnsentPostMetadatasPaginated.Status.SubscriptionNotFound => NotFound(),
+            GetSubscriptionUnreceivedPostSnippetsPaginated.Status.Success => Ok(result.PostMetadatas),
+            GetSubscriptionUnreceivedPostSnippetsPaginated.Status.SubscriptionNotFound => NotFound(),
             _ => throw new InvalidOperationException(),
         };
     }

@@ -13,7 +13,7 @@ export class DashboardSubscriptionSnippetsResolver implements Resolve<Resolved<P
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Resolved<PaginatedResponse<SubscriptionSnippet>> | Observable<Resolved<PaginatedResponse<SubscriptionSnippet>>> | Promise<Resolved<PaginatedResponse<SubscriptionSnippet>>> {
     const userId = this.authService.getUserId()!;
-    return this.weShareClient.getSubscriptionSnippets(userId)
+    return this.weShareClient.getSubscriptionSnippets(userId, 0, 10)
       .pipe(
         map(value => (Resolved.success(value))),
         catchError(error => of(Resolved.error<PaginatedResponse<SubscriptionSnippet>>(error))),

@@ -1,0 +1,15 @@
+<div *ngIf="subscriptionSnippets && subscriptionSnippets.length != 0">
+  <mat-paginator [length]="subscriptionSnippetsResponse.totalCount"
+                 [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                 (page)="refreshList($event)">
+  </mat-paginator>
+
+  <div *ngFor="let subscriptionSnippet of subscriptionSnippets">
+    <shared-subscription-snippet [subscriptionSnippet]="subscriptionSnippet"></shared-subscription-snippet>
+  </div>
+
+</div>
+
+<p *ngIf="subscriptionSnippets && subscriptionSnippets.length == 0">
+  Nothing here...
+</p>

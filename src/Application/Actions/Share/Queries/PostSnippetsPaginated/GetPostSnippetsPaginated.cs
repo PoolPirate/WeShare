@@ -10,7 +10,7 @@ using WeShare.Application.Services;
 using WeShare.Domain.Entities;
 
 namespace WeShare.Application.Actions.Queries;
-public class GetPostMetadatasPaginated
+public class GetPostSnippetsPaginated
 {
     public class Query : IRequest<Result>
     {

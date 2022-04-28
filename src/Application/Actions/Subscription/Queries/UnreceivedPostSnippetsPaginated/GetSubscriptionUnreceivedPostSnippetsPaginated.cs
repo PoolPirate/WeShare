@@ -12,7 +12,7 @@ using WeShare.Application.Services;
 using WeShare.Domain.Entities;
 
 namespace WeShare.Application.Actions.Queries;
-public class GetSubscriptionUnsentPostMetadatasPaginated
+public class GetSubscriptionUnreceivedPostSnippetsPaginated
 {
     public class Query : IRequest<Result>
     {

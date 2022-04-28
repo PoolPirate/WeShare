@@ -5,19 +5,19 @@ import { Observable, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { WeShareClient } from "../../../../../services/weshareclient";
 import { PaginatedResponse, Resolved } from "../../../../../types/general-types";
-import { PostMetadata } from "../../../../../types/post-types";
+import { PostSnippet } from "../../../../../types/post-types";
 
 @Injectable()
-export class ViewSharePostsResolver implements Resolve<Resolved<PaginatedResponse<PostMetadata>>> {
+export class ViewSharePostsResolver implements Resolve<Resolved<PaginatedResponse<PostSnippet>>> {
   constructor(private weShareClient: WeShareClient) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Resolved<PaginatedResponse<PostMetadata>> | Observable<Resolved<PaginatedResponse<PostMetadata>>> | Promise<Resolved<PaginatedResponse<PostMetadata>>> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Resolved<PaginatedResponse<PostSnippet>> | Observable<Resolved<PaginatedResponse<PostSnippet>>> | Promise<Resolved<PaginatedResponse<PostSnippet>>> {
     var shareId = route.parent!.params['shareId'];
 
-    return this.weShareClient.getPosts(shareId, 0)
+    return this.weShareClient.getPosts(shareId, 0, 10)
       .pipe(
         map(value => (Resolved.success(value))),
-        catchError(error => of(Resolved.error<PaginatedResponse<PostMetadata>>(error))),
+        catchError(error => of(Resolved.error<PaginatedResponse<PostSnippet>>(error))),
       );
   }
 }

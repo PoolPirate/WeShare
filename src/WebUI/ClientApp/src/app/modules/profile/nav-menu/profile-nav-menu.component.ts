@@ -23,4 +23,7 @@ export class ProfileNavMenuComponent {
   get showLikesTab() {
     return this.isOwnProfile || this.profileStore.profileInfo.likesPublished;
   }
+  get showSubscriptionsTab() {
+    return this.isOwnProfile;
+  }
 }

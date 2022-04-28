@@ -1,14 +1,12 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Threading.Tasks;
 using WeShare.Application.Common;
 using WeShare.Application.Common.Exceptions;
 using WeShare.Application.Services;
 using WeShare.Domain.Entities;
 
 namespace WeShare.Application.Actions.Commands;
-public class SubscriptionMarkPostAsSentAction
+public class SubscriptionMarkPostAsReceivedAction
 {
     public class Command : IRequest<Result>
     {
@@ -26,6 +24,7 @@ public class SubscriptionMarkPostAsSentAction
     {
         Success,
         SubscriptionNotFound,
+        NotAllowedForSubscriptionType,
         SubscriptionAlreadySetHigher,
         PostNotFound,
         PostForWrongShare,
@@ -57,6 +56,10 @@ public class SubscriptionMarkPostAsSentAction
 
             await Authorizer.EnsureAuthorizationAsync(subscription, SubscriptionCommandOperation.MarkPostAsSent, cancellationToken);
             
+            if (!subscription.Type.SupportsMarkAsReceivedAction())
+            {
+                return new Result(Status.NotAllowedForSubscriptionType);
+            }
             if ((subscription.LastReceivedPostId?.Value ?? -1) >= request.PostId.Value)
             {
                 return new Result(Status.SubscriptionAlreadySetHigher);

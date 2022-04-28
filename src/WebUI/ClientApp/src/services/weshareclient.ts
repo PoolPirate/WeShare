@@ -5,7 +5,7 @@ import { shareReplay } from "rxjs/operators";
 import { AccountInfo } from "../types/account-types";
 import { CallbackInfo } from "../types/callback-types";
 import { PaginatedResponse } from "../types/general-types";
-import { PostMetadata } from "../types/post-types";
+import { PostSnippet } from "../types/post-types";
 import { ProfileInfo } from "../types/profile-types";
 import { ShareData, ShareInfo, ShareSecrets, ShareSnippet, ShareUserData } from "../types/share-types";
 import { SubscriptionInfo, SubscriptionSnippet } from "../types/subscription-types";
@@ -130,8 +130,8 @@ export class WeShareClient {
       .pipe(shareReplay(1));
   }
 
-  getSubscriptionSnippets(userId: number) {
-    return this.client.get<PaginatedResponse<SubscriptionSnippet>>("Api/User/Subscription/Snippets/Id/" + userId + "/" + 0 + "/" + 10, { headers: this.getHeaders() })
+  getSubscriptionSnippets(userId: number, page: number, pageSize: number) {
+    return this.client.get<PaginatedResponse<SubscriptionSnippet>>("Api/User/Subscription/Snippets/Id/" + userId + "/" + page + "/" + pageSize, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
@@ -141,7 +141,7 @@ export class WeShareClient {
   }
 
   getUnsentPosts(subscriptionId: number) {
-    return this.client.get<PaginatedResponse<PostMetadata>>("Api/Subscription/Posts/Unsent/Id/" + subscriptionId + "/" + 0 + "/" + 10, { headers: this.getHeaders() })
+    return this.client.get<PaginatedResponse<PostSnippet>>("Api/Subscription/Posts/Unsent/Id/" + subscriptionId + "/" + 0 + "/" + 10, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
@@ -163,8 +163,8 @@ export class WeShareClient {
 
   //Posts
 
-  getPosts(shareId: number, page: number) {
-    return this.client.get<PaginatedResponse<PostMetadata>>("Api/Share/Posts/Metadata/" + shareId + "/" + page + "/" + 10)
+  getPosts(shareId: number, page: number, pageSize: number) {
+    return this.client.get<PaginatedResponse<PostSnippet>>("Api/Share/Posts/Metadata/" + shareId + "/" + page + "/" + pageSize)
       .pipe(shareReplay(1));
   }
 

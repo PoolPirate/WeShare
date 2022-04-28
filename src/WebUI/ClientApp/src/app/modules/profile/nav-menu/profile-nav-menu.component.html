@@ -9,11 +9,18 @@
      [active]="activeLink == 'shares'">
     Shares
   </a>
+  <a class="push-right"></a>
   <a *ngIf="showLikesTab"
      mat-tab-link [routerLink]="['./likes']"
      (click)="activeLink = 'likes'"
      [active]="activeLink == 'likes'">
     Likes
+  </a>
+  <a *ngIf="showSubscriptionsTab"
+     mat-tab-link [routerLink]="['./subscriptions']"
+     (click)="activeLink = 'subscriptions'"
+     [active]="activeLink == 'subscriptions'">
+    Subscriptions
   </a>
 </nav>
 

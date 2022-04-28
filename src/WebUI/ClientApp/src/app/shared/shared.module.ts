@@ -14,6 +14,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { NotFoundComponent } from './pages/notfound/notfound.component';
 import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
 import { SubscriptionSnippetComponent } from './components/subscription-snippet/subscription-snippet.component';
+import { PostSnippetComponent } from './components/post-snippet/post-snippet.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,7 @@ import { SubscriptionSnippetComponent } from './components/subscription-snippet/
     ReadmeComponent,
     LikeButtonComponent,
     SubscriptionSnippetComponent,
+    PostSnippetComponent,
   ],
   imports: [
     CommonModule,
@@ -36,6 +40,8 @@ import { SubscriptionSnippetComponent } from './components/subscription-snippet/
 
     MatIconModule,
     MatButtonModule,
+    MatCardModule,
+    MatExpansionModule
   ],
   exports: [ 
     NotFoundComponent,
@@ -46,6 +52,7 @@ import { SubscriptionSnippetComponent } from './components/subscription-snippet/
 
     ShareSnippetComponent,
     SubscriptionSnippetComponent,
+    PostSnippetComponent,
 
     CommonModule,
 
@@ -57,6 +64,8 @@ import { SubscriptionSnippetComponent } from './components/subscription-snippet/
 
     MatIconModule,
     MatButtonModule,
+    MatCardModule,
+    MatExpansionModule
   ],
   providers: [
     AuthService,

@@ -13,7 +13,7 @@ public class SubscriptionManageController : ExtendedControllerBase
         CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new SubscriptionCreateAction
-            .Command(SubscriptionType.Dashboard, SubscriptionName.From(createForm.Name),
+            .Command(createForm.Type, SubscriptionName.From(createForm.Name),
             new ShareId(createForm.ShareId), new UserId(createForm.UserId)), cancellationToken);
 
         return result.Status switch
@@ -28,16 +28,16 @@ public class SubscriptionManageController : ExtendedControllerBase
     public async Task<ActionResult> MarkPostAsSentAsync([FromRoute] long subscriptionId, [FromRoute] long postId, 
         CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new SubscriptionMarkPostAsSentAction
+        var result = await Mediator.Send(new SubscriptionMarkPostAsReceivedAction
             .Command(new SubscriptionId(subscriptionId), new PostId(postId)), cancellationToken);
 
         return result.Status switch
         {
-            SubscriptionMarkPostAsSentAction.Status.Success => Ok(),
-            SubscriptionMarkPostAsSentAction.Status.SubscriptionNotFound => NotFound(),
-            SubscriptionMarkPostAsSentAction.Status.SubscriptionAlreadySetHigher => Conflict(),
-            SubscriptionMarkPostAsSentAction.Status.PostNotFound => UnprocessableEntity(),
-            SubscriptionMarkPostAsSentAction.Status.PostForWrongShare => UnprocessableEntity(),
+            SubscriptionMarkPostAsReceivedAction.Status.Success => Ok(),
+            SubscriptionMarkPostAsReceivedAction.Status.SubscriptionNotFound => NotFound(),
+            SubscriptionMarkPostAsReceivedAction.Status.SubscriptionAlreadySetHigher => Conflict(),
+            SubscriptionMarkPostAsReceivedAction.Status.PostNotFound => UnprocessableEntity(),
+            SubscriptionMarkPostAsReceivedAction.Status.PostForWrongShare => UnprocessableEntity(),
             _ => throw new InvalidOperationException(),
         };
     }

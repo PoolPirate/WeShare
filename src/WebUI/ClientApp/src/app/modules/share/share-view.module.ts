@@ -15,6 +15,7 @@ import { ShareViewSubscriptionSnippetsResolver } from './services/resolvers/shar
 import { SharedModule } from '../../shared/shared.module';
 import { ShareViewEditComponent } from './modules/edit/share-view-edit.component';
 import { ShareViewSettingsComponent } from './modules/settings/share-view-settings.component';
+import { ProfileSubscriptionSnippetsResolver } from '../profile/resolvers/profile-subscriptionsnippets.resolver';
 
 const routes: Routes = [
   { path: '', redirectTo: 'overview' },
@@ -56,7 +57,7 @@ const routes: Routes = [
   providers: [
     ViewSharePostsResolver,
     ViewShareSecretsResolver,
-    ShareViewSubscriptionSnippetsResolver
+    ShareViewSubscriptionSnippetsResolver,
   ]
 })
 export class ShareViewModule { }

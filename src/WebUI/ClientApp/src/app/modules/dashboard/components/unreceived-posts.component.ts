@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { WeShareClient } from '../../../../services/weshareclient';
-import { PostMetadata } from '../../../../types/post-types';
+import { PostSnippet } from '../../../../types/post-types';
 import { SubscriptionSnippet } from '../../../../types/subscription-types';
 import { DashboardService } from '../services/dashboardservice';
 
 @Component({
-  selector: 'unsent-posts-menu',
-  templateUrl: './unsent-posts.component.html'
+  selector: 'unreceived-posts-menu',
+  templateUrl: './unreceived-posts.component.html'
 })
-export class UnsentPostsComponent {
+export class UnreceivedPostsComponent {
   subscriptionPostMap: Compound[] | null = null;
 
   constructor(private dashboardService: DashboardService, private weShareClient: WeShareClient) {
@@ -43,9 +43,9 @@ export class UnsentPostsComponent {
 
 class Compound {
   subscriptionSnippet: SubscriptionSnippet;
-  unsentPosts: PostMetadata[];
+  unsentPosts: PostSnippet[];
 
-  constructor(subscriptionSnippet: SubscriptionSnippet, unsentPosts: PostMetadata[]) {
+  constructor(subscriptionSnippet: SubscriptionSnippet, unsentPosts: PostSnippet[]) {
     this.subscriptionSnippet = subscriptionSnippet;
     this.unsentPosts = unsentPosts;
   }

@@ -1,5 +1,9 @@
-<div [routerLink]="['/subscription', subscriptionSnippet.id]" class="container rounded border bg-dark text-white p-3 clickable">
-  <h3>
-    {{ subscriptionSnippet.name }}
-  </h3>
-</div>
+<mat-card class="flex">
+  <mat-panel-title>
+    Id: {{ subscriptionSnippet.id }}
+  </mat-panel-title>
+  <mat-panel-description class="push-right">
+    Name: {{ subscriptionSnippet.name }}
+  </mat-panel-description>
+  <button class="push-right" [routerLink]="['/subscription', subscriptionSnippet.id]" mat-raised-button color="primary">View</button>
+</mat-card>

@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from '../material/material.module';
+import { UnreceivedPostsComponent } from './components/unreceived-posts.component';
 import { DashboardMainComponent } from './pages/main/dashboard-main.component';
-import { UnsentPostsComponent } from './components/unsent-posts.component';
 import { DashboardSubscriptionSnippetsResolver } from './resolvers/dashboard-subscriptionsnippets.resolver';
 
 const routes: Routes = [
@@ -18,7 +18,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     DashboardMainComponent,
-    UnsentPostsComponent
+    UnreceivedPostsComponent
   ],
   imports: [
     MaterialModule,

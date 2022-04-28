@@ -11,6 +11,8 @@ import { ProfileSharesResolver } from './resolvers/profile-shares.resolver';
 import { ProfileComponent } from './profile.component';
 import { ProfileLikesResolver } from './resolvers/profile-likes.resolver';
 import { ProfileLikesComponent } from './pages/likes/profile-likes.component';
+import { ProfileSubscriptionsComponent } from './pages/subscriptions/profile-subscriptions.component';
+import { ProfileSubscriptionSnippetsResolver } from './resolvers/profile-subscriptionsnippets.resolver';
 
 const routes: Routes = [
   { path: '', redirectTo: 'overview' },
@@ -25,6 +27,10 @@ const routes: Routes = [
   {
     path: 'likes', component: ProfileLikesComponent,
     resolve: { likesResponse: ProfileLikesResolver },
+  },
+  {
+    path: 'subscriptions', component: ProfileSubscriptionsComponent,
+    resolve: { subscriptionSnippetsResponse: ProfileSubscriptionSnippetsResolver }
   }
 ]
 
@@ -35,6 +41,7 @@ const routes: Routes = [
     ProfileOverviewComponent,
     ProfileSharesComponent,
     ProfileLikesComponent,
+    ProfileSubscriptionsComponent,
   ],
   imports: [
     MaterialModule,
@@ -45,6 +52,7 @@ const routes: Routes = [
     ProfilePopularSharesResolver,
     ProfileSharesResolver,
     ProfileLikesResolver,
+    ProfileSubscriptionSnippetsResolver
   ]
 })
 export class ProfileModule { }

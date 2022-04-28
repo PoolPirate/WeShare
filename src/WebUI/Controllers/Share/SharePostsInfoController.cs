@@ -14,13 +14,13 @@ public class SharePostsInfoController : ExtendedControllerBase
         [FromRoute] ushort page, [FromRoute] ushort pageSize,
         CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new GetPostMetadatasPaginated
+        var result = await Mediator.Send(new GetPostSnippetsPaginated
             .Query(new ShareId(shareId), page, pageSize), cancellationToken);
 
         return result.Status switch
         {
-            GetPostMetadatasPaginated.Status.Success => Ok(result.Metadatas),
-            GetPostMetadatasPaginated.Status.ShareNotFound => NotFound(),
+            GetPostSnippetsPaginated.Status.Success => Ok(result.Metadatas),
+            GetPostSnippetsPaginated.Status.ShareNotFound => NotFound(),
             _ => throw new InvalidOperationException(),
         };
     }
