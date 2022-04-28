@@ -9,3 +9,8 @@ export class SubscriptionSnippet {
   id: number;
   name: string;
 }
+
+enum SubscriptionType {
+  Dashboard,
+
+}
