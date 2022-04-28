@@ -6,7 +6,8 @@ import { DashboardService } from '../services/dashboardservice';
 
 @Component({
   selector: 'unreceived-posts-menu',
-  templateUrl: './unreceived-posts.component.html'
+  templateUrl: './unreceived-posts.component.html',
+  styleUrls: ['./unreceived-posts.component.css']
 })
 export class UnreceivedPostsComponent {
   subscriptionPostMap: Compound[] | null = null;

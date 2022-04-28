@@ -5,6 +5,7 @@ import { DashboardService } from './services/dashboardservice';
 @Component({
   selector: 'dashboard',
   templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css'],
   providers: [DashboardService]
 })
 export class DashboardComponent {
