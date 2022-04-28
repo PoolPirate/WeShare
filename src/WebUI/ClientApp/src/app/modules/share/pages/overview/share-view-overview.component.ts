@@ -1,10 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../../services/authservice';
 import { WeShareClient } from '../../../../../services/weshareclient';
 import { ShareData, ShareUserData } from '../../../../../types/share-types';
 import { LikeButtonComponent } from '../../../../shared/components/like-button/like-button.component';
+import { ShareViewSubscriptionTypeDialogComponent } from '../../components/subscription-type-menu/share-view-subscription-type-dialog.component';
 import { ShareService } from '../../services/shareservice';
 
 @Component({
@@ -18,16 +20,23 @@ export class ShareViewOverviewComponent {
 
   @ViewChild(LikeButtonComponent) likebutton: LikeButtonComponent;
 
-  constructor(private weShareClient: WeShareClient, private authService: AuthService, private router: Router,
+  constructor(private weShareClient: WeShareClient, private authService: AuthService, private router: Router, private subscriptionTypeDialog: MatDialog,
     shareService: ShareService) {
     this.shareData = shareService.shareData;
     this.shareUserData = shareService.shareUserData;
   }
 
+  openSubscriptionTypeDialog() {
+    this.subscriptionTypeDialog.open(ShareViewSubscriptionTypeDialogComponent);
+  }
+
   subscribeStatusUpdate(subscribed: boolean) {
     if (this.authService.isLoggedOut()) {
       this.router.navigateByUrl("/login");
+      return;
     }
+
+    this.openSubscriptionTypeDialog();
   }
 
   like(liked: boolean) {
