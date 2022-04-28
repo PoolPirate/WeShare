@@ -3,5 +3,5 @@ public enum SubscriptionCommandOperation : byte
 {
     Create,
     Remove,
-    MarkPostAsSent,
+    MarkPostAsReceived,
 }

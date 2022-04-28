@@ -55,30 +55,20 @@ public class GetSubscriptionUnreceivedPostSnippetsPaginated
         {
             await Authorizer.EnsureAuthorizationAsync(request.SubscriptionId, SubscriptionQueryOperation.ReadUnsentPostMetadata, cancellationToken);
 
-            var subscriptionData = await DbContext.Subscriptions
+            var shareId = await DbContext.Subscriptions
                 .Where(x => x.Id == request.SubscriptionId)
-                .Select(x => new
-                {
-                    x.ShareId,
-                    x.LastReceivedPostId,
-                })
+                .Select<Subscription, ShareId?>(x => x.ShareId)
                 .SingleOrDefaultAsync(cancellationToken);
 
-            if (subscriptionData is null)
+            if (shareId is null)
             {
                 return new Result(Status.SubscriptionNotFound);
             }
 
-            var lastReceivedPostCreatedAt = subscriptionData.LastReceivedPostId.HasValue
-                ? await DbContext.Posts
-                    .Where(x => x.Id == subscriptionData.LastReceivedPostId)
-                    .Select(x => x.CreatedAt)
-                    .SingleOrDefaultAsync(cancellationToken)
-                : DateTimeOffset.MinValue;
-
             var postMetadatas = await DbContext.Posts
-                .Where(x => x.ShareId == subscriptionData.ShareId)
-                .Where(x => x.CreatedAt > lastReceivedPostCreatedAt)
+                .Where(x => x.ShareId == shareId)
+                .Where(x => !x.SentPosts!
+                    .Any(x => x.Received && x.SubscriptionId == request.SubscriptionId))
                 .ProjectTo<PostSnippetDto>(Mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.Page, request.PageSize, cancellationToken);
 

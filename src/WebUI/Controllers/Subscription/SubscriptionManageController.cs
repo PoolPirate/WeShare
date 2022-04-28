@@ -28,16 +28,17 @@ public class SubscriptionManageController : ExtendedControllerBase
     public async Task<ActionResult> MarkPostAsSentAsync([FromRoute] long subscriptionId, [FromRoute] long postId,
         CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new SubscriptionMarkPostAsReceivedAction
+        var result = await Mediator.Send(new SentPostMarkAsReceivedAction
             .Command(new SubscriptionId(subscriptionId), new PostId(postId)), cancellationToken);
 
         return result.Status switch
         {
-            SubscriptionMarkPostAsReceivedAction.Status.Success => Ok(),
-            SubscriptionMarkPostAsReceivedAction.Status.SubscriptionNotFound => NotFound(),
-            SubscriptionMarkPostAsReceivedAction.Status.SubscriptionAlreadySetHigher => Conflict(),
-            SubscriptionMarkPostAsReceivedAction.Status.PostNotFound => UnprocessableEntity(),
-            SubscriptionMarkPostAsReceivedAction.Status.PostForWrongShare => UnprocessableEntity(),
+            SentPostMarkAsReceivedAction.Status.Success => Ok(),
+            SentPostMarkAsReceivedAction.Status.SubscriptionNotFound => NotFound(nameof(subscriptionId)),
+            SentPostMarkAsReceivedAction.Status.NotAllowedForSubscriptionType => UnprocessableEntity(nameof(subscriptionId)),
+            SentPostMarkAsReceivedAction.Status.PostAlreadyReceived => Conflict(),
+            SentPostMarkAsReceivedAction.Status.PostNotFound => NotFound(nameof(postId)),
+            SentPostMarkAsReceivedAction.Status.PostForWrongShare => UnprocessableEntity(nameof(postId)),
             _ => throw new InvalidOperationException(),
         };
     }

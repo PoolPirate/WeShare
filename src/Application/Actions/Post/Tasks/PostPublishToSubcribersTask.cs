@@ -30,6 +30,11 @@ public class PostPublishToSubcribersTask
     {
         private readonly IShareContext DbContext;
 
+        public Handler(IShareContext dbContext)
+        {
+            DbContext = dbContext;
+        }
+
         public Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();

@@ -8,15 +8,19 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
     public void Configure(EntityTypeBuilder<Post> builder)
     {
         builder.Property(x => x.Id)
-            .ValueGeneratedOnAdd()
-            .HasValueGenerator<StronglyTypedIdValueGenerator<PostId>>()
-            .UseIdentityAlwaysColumn();
+        .ValueGeneratedOnAdd()
+        .HasValueGenerator<StronglyTypedIdValueGenerator<PostId>>()
+        .UseIdentityAlwaysColumn();
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.HeadersSize);
         builder.Property(x => x.PayloadSize);
 
         builder.Property(x => x.ShareId);
+
+        builder.HasMany(x => x.SentPosts)
+        .WithOne(x => x.Post)
+        .HasForeignKey(x => x.PostId);
 
         builder.ToTable("Posts");
     }

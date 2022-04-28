@@ -31,6 +31,11 @@ public class Post : AuditableEntity, IHasDomainEvents
     /// </summary>
     public Share? Share { get; init; } //Navigation Property
 
+    /// <summary>
+    /// The history of who this post was sent to.
+    /// </summary>
+    public List<SentPost>? SentPosts { get; init; }
+
     public static Post Create(ByteCount headersSize, ByteCount payloadSize, ShareId shareId)
     {
         var post = new Post(headersSize, payloadSize, shareId);

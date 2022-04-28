@@ -17,7 +17,6 @@ public class SubscriptionCreateAction
         public ShareId ShareId { get; }
         public UserId UserId { get; }
 
-
         public Command(SubscriptionType type, SubscriptionName name, ShareId shareId, UserId userId)
         {
             Type = type;
@@ -48,21 +47,14 @@ public class SubscriptionCreateAction
 
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
-            var mostRecentPostId = await DbContext.Posts
-                .Where(x => x.ShareId == request.ShareId)
-                .OrderByDescending(x => x.CreatedAt)
-                .Select<Post, PostId?>(x => x.Id)
-                .FirstOrDefaultAsync(cancellationToken);
+            var subscription = Subscription.Create(request.Type, request.Name, request.UserId, request.ShareId);
 
-            if (mostRecentPostId == default &&
-                !await DbContext.Shares.AnyAsync(x => x.Id == request.ShareId, cancellationToken))
+            await Authorizer.EnsureAuthorizationAsync(subscription, SubscriptionCommandOperation.Create, cancellationToken);
+
+            if(!await DbContext.Shares.AnyAsync(x => x.Id == request.ShareId, cancellationToken))
             {
                 return new Result(Status.ShareNotFound);
             }
-
-            var subscription = Subscription.Create(request.Type, request.Name, request.UserId, request.ShareId, mostRecentPostId);
-
-            await Authorizer.EnsureAuthorizationAsync(subscription, SubscriptionCommandOperation.Create, cancellationToken);
 
             var transaction = await DbContext.BeginTransactionAsync(cancellationToken);
 

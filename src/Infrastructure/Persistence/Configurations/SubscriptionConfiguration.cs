@@ -20,9 +20,10 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
 
         builder.Property(x => x.ShareId);
         builder.Property(x => x.UserId);
-        builder.Property(x => x.LastReceivedPostId);
 
-        builder.HasOne(x => x.LastReceivedPost);
+        builder.HasMany(x => x.SentPosts)
+        .WithOne(x => x.Subscription)
+        .HasForeignKey(x => x.SubscriptionId);
 
         builder.ToTable("Subscriptions");
     }

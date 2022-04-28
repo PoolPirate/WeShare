@@ -30,11 +30,12 @@ export class UnreceivedPostsComponent {
     });
   }
 
-  markAsRead(compound: Compound) {
-    this.weShareClient.markPostAsSent(compound.subscriptionSnippet.id, compound.unsentPosts[0].id)
+  markAsRead(compound: Compound, postId: number) {
+    this.weShareClient.markPostAsSent(compound.subscriptionSnippet.id, postId)
       .subscribe(
         success => {
-          compound.unsentPosts.splice(0, 1);
+          const index = compound.unsentPosts.findIndex(x => x.id == postId);
+          compound.unsentPosts.splice(index, 1);
         },
         error => {
           alert(error.status);

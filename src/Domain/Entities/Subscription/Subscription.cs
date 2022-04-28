@@ -21,7 +21,7 @@ public class Subscription : AuditableEntity
     /// <summary>
     /// The user who created this subscription.
     /// </summary>
-    public User? User { get; init; }
+    public User? User { get; init; } //Navigation Property
 
     /// <summary>
     /// The id of the user who created this subscription.
@@ -31,7 +31,7 @@ public class Subscription : AuditableEntity
     /// <summary>
     /// The share that this subcription applies to.
     /// </summary>
-    public Share? Share { get; init; }
+    public Share? Share { get; init; } //Navigation Property
 
     /// <summary>
     /// The id of the share that this subcription applies to.
@@ -39,28 +39,22 @@ public class Subscription : AuditableEntity
     public ShareId ShareId { get; init; }
 
     /// <summary>
-    /// The last post that was successfully received by the subscription client.
+    /// The posts sent to this subscription.
     /// </summary>
-    public Post? LastReceivedPost { get; set; } = null!;
+    public List<SentPost>? SentPosts { get; init; } //Navigation Property
 
-    /// <summary>
-    /// The id of the last post that was successfully received by the subscription client.
-    /// </summary>
-    public PostId? LastReceivedPostId { get; set; } = null;
-
-    public static Subscription Create(SubscriptionType type, SubscriptionName name, UserId userId, ShareId shareId, PostId? lastReceivedPostId)
+    public static Subscription Create(SubscriptionType type, SubscriptionName name, UserId userId, ShareId shareId)
     {
-        var subscription = new Subscription(type, name, userId, shareId, lastReceivedPostId);
+        var subscription = new Subscription(type, name, userId, shareId);
         return subscription;
     }
 
-    private Subscription(SubscriptionType type, SubscriptionName name, UserId userId, ShareId shareId, PostId? lastReceivedPostId)
+    private Subscription(SubscriptionType type, SubscriptionName name, UserId userId, ShareId shareId)
     {
         Type = type;
         Name = name;
         UserId = userId;
         ShareId = shareId;
-        LastReceivedPostId = lastReceivedPostId;
     }
 
     public Subscription()

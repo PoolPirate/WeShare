@@ -23,7 +23,7 @@ public class SubscriptionCommandAuthorizationHandler : AuthorizationHandler<Subs
         {
             SubscriptionCommandOperation.Create or
             SubscriptionCommandOperation.Remove or
-            SubscriptionCommandOperation.MarkPostAsSent
+            SubscriptionCommandOperation.MarkPostAsReceived
                 => ValueTask.FromResult(userId == entity.UserId),
             _ => throw new NotImplementedException(nameof(operation)),
         };

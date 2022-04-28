@@ -20,6 +20,7 @@ public class ShareDbContext : MergingDbContext, IShareContext
     public DbSet<Callback> Callbacks { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
+    public DbSet<SentPost> SentPosts { get; set; }
 
     public ShareDbContext(
         DbContextOptions<ShareDbContext> options,
