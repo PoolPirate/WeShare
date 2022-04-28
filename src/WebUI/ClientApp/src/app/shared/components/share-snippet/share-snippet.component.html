@@ -1,5 +1,5 @@
-<div class="container rounded border bg-dark text-white p-3">
-  <h3>
+<mat-card class="flex">
+  <mat-panel-title>
     <a [routerLink]="['/profile', shareSnippet.ownerUsername]">
       @{{ shareSnippet.ownerUsername }}
     </a>
@@ -7,8 +7,10 @@
     <a [routerLink]="['/share/view', shareSnippet.id]">
       {{ shareSnippet.name }}
     </a>
-  </h3>
+  </mat-panel-title>
+  <mat-panel-description>
 
-
+  </mat-panel-description>
   <p>{{ shareSnippet.description }}</p>
-</div>
+  <!--<button class="push-right" [routerLink]="['/share/view', shareSnippet.id]" mat-raised-button color="primary">View</button>-->
+</mat-card>
