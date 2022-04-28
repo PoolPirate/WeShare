@@ -43,6 +43,13 @@ public class DbSaveResult
 
         constraint = constraint[entitiyType.Name.Length..];
 
+        if (!constraint.StartsWith("s"))
+        {
+            return false;
+        }
+
+        constraint = constraint[1..];
+
         foreach (string propertyName in propertyNames)
         {
             if (!constraint.StartsWith(IndexNamePropertySeparator))

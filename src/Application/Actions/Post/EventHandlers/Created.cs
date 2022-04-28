@@ -21,6 +21,5 @@ public class Created : INotificationHandler<DomainEventNotification<PostCreatedE
 
         return Task.CompletedTask;
     }
-
 }
 

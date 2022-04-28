@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using System.ComponentModel.DataAnnotations;
+using System.Transactions;
 using WeShare.Application.Common;
 using WeShare.Application.Common.Exceptions;
 using WeShare.Application.Services;
@@ -57,7 +58,16 @@ public class UserCreateAction
             var user = User.Create(request.Username, request.Email, passwordHash, request.Nickname);
             DbContext.Users.Add(user);
 
+            using var transactionScope = new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }, 
+                TransactionScopeAsyncFlowOption.Enabled);
+
             var saveResult = await DbContext.SaveChangesAsync(allowedStatuses: DbStatus.DuplicateIndex, cancellationToken: cancellationToken);
+
+            if (saveResult.Status == DbStatus.Success)
+            {
+                transactionScope.Complete();
+            }
 
             return saveResult.Status switch
             {

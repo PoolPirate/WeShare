@@ -9,7 +9,8 @@ public class Dispatcher : Singleton, IDispatcher
 {
     public void Enqueue(IRequest request, string jobName)
     {
-        BackgroundJob.Enqueue<DispatcherBridge>(x => x.Send(jobName, request));
+        var client = new BackgroundJobClient();
+        client.Enqueue<DispatcherBridge>(x => x.Send(jobName, request));
     }
 }
 

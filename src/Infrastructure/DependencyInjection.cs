@@ -31,7 +31,7 @@ public static class DependencyInjection
             .UsePostgreSqlStorage(provider.GetRequiredService<DatabaseOptions>().HangfireConnectionString, new PostgreSqlStorageOptions()
             {
                 PrepareSchemaIfNecessary = true,
-                
+                EnableTransactionScopeEnlistment = true,
             }));
 
         services.AddHangfireServer();

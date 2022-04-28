@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Reflection;
+using System.Transactions;
 using WeShare.Application.Common;
 using WeShare.Application.Services;
 using WeShare.Domain.Common;
@@ -71,7 +72,7 @@ public class ShareDbContext : MergingDbContext, IShareContext
 
         var domainEvents = GetUnpublishedDomainEvents();
 
-        if (Database.CurrentTransaction is null && domainEvents.Length != 0)
+        if (Transaction.Current is null && Database.CurrentTransaction is null && domainEvents.Length != 0)
         {
             transaction = await Database.BeginTransactionAsync(cancellationToken);
         }
@@ -144,4 +145,9 @@ public class ShareDbContext : MergingDbContext, IShareContext
 
     public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken)
         => Database.BeginTransactionAsync(cancellationToken);
+    public async Task CloseConnectionAsync()
+    {
+        await Database.CloseConnectionAsync();
+        await DisposeAsync();
+    }
 }

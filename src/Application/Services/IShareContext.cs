@@ -15,6 +15,7 @@ public interface IShareContext
     DbSet<Subscription> Subscriptions { get; }
 
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
+    Task CloseConnectionAsync();
 
     Task<DbSaveResult> SaveChangesAsync(DbStatus allowedStatuses = DbStatus.Success,
         IDbContextTransaction? transaction = null, CancellationToken cancellationToken = default);
