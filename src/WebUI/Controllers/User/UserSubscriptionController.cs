@@ -25,6 +25,4 @@ public class UserSubscriptionController : ExtendedControllerBase
             _ => throw new InvalidOperationException(),
         };
     }
-
-
 }

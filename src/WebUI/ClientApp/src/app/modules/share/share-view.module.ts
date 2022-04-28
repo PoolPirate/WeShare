@@ -16,7 +16,8 @@ import { SharedModule } from '../../shared/shared.module';
 import { ShareViewEditComponent } from './modules/edit/share-view-edit.component';
 import { ShareViewSettingsComponent } from './modules/settings/share-view-settings.component';
 import { ProfileSubscriptionSnippetsResolver } from '../profile/resolvers/profile-subscriptionsnippets.resolver';
-import { ShareViewSubscriptionTypeDialogComponent } from './components/subscription-type-menu/share-view-subscription-type-dialog.component';
+import { ShareViewSubscriptionTypeDialogComponent } from './components/subscription-type-dialog/share-view-subscription-type-dialog.component';
+import { ShareViewCreatePostDialogComponent } from './components/create-post-dialog/share-view-create-post-dialog.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'overview' },
@@ -48,7 +49,8 @@ const routes: Routes = [
     ShareViewPostsComponent,
     ShareViewSubscribeButtonComponent,
     ShareViewSubscriptionsComponent,
-    ShareViewSubscriptionTypeDialogComponent
+    ShareViewSubscriptionTypeDialogComponent,
+    ShareViewCreatePostDialogComponent,
   ],
   imports: [
     MaterialModule,

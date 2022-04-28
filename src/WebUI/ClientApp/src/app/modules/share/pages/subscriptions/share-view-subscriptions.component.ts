@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../../../services/authservice';
+import { WeShareClient } from '../../../../../services/weshareclient';
 import { PaginatedResponse, Resolved } from '../../../../../types/general-types';
 import { ShareData } from '../../../../../types/share-types';
 import { SubscriptionSnippet } from '../../../../../types/subscription-types';
@@ -18,7 +20,10 @@ export class ShareViewSubscriptionsComponent {
   subscriptionSnippetsResponse: PaginatedResponse<SubscriptionSnippet>;
   subscriptionSnippets: SubscriptionSnippet[];
 
-  constructor(shareService: ShareService, authService: AuthService, router: Router, route: ActivatedRoute) {
+  lastPageEvent: PageEvent | null;
+
+  constructor(private weShareClient: WeShareClient, private authService: AuthService,
+    shareService: ShareService, router: Router, route: ActivatedRoute) {
     if (authService.isLoggedOut()) {
       router.navigate(['login']);
     }
@@ -46,4 +51,38 @@ export class ShareViewSubscriptionsComponent {
       }
     });
   }
+
+
+  refreshList(pageEvent: PageEvent | null) {
+    this.lastPageEvent = pageEvent;
+
+    if (pageEvent) {
+      this.updateList(pageEvent.pageIndex, pageEvent.pageSize);
+    }
+    else {
+      this.updateList(0, 10);
+    }
+
+  }
+
+  updateList(pageIndex: number, pageSize: number) {
+    this.weShareClient.getSubscriptionSnippets(this.authService.getUserId()!, null, pageIndex, pageSize)
+      .subscribe(success => {
+        this.subscriptionSnippetsResponse = success;
+        this.subscriptionSnippets = this.subscriptionSnippetsResponse.items;
+      }, error => {
+        alert("There was an error while loading the data!");
+      });
+  }
+
+  onDelete(subscriptionSnippet: SubscriptionSnippet) {
+    this.weShareClient.removeSubscription(subscriptionSnippet.id)
+      .subscribe(success => {
+        this.refreshList(this.lastPageEvent);
+      }, error => {
+        this.refreshList(this.lastPageEvent);
+        alert("There was an error while deleting subscription");
+      });
+  }
+
 }

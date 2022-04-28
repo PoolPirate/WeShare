@@ -26,16 +26,19 @@ public class UserQueryAuthorizationHandler : AuthorizationHandler<UserId, UserQu
         var optionalUserId = CurrentUserService.GetUserId();
         if (!optionalUserId.HasValue)
         {
-            return false;
+            return operation switch
+            {
+                UserQueryOperation.ReadLikedShares => await DbContext.Users
+                                    .Where(x => x.Id == entity)
+                                    .AllAsync(x => x.LikesPublished, cancellationToken),
+                _ => false,
+            };
         }
         var userId = optionalUserId.Value;
 
         return operation switch
         {
-            UserQueryOperation.ReadLikedShares => userId == entity ||
-                await DbContext.Users
-                .Where(x => x.Id == entity)
-                .AllAsync(x => x.LikesPublished, cancellationToken),
+            UserQueryOperation.ReadLikedShares or
             UserQueryOperation.ReadAccount or
             UserQueryOperation.ReadSubscriptions
                 => userId == entity,

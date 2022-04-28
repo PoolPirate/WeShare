@@ -80,6 +80,7 @@ public class Startup
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
+                RequireExpirationTime = true,
                 ValidIssuer = securityOptions.JwtIssuer,
                 ValidAudience = securityOptions.JwtIssuer,
                 IssuerSigningKey = securityKey,

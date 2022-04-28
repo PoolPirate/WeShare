@@ -20,6 +20,8 @@ export class ProfileSubscriptionsComponent {
   subscriptionSnippetsResponse: PaginatedResponse<SubscriptionSnippet>;
   subscriptionSnippets: SubscriptionSnippet[];
 
+  lastPageEvent: PageEvent | null;
+
   constructor(private profileStore: ProfileStore, private authService: AuthService, private weShareClient: WeShareClient,
     route: ActivatedRoute, router: Router) {
     route.data.subscribe(data => {
@@ -43,13 +45,35 @@ export class ProfileSubscriptionsComponent {
     });
   }
 
-  refreshList(pageEvent: PageEvent) {
-    this.weShareClient.getSubscriptionSnippets(this.userSnippet.id, null, pageEvent.pageIndex, pageEvent.pageSize)
+  refreshList(pageEvent: PageEvent | null) {
+    this.lastPageEvent = pageEvent;
+
+    if (pageEvent) {
+      this.updateList(pageEvent.pageIndex, pageEvent.pageSize);
+    }
+    else {
+      this.updateList(0, 10);
+    }
+
+  }
+
+  updateList(pageIndex: number, pageSize: number) {
+    this.weShareClient.getSubscriptionSnippets(this.userSnippet.id, null, pageIndex, pageSize)
       .subscribe(success => {
         this.subscriptionSnippetsResponse = success;
         this.subscriptionSnippets = this.subscriptionSnippetsResponse.items;
       }, error => {
         alert("There was an error while loading the data!");
+      });
+  }
+
+  onDelete(subscriptionSnippet: SubscriptionSnippet) {
+    this.weShareClient.removeSubscription(subscriptionSnippet.id)
+      .subscribe(success => {
+        this.refreshList(this.lastPageEvent);
+      }, error => {
+        this.refreshList(this.lastPageEvent);
+        alert("There was an error while deleting subscription");
       });
   }
 

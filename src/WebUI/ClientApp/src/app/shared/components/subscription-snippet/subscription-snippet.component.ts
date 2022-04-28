@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { SubscriptionSnippet } from '../../../../types/subscription-types';
 
 @Component({
@@ -9,4 +9,11 @@ import { SubscriptionSnippet } from '../../../../types/subscription-types';
 export class SubscriptionSnippetComponent {
   @Input()
   subscriptionSnippet: SubscriptionSnippet;
+
+  @Output()
+  delete = new EventEmitter();
+
+  onDelete() {
+    this.delete.emit();
+  }
 }

@@ -25,7 +25,6 @@ public class GetUserSubscriptionSnippetsPaginated
         [Range(3, 100)]
         public ushort PageSize { get; }
 
-
         public Query(UserId userId, SubscriptionType? type, ushort page, ushort pageSize)
         {
             UserId = userId;

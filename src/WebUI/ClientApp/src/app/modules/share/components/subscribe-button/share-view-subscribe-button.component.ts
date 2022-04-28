@@ -15,7 +15,6 @@ export class ShareViewSubscribeButtonComponent {
   onStatusUpdate = new EventEmitter<boolean>();
 
   subscribe() {
-    this.subscribed = !this.subscribed;
     this.onStatusUpdate.emit(this.subscribed);
   }
 }

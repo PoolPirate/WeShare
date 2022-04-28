@@ -1,0 +1,20 @@
+.push-right {
+  margin-left: auto;
+}
+
+.flex {
+  display: flex;
+}
+
+mat-expansion-panel {
+  margin: 12px;
+}
+
+mat-panel-description {
+  display: flex;
+  justify-content: right;
+} 
+
+mat-stepper {
+  width: 60vw;
+}

@@ -8,7 +8,7 @@ namespace WeShare.WebAPI.Controllers;
 [ApiController]
 public class SubscriptionManageController : ExtendedControllerBase
 {
-    [HttpPost("Create/{shareId}/{userId}")]
+    [HttpPost("Create")]
     public async Task<ActionResult<long>> CreateSubscriptionAsync([FromBody] SubscriptionCreateForm createForm,
         CancellationToken cancellationToken)
     {

@@ -6,7 +6,7 @@ import { AuthService } from '../../../../../services/authservice';
 import { WeShareClient } from '../../../../../services/weshareclient';
 import { ShareData, ShareUserData } from '../../../../../types/share-types';
 import { LikeButtonComponent } from '../../../../shared/components/like-button/like-button.component';
-import { ShareViewSubscriptionTypeDialogComponent } from '../../components/subscription-type-menu/share-view-subscription-type-dialog.component';
+import { ShareViewSubscriptionTypeDialogComponent } from '../../components/subscription-type-dialog/share-view-subscription-type-dialog.component';
 import { ShareService } from '../../services/shareservice';
 
 @Component({
@@ -20,14 +20,16 @@ export class ShareViewOverviewComponent {
 
   @ViewChild(LikeButtonComponent) likebutton: LikeButtonComponent;
 
-  constructor(private weShareClient: WeShareClient, private authService: AuthService, private router: Router, private subscriptionTypeDialog: MatDialog,
+  constructor(private weShareClient: WeShareClient, private authService: AuthService, private router: Router, private matDialog: MatDialog,
     shareService: ShareService) {
     this.shareData = shareService.shareData;
     this.shareUserData = shareService.shareUserData;
   }
 
   openSubscriptionTypeDialog() {
-    this.subscriptionTypeDialog.open(ShareViewSubscriptionTypeDialogComponent);
+    this.matDialog.open(ShareViewSubscriptionTypeDialogComponent, {
+      data: { shareId: this.shareData.shareInfo.id }
+    });
   }
 
   subscribeStatusUpdate(subscribed: boolean) {

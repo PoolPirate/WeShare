@@ -136,8 +136,8 @@ export class WeShareClient {
       .pipe(shareReplay(1));
   }
 
-  getShareSubscriptionSnippets(userId: number, shareId: number) {
-    return this.client.get<PaginatedResponse<SubscriptionSnippet>>("Api/User/Share/Subscription/Snippets/Id/" + userId + "/" + shareId + "/" + 0 + "/" + 10, { headers: this.getHeaders() })
+  getShareSubscriptionSnippets(userId: number, shareId: number, page: number, pageSize: number) {
+    return this.client.get<PaginatedResponse<SubscriptionSnippet>>("Api/User/Share/Subscription/Snippets/Id/" + userId + "/" + shareId + "/" + page + "/" + pageSize, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
@@ -146,9 +146,9 @@ export class WeShareClient {
       .pipe(shareReplay(1));
   }
 
-  createSubscription(shareId: number) {
+  createSubscription(shareId: number, type: SubscriptionType, name: string) {
     const userId = this.authService.getUserId();
-    return this.client.post<number>("Api/Subscription/Create/" + shareId + "/" + userId, {}, { headers: this.getHeaders() })
+    return this.client.post<number>("Api/Subscription/Create/", { shareId, userId, type, name }, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 

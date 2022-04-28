@@ -20,6 +20,17 @@ export class AuthService {
     return request;
   }
 
+  ensureNotOutdated(): any {
+    const expiration = localStorage.getItem('expires_at');
+    if (expiration == null) {
+      return false;
+    }
+    const loggedIn = Date.now() < Number.parseInt(expiration);
+    if (!loggedIn) {
+      this.logout();
+    }
+  }
+
   logout() {
     localStorage.removeItem('jwt_token');
     localStorage.removeItem('user_id');
@@ -29,11 +40,10 @@ export class AuthService {
   }
 
   isLoggedIn() {
+    this.ensureNotOutdated();
+
     const expiration = localStorage.getItem('expires_at');
-    if (expiration == null) {
-      return false;
-    }
-    return Date.now() < Number.parseInt(expiration);
+    return expiration != null;
   }
 
   isLoggedOut() {
@@ -41,14 +51,18 @@ export class AuthService {
   }
 
   getToken() {
+    this.ensureNotOutdated();
     return localStorage.getItem('jwt_token');
   }
   getUserId() {
+    this.ensureNotOutdated();
     const raw = localStorage.getItem('user_id');
     if (raw == null) {
       return null;
     }
-    return Number.parseInt(raw);
+    const userId = Number.parseInt(raw);
+
+    return userId;
   }
   setNickname(nickname: string | null) {
     if (nickname == null) {
@@ -70,6 +84,7 @@ export class AuthService {
     localStorage.setItem('user_name', username);
   }
   getUsername() {
+    this.ensureNotOutdated();
     return localStorage.getItem('user_name');
   }
 

@@ -52,7 +52,7 @@ public class SubscriptionCreateAction
                 .Where(x => x.ShareId == request.ShareId)
                 .OrderByDescending(x => x.CreatedAt)
                 .Select<Post, PostId?>(x => x.Id)
-                .SingleOrDefaultAsync(cancellationToken);
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (mostRecentPostId == default &&
                 !await DbContext.Shares.AnyAsync(x => x.Id == request.ShareId, cancellationToken))

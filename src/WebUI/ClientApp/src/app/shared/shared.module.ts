@@ -17,6 +17,9 @@ import { SubscriptionSnippetComponent } from './components/subscription-snippet/
 import { PostSnippetComponent } from './components/post-snippet/post-snippet.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { CreateButtonComponent } from './components/create-button/create-button.component';
+import { PagedListHeaderComponent } from './components/paged-list-header/paged-list-header.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -27,6 +30,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     LikeButtonComponent,
     SubscriptionSnippetComponent,
     PostSnippetComponent,
+    CreateButtonComponent,
+    PagedListHeaderComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +46,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatIconModule,
     MatButtonModule,
     MatCardModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatPaginatorModule
   ],
   exports: [ 
     NotFoundComponent,
@@ -49,10 +55,13 @@ import { MatExpansionModule } from '@angular/material/expansion';
 
     ReadmeComponent,
     LikeButtonComponent,
+    CreateButtonComponent,
 
     ShareSnippetComponent,
     SubscriptionSnippetComponent,
     PostSnippetComponent,
+
+    PagedListHeaderComponent,
 
     CommonModule,
 
@@ -65,7 +74,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatIconModule,
     MatButtonModule,
     MatCardModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatPaginatorModule,
   ],
   providers: [
     AuthService,

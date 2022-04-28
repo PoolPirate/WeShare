@@ -15,7 +15,7 @@ export class ShareViewSubscriptionSnippetsResolver implements Resolve<Resolved<P
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Resolved<PaginatedResponse<SubscriptionSnippet>> | Observable<Resolved<PaginatedResponse<SubscriptionSnippet>>> | Promise<Resolved<PaginatedResponse<SubscriptionSnippet>>> {
     const userId = this.authService.getUserId()!;
     const shareId = route.parent?.params["shareId"];
-    return this.weShareClient.getShareSubscriptionSnippets(userId, shareId)
+    return this.weShareClient.getShareSubscriptionSnippets(userId, shareId, 0, 10)
       .pipe(
         map(value => (Resolved.success(value))),
         catchError(error => of(Resolved.error<PaginatedResponse<SubscriptionSnippet>>(error))),

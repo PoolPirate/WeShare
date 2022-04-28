@@ -9,7 +9,8 @@
      [active]="activeLink == 'posts'">
     Posts
   </a>
-  <a mat-tab-link [routerLink]="['./subscriptions']"
+  <a *ngIf="isOwnProfile"
+     mat-tab-link [routerLink]="['./subscriptions']"
      (click)="activeLink = 'subscriptions'"
      [active]="activeLink == 'subscriptions'"
      class="push-right">

@@ -1,15 +1,18 @@
-<div *ngIf="posts.length != 0">
-  <mat-paginator [length]="postsResponse.totalCount"
-                 [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
-                 (page)="refreshList($event)">
-  </mat-paginator>
+<div *ngIf="posts">
+  <shared-paged-list-header [count]="postsResponse.totalCount"
+                            [showCreateButton]="isOwnShare"
+                            (create)="createPost()" (page)="refreshList($event)"></shared-paged-list-header>
 
-  <div *ngFor="let post of posts">
-    <shared-post-snippet [postSnippet]="post"></shared-post-snippet>
+  <div *ngIf="posts.length != 0">
+    <div *ngFor="let post of posts">
+      <shared-post-snippet [postSnippet]="post"></shared-post-snippet>
+    </div>
   </div>
+
+  <p *ngIf="posts.length == 0">
+    Nothing posted yet...
+  </p>
+
 </div>
 
-<p *ngIf="posts.length == 0">
-  Nothing posted yet...
-</p>
 

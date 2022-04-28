@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../../../../services/authservice';
 import { WeShareClient } from '../../../../../services/weshareclient';
 import { PaginatedResponse, Resolved } from '../../../../../types/general-types';
 import { PostSnippet } from '../../../../../types/post-types';
 import { ShareData } from '../../../../../types/share-types';
+import { ShareViewCreatePostDialogComponent } from '../../components/create-post-dialog/share-view-create-post-dialog.component';
 import { ShareService } from '../../services/shareservice';
 
 @Component({
@@ -19,7 +22,8 @@ export class ShareViewPostsComponent {
   posts: PostSnippet[];
   errorCode: number;
 
-  constructor(private weShareClient: WeShareClient, shareService: ShareService, router: Router, route: ActivatedRoute) {
+  constructor(private weShareClient: WeShareClient, private matDialog: MatDialog, private authService: AuthService,
+    shareService: ShareService, router: Router, route: ActivatedRoute) {
     this.shareData = shareService.shareData;
 
     route.data.subscribe(data => {
@@ -49,5 +53,13 @@ export class ShareViewPostsComponent {
       }, error => {
         alert("There was an error while loading the data!");
       });
+  }
+
+  createPost() {
+    this.matDialog.open(ShareViewCreatePostDialogComponent);
+  }
+
+  get isOwnShare() {
+    return this.shareData.ownerSnippet.id == this.authService.getUserId();
   }
 }

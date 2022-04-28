@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Create a Post</h1>
+
+<mat-stepper>
+  <mat-step>
+    <ng-template matStepLabel>Headers</ng-template>
+    <div mat-dialog-actions class="flex">
+      <button class="push-right" mat-button mat-dialog-close color="error">Cancel</button>
+      <button class="push-right" mat-button matStepperNext color="primary">Next</button>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Payload</ng-template>
+    <div mat-dialog-actions class="flex">
+      <button class="push-right" mat-button mat-dialog-close color="error">Cancel</button>
+      <button class="push-right" mat-button matStepperNext color="primary">Next</button>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Publish</ng-template>
+
+    <div mat-dialog-actions class="flex">
+      <button class="push-right" mat-button mat-dialog-close color="error">Cancel</button>
+      <button class="push-right" mat-button color="primary" (click)="submit()">Submit</button>
+    </div>
+  </mat-step>
+</mat-stepper>
+

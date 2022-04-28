@@ -5,9 +5,9 @@
   </mat-paginator>
 
   <div *ngFor="let subscriptionSnippet of subscriptionSnippets">
-    <shared-subscription-snippet [subscriptionSnippet]="subscriptionSnippet"></shared-subscription-snippet>
+    <shared-subscription-snippet [subscriptionSnippet]="subscriptionSnippet"
+                                 (delete)="onDelete(subscriptionSnippet)"></shared-subscription-snippet>
   </div>
-
 </div>
 
 <p *ngIf="subscriptionSnippets && subscriptionSnippets.length == 0">

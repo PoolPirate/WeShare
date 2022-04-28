@@ -5,5 +5,8 @@
   <mat-panel-description class="push-right">
     Name: {{ subscriptionSnippet.name }}
   </mat-panel-description>
-  <button class="push-right" [routerLink]="['/subscription', subscriptionSnippet.id]" mat-raised-button color="primary">View</button>
+  <button (click)="onDelete()"
+          class="push-right" mat-raised-button color="error">Delete</button>
+  <button [routerLink]="['/subscription', subscriptionSnippet.id]"
+          mat-raised-button color="primary">Manage</button>
 </mat-card>
