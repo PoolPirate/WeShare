@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using WeShare.Application.Actions.Commands;
+using WeShare.Application.Actions.Tasks;
 using WeShare.Application.Common.Models;
 using WeShare.Application.Services;
 using WeShare.Domain.Enums;
@@ -22,10 +22,10 @@ public class CallbackCreatedEventHandler : INotificationHandler<DomainEventNotif
         switch (callback.Type)
         {
             case CallbackType.EmailVerification:
-                Dispatcher.Enqueue(new SendEmailVerificationAction.Command(callback.Id), $"Send Verification To User {callback.OwnerId}");
+                Dispatcher.Enqueue(new SendEmailVerificationTask.Command(callback.Id), $"Send Verification To User {callback.OwnerId}");
                 return Task.CompletedTask;
             case CallbackType.PasswordReset:
-                Dispatcher.Enqueue(new SendEmailPasswordResetAction.Command(callback.Id), $"Send Password Reset To User {callback.OwnerId}");
+                Dispatcher.Enqueue(new SendEmailPasswordResetTask.Command(callback.Id), $"Send Password Reset To User {callback.OwnerId}");
                 return Task.CompletedTask;
             default:
                 return Task.CompletedTask;

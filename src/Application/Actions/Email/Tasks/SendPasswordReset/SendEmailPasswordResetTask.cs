@@ -5,8 +5,8 @@ using WeShare.Application.Services;
 using WeShare.Domain.Entities;
 using WeShare.Domain.Enums;
 
-namespace WeShare.Application.Actions.Commands;
-public class SendEmailVerificationAction
+namespace WeShare.Application.Actions.Tasks;
+public class SendEmailPasswordResetTask
 {
     public class Command : IRequest
     {
@@ -24,7 +24,7 @@ public class SendEmailVerificationAction
         private readonly IEmailSender EmailSender;
         private readonly ILogger Logger;
 
-        public Handler(IShareContext dbContext, IEmailSender emailSender, ILogger<SendEmailVerificationAction> logger)
+        public Handler(IShareContext dbContext, IEmailSender emailSender, ILogger<SendEmailVerificationTask> logger)
         {
             DbContext = dbContext;
             EmailSender = emailSender;
@@ -47,7 +47,7 @@ public class SendEmailVerificationAction
                 Logger.LogWarning("Not sending email, Already sucessfully sent: CallbackId={callbackId}", request.CallbackId);
                 return Unit.Value;
             }
-            if (callback.Type != CallbackType.EmailVerification)
+            if (callback.Type != CallbackType.PasswordReset)
             {
                 throw new InvalidOperationException($"Invalid Callback Type: CallbackId={request.CallbackId}");
             }
@@ -63,7 +63,7 @@ public class SendEmailVerificationAction
                 return Unit.Value;
             }
 
-            await EmailSender.SendVerificationEmail(userData.Username, userData.Nickname, userData.Email, callback.Secret);
+            await EmailSender.SendPasswordResetEmail(userData.Username, userData.Nickname, userData.Email, callback.Secret);
             callback.SuccessfullySentAt = DateTimeOffset.UtcNow;
 
             Logger.LogInformation("Sucessfully sent email: CallbackId={callbackId} ; UserId={userId}", request.CallbackId, callback.OwnerId);

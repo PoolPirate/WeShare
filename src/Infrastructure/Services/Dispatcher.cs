@@ -1,12 +1,16 @@
 ﻿using Common.Services;
 using Hangfire;
 using MediatR;
+using System.Transactions;
 using WeShare.Application.Services;
 
 namespace WeShare.Infrastructure.Services;
 public class Dispatcher : Singleton, IDispatcher
 {
-    public void Enqueue(IRequest request, string jobName) => BackgroundJob.Enqueue<DispatcherBridge>(x => x.Send(jobName, request));
+    public void Enqueue(IRequest request, string jobName)
+    {
+        BackgroundJob.Enqueue<DispatcherBridge>(x => x.Send(jobName, request));
+    }
 }
 
 public class DispatcherBridge : Scoped

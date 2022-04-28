@@ -111,6 +111,10 @@ public class ShareDbContext : MergingDbContext, IShareContext
 
     private void EnsureTransactionIsUsed(IDbContextTransaction? transaction)
     {
+        if (transaction is null)
+        {
+            return;
+        }
         if (transaction != Database.CurrentTransaction)
         {
             throw new InvalidOperationException("This context does not use the given transaction!");
