@@ -17,12 +17,12 @@ public abstract class MergingDbContext : DbContext
         PropertyMerger = propertyMerger;
     }
 
-    public virtual async Task<DbSaveResult> SaveChangesAsync(DbStatus allowedStatuses = DbStatus.Success,
+    public virtual async Task<DbSaveResult> SaveChangesAsync(DbStatus allowedStatuses = DbStatus.Success, bool discardConcurrentDeletedEntries = false,
         IDbContextTransaction? transaction = null, CancellationToken cancellationToken = default)
     {
         try
         {
-            int affectedRows = await SaveChangesAsync(cancellationToken);
+            int affectedRows = await SaveChangesAsync(discardConcurrentDeletedEntries, cancellationToken);
             return DbSaveResult.FromSuccess(affectedRows);
         }
         catch (Exception ex)
@@ -38,7 +38,7 @@ public abstract class MergingDbContext : DbContext
         }
     }
 
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override async Task<int> SaveChangesAsync(bool discardConcurrentDeletedEntries, CancellationToken cancellationToken = default)
     {
         bool saved = false;
         while (!saved)
@@ -49,7 +49,7 @@ public abstract class MergingDbContext : DbContext
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                if (!await MergeConcurrencyConflicts(ex.Entries, cancellationToken))
+                if (!await MergeConcurrencyConflicts(ex.Entries, discardConcurrentDeletedEntries, cancellationToken))
                 {
                     throw;
                 }
@@ -63,7 +63,7 @@ public abstract class MergingDbContext : DbContext
 
     private Task StepBackBeforeRetry(CancellationToken cancellationToken) => Task.Delay(Random.Next(1, 20), cancellationToken);
 
-    private async Task<bool> MergeConcurrencyConflicts(IEnumerable<EntityEntry> conflicts, CancellationToken cancellationToken)
+    private async Task<bool> MergeConcurrencyConflicts(IEnumerable<EntityEntry> conflicts, bool discardConcurrentDeletedEntries, CancellationToken cancellationToken)
     {
         foreach (var entry in conflicts)
         {
@@ -71,7 +71,13 @@ public abstract class MergingDbContext : DbContext
 
             if (databaseValues is null)
             {
-                return false;
+                if (!discardConcurrentDeletedEntries)
+                {
+                    return false;
+                }
+
+                entry.State = EntityState.Detached;
+                continue;
             }
 
             var originalValues = entry.OriginalValues;

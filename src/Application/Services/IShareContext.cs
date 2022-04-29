@@ -18,6 +18,6 @@ public interface IShareContext
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
     Task CloseConnectionAsync();
 
-    Task<DbSaveResult> SaveChangesAsync(DbStatus allowedStatuses = DbStatus.Success,
+    Task<DbSaveResult> SaveChangesAsync(DbStatus allowedStatuses = DbStatus.Success, bool discardConcurrentDeletedEntries = false,
         IDbContextTransaction? transaction = null, CancellationToken cancellationToken = default);
 }

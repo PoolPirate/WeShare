@@ -1,5 +1,6 @@
 ﻿using Common.Services;
 using MediatR;
+using WeShare.Application.Actions.Tasks;
 using WeShare.Application.Common.Models;
 using WeShare.Application.Services;
 using WeShare.Domain.Entities;
@@ -17,7 +18,9 @@ public class Created : INotificationHandler<DomainEventNotification<PostCreatedE
 
     public Task Handle(DomainEventNotification<PostCreatedEvent> notification, CancellationToken cancellationToken)
     {
-
+        var post = notification.DomainEvent.Post;
+        Dispatcher.Enqueue(new PostPublishToWebhookTask.Command(post.Id),
+            $"Webhook Publish Post {post.Id}");
 
         return Task.CompletedTask;
     }

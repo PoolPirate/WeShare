@@ -56,7 +56,7 @@ public class ShareDbContext : MergingDbContext, IShareContext
         base.ConfigureConventions(configurationBuilder);
     }
 
-    public override async Task<DbSaveResult> SaveChangesAsync(DbStatus allowedStatuses = DbStatus.Success,
+    public override async Task<DbSaveResult> SaveChangesAsync(DbStatus allowedStatuses = DbStatus.Success, bool discardConcurrentDeletedEntries = false,
         IDbContextTransaction? transaction = null, CancellationToken cancellationToken = new CancellationToken())
     {
         EnsureTransactionIsUsed(transaction);
@@ -80,7 +80,7 @@ public class ShareDbContext : MergingDbContext, IShareContext
 
         try
         {
-            var result = await base.SaveChangesAsync(allowedStatuses, cancellationToken: cancellationToken);
+            var result = await base.SaveChangesAsync(allowedStatuses, discardConcurrentDeletedEntries, cancellationToken: cancellationToken);
 
             if (result.Status == DbStatus.Success)
             {
