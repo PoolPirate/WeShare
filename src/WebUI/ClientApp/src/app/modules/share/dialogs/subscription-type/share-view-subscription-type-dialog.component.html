@@ -13,7 +13,7 @@
     </mat-expansion-panel-header>
     <div class="flex">
       <button class="push-right" mat-raised-button color="primary"
-              (click)="createAndRedirect(subscriptionType.Dashboard)">Use</button>
+              (click)="openCreationDialog(subscriptionType.Dashboard)">Use</button>
     </div>
   </mat-expansion-panel>
 
@@ -100,7 +100,8 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
     <div class="flex">
-      <button class="push-right" mat-raised-button color="primary">Use</button>
+      <button class="push-right" mat-raised-button color="primary"
+              (click)="openCreationDialog(subscriptionType.Webhook)">Use</button>
     </div>
   </mat-expansion-panel>
 </mat-accordion>

@@ -9,8 +9,9 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 {
 
     private readonly IDictionary<Type, Action<ExceptionContext>> ExceptionHandlers;
+    private readonly ILogger Logger;
 
-    public ApiExceptionFilterAttribute()
+    public ApiExceptionFilterAttribute(ILogger<ApiExceptionFilterAttribute> logger)
     {
         // Register known exception types and handlers.
         ExceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
@@ -20,6 +21,8 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
                 { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
                 { typeof(ForbiddenAccessException), HandleForbiddenAccessException }
             };
+
+        Logger = logger;
     }
 
     public override void OnException(ExceptionContext context)
@@ -123,7 +126,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         context.ExceptionHandled = true;
     }
 
-    private static void HandleUnknownException(ExceptionContext context)
+    private void HandleUnknownException(ExceptionContext context)
     {
         var details = new ProblemDetails
         {
@@ -138,5 +141,6 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         };
 
         context.ExceptionHandled = true;
+        Logger.LogCritical(context.Exception, "An unhandled exception has occurred while executing the request");
     }
 }

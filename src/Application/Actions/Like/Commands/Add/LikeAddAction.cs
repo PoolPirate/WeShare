@@ -51,7 +51,7 @@ public class LikeAddAction
                 .Where(x => x.Id == like.ShareId)
                 .UpdateFromQueryAsync(x => new Share() { LikeCount = x.LikeCount + 1 }, cancellationToken: cancellationToken);
 
-            var saveResult = await DbContext.SaveChangesAsync(DbStatus.DuplicateIndex, transaction, cancellationToken);
+            var saveResult = await DbContext.SaveChangesAsync(DbStatus.DuplicateIndex, transaction: transaction, cancellationToken: cancellationToken);
 
             return saveResult.Status switch
             {

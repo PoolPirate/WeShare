@@ -54,8 +54,12 @@ public class AuthorizationHandlerMapper : Singleton
         return base.InitializeAsync();
     }
 
-    public (Type, Func<object, object, Enum, CancellationToken, ValueTask<bool>>) GetAuthorizationHandlerType(Type entityType, Type operationType) => !AuthorizationHandlerMap.TryGetValue((entityType, operationType), out var handlerType)
-            ? throw new InvalidOperationException($"No AuthorizationHandler for entity type {entityType} for operation type {operationType} registered!")
-            : handlerType;
+    public (Type, Func<object, object, Enum, CancellationToken, ValueTask<bool>>) GetAuthorizationHandlerType(Type entityType, Type operationType) 
+        => AuthorizationHandlerMap.TryGetValue((entityType, operationType), out var handlerType)
+            ? handlerType
+            : entityType.BaseType is not null &&
+              AuthorizationHandlerMap.TryGetValue((entityType.BaseType, operationType), out handlerType)
+                ? handlerType
+                : throw new InvalidOperationException($"No AuthorizationHandler for entity type {entityType} for operation type {operationType} registered!");
 }
 

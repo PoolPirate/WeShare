@@ -1,0 +1,43 @@
+<div>
+  <h1>Create Dashboard Subscription</h1>
+
+  <mat-stepper labelPosition="bottom" #stepper>
+    <mat-step [stepControl]="name">
+      <ng-template matStepLabel>Name</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Subscription Name</mat-label>
+        <input matInput [formControl]="name"
+               placeholder="AnotherSuperCoolName" autocomplete="off">
+        <button *ngIf="name.value" matSuffix mat-icon-button (click)="name.reset()" class="borderless">
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-error *ngIf="name.invalid">
+          {{ name.hasError('minlength') ? "Name must have at least 1 characters" : "" }}
+          {{ name.hasError('maxlength') ? "Name must have at most 24 characters" : "" }}
+        </mat-error>
+      </mat-form-field>
+
+      <div mat-dialog-actions class="flex">
+        <button mat-raised-button color="accent"
+                (click)="backToTypeSelect()">Back</button>
+        <button mat-button mat-dialog-close color="error">Cancel</button>
+        <button matStepperNext mat-raised-button class="push-right" color="primary">Next</button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+
+      <div mat-dialog-actions class="flex">
+        <button matStepperPrevious mat-raised-button color="accent">Back</button>
+        <button mat-button mat-dialog-close color="error">Cancel</button>
+        <button matStepperNext mat-raised-button class="push-right" color="primary"
+                [disabled]="!stepperCompleted"
+                (click)="createAndRedirect()">Subscribe</button>
+      </div>
+    </mat-step>
+  </mat-stepper>
+</div>
+
+
+
+

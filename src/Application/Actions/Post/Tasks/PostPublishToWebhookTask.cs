@@ -9,7 +9,7 @@ using WeShare.Domain.Entities;
 namespace WeShare.Application.Actions.Tasks;
 public class PostPublishToWebhookTask
 {
-    private const int ChunksSize = 50;
+    private const int ChunkSize = 50;
 
     public class Command : IRequest
     {
@@ -59,19 +59,24 @@ public class PostPublishToWebhookTask
 
             var content = await PostStorage.LoadAsync(post.Id, cancellationToken);
 
+            if (content is null)
+            {
+                throw new InvalidOperationException($"Loading post content failed: PostId={post.Id}");
+            }
+
             var options = new ParallelOptions()
             {
                 CancellationToken = cancellationToken,
                 MaxDegreeOfParallelism = 4,
             };
 
-            await Parallel.ForEachAsync(GetTargetSubscriptionChunks(request.PostId, post.CreatedAt, post.ShareId), options,
+            await Parallel.ForEachAsync(await GetTargetSubscriptionChunks(request.PostId, post.CreatedAt, post.ShareId, cancellationToken), options,
                 (subscribers, cancellationToken) => PublishPostChunkToSubscribersAsync(post, content, subscribers, cancellationToken));
 
             return Unit.Value;
         }
 
-        private async ValueTask PublishPostChunkToSubscribersAsync(Post post, PostContent content, Subscription[] subscriptions, CancellationToken cancellationToken)
+        private async ValueTask PublishPostChunkToSubscribersAsync(Post post, PostContent content, WebhookSubscription[] subscriptions, CancellationToken cancellationToken)
         {
             var dbContext = Provider.GetRequiredService<IShareContext>();
 
@@ -90,7 +95,7 @@ public class PostPublishToWebhookTask
 
                 sentPost.IncrementAttempts();
 
-                bool success = await WebhookClient.TrySendPostAsync(post, content, subscription, cancellationToken);
+                bool success = await WebhookClient.TrySendPostAsync(subscription.TargetUrl, post, content, cancellationToken);
 
                 if (success)
                 {
@@ -107,17 +112,18 @@ public class PostPublishToWebhookTask
             }
         }
 
-        private IAsyncEnumerable<Subscription[]> GetTargetSubscriptionChunks(PostId postId, DateTimeOffset postCreatedAt, ShareId shareId) 
-            => DbContext.Subscriptions
-                .AsNoTracking()
-                .Where(x => x.ShareId == shareId)
-                .Where(x => x.CreatedAt >= postCreatedAt)
-                .Where(x => !x.SentPosts!
-                    .Where(x => x.PostId == postId)
-                    .Where(x => x.Received)
-                    .Any())
-                .Chunk(ChunksSize)
-                .AsAsyncEnumerable();
+        private async Task<IEnumerable<WebhookSubscription[]>> GetTargetSubscriptionChunks(PostId postId, DateTimeOffset postCreatedAt, ShareId shareId, CancellationToken cancellation)
+        {
+            var subscriptions = await DbContext.WebhookSubscriptions
+                           .AsNoTracking()
+                           .Where(x => x.ShareId == shareId && postCreatedAt >= x.CreatedAt)
+                           .Where(x => !x.SentPosts!
+                               .Where(x => x.PostId == postId && x.Received)
+                               .Any())
+                           .ToArrayAsync(cancellationToken: cancellation);
+
+            return subscriptions.Chunk(ChunkSize);
+        }
     }
 }
 

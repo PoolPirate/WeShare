@@ -146,9 +146,16 @@ export class WeShareClient {
       .pipe(shareReplay(1));
   }
 
-  createSubscription(shareId: number, type: SubscriptionType, name: string) {
+  createDashboardSubscription(shareId: number, name: string) {
+    return this.createSubscription(shareId, SubscriptionType.Dashboard, name, null);
+  }
+  createWebhookSubscription(shareId: number, name: string, targetUrl: string) {
+    return this.createSubscription(shareId, SubscriptionType.Webhook, name, targetUrl);
+  }
+
+  private createSubscription(shareId: number, type: SubscriptionType, name: string, targetUrl: string | null) {
     const userId = this.authService.getUserId();
-    return this.client.post<number>("Api/Subscription/Create/", { shareId, userId, type, name }, { headers: this.getHeaders() })
+    return this.client.post<number>("Api/Subscription/Create/", { shareId, userId, type, name, targetUrl }, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 

@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
+using System.Collections.Generic;
 using WeShare.Application.Entities;
 using WeShare.Application.Services;
 using WeShare.Domain.Entities;
@@ -14,10 +15,10 @@ public class PostSubmitAction
     {
         public ShareSecret ShareSecret { get; }
 
-        public Dictionary<string, StringValues> Headers { get; }
+        public IDictionary<string, string[]> Headers { get; }
         public Stream Payload { get; }
 
-        public Command(ShareSecret shareSecret, Dictionary<string, StringValues> headers, Stream payload)
+        public Command(ShareSecret shareSecret, IDictionary<string, string[]> headers, Stream payload)
         {
             ShareSecret = shareSecret;
             Headers = headers;
@@ -60,18 +61,28 @@ public class PostSubmitAction
                 return new Result(Status.ShareNotFound);
             }
 
-            var content = new PostContent(request.Headers, request.Payload);
-            var metaData = await PostProcessor.PreProcessAsync(content, context);
+            var (processedHeaders, processedPayload) = await PostProcessor.PreProcessAsync(request.Headers, request.Payload, context);
 
             using var transaction = await DbContext.BeginTransactionAsync(cancellationToken);
 
-            var post = Post.Create(metaData.HeadersSize, metaData.PayloadSize, context.ShareId);
+            var post = Post.Create(context.ShareId);
             DbContext.Posts.Add(post);
 
-            var saveResult = await DbContext.SaveChangesAsync(cancellationToken: cancellationToken);
+            await DbContext.SaveChangesAsync(cancellationToken: cancellationToken);
 
-            await PostStorage.StoreAsync(post.Id, content, cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
+            var metadata = await PostStorage.StoreAsync(post.Id, processedHeaders, processedPayload, cancellationToken);
+
+            try
+            {
+                post.SetMetadata(post.HeadersSize, post.PayloadSize);
+
+                await DbContext.SaveChangesAsync(transaction: transaction, cancellationToken: cancellationToken);
+            }
+            catch
+            {
+                await PostStorage.DeleteAsync(post.Id);
+                throw;
+            }
 
             return new Result(Status.Success);
         }

@@ -7,7 +7,7 @@ import { WeShareClient } from '../../../../../services/weshareclient';
 import { PaginatedResponse, Resolved } from '../../../../../types/general-types';
 import { PostSnippet } from '../../../../../types/post-types';
 import { ShareData } from '../../../../../types/share-types';
-import { ShareViewCreatePostDialogComponent } from '../../components/create-post-dialog/share-view-create-post-dialog.component';
+import { ShareViewCreatePostDialogComponent } from '../../dialogs/post-create/share-view-create-post-dialog.component';
 import { ShareService } from '../../services/shareservice';
 
 @Component({

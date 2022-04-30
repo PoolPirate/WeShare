@@ -49,7 +49,7 @@ public class Subscription : AuditableEntity
         return subscription;
     }
 
-    private Subscription(SubscriptionType type, SubscriptionName name, UserId userId, ShareId shareId)
+    protected Subscription(SubscriptionType type, SubscriptionName name, UserId userId, ShareId shareId)
     {
         Type = type;
         Name = name;

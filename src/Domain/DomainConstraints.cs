@@ -9,7 +9,7 @@ public static class DomainConstraints
     public const int NicknameLengthMaximum = 20;
 
     public const int SubscriptionnameLengthMinimum = 1;
-    public const int SubscriptionnameLengthMaximum = 16;
+    public const int SubscriptionnameLengthMaximum = 24;
 
     public const int EmailLengthMaximum = 128;
 

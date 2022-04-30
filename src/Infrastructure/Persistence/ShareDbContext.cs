@@ -20,6 +20,7 @@ public class ShareDbContext : MergingDbContext, IShareContext
     public DbSet<Callback> Callbacks { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
+    public DbSet<WebhookSubscription> WebhookSubscriptions { get; set; }
     public DbSet<SentPost> SentPosts { get; set; }
 
     public ShareDbContext(
@@ -82,14 +83,10 @@ public class ShareDbContext : MergingDbContext, IShareContext
         {
             var result = await base.SaveChangesAsync(allowedStatuses, discardConcurrentDeletedEntries, cancellationToken: cancellationToken);
 
-            if (result.Status == DbStatus.Success)
+            if (result.Status == DbStatus.Success && transaction is not null)
             {
                 await DispatchEvents(domainEvents);
-
-                if (transaction is not null)
-                {
-                    await transaction.CommitAsync(cancellationToken);
-                }
+                await transaction.CommitAsync(cancellationToken);
             }
 
             return result;

@@ -59,7 +59,7 @@ public class LikeRemoveAction
                 .Where(x => x.Id == like.ShareId)
                 .UpdateFromQueryAsync(x => new Share() { LikeCount = x.LikeCount - 1 }, cancellationToken);
 
-            var saveResult = await DbContext.SaveChangesAsync(DbStatus.ConcurrencyEntryDeleted, transaction, cancellationToken);
+            var saveResult = await DbContext.SaveChangesAsync(DbStatus.ConcurrencyEntryDeleted, transaction: transaction, cancellationToken: cancellationToken);
 
             return saveResult.Status switch
             {

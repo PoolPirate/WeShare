@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WeShare.Infrastructure.Persistence;
@@ -11,9 +12,10 @@ using WeShare.Infrastructure.Persistence;
 namespace WeShare.Infrastructure.Migrations
 {
     [DbContext(typeof(ShareDbContext))]
-    partial class ShareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220429201914_WebhookSubscription")]
+    partial class WebhookSubscription
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -3,10 +3,10 @@
 namespace WeShare.Domain.Entities;
 public class PostContent
 {
-    public IReadOnlyDictionary<string, StringValues> Headers { get; }
-    public Stream Payload { get; }
+    public IDictionary<string, string[]> Headers { get; }
+    public byte[] Payload { get; }
 
-    public PostContent(IReadOnlyDictionary<string, StringValues> headers, Stream payload)
+    public PostContent(IDictionary<string, string[]> headers, byte[] payload)
     {
         Headers = headers;
         Payload = payload;

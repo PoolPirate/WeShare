@@ -23,4 +23,12 @@ public class SubscriptionCreateForm
     /// The name of the subscription.
     /// </summary>
     public string Name { get; set; }
+
+    /// <summary>
+    /// The target url of the webhook.
+    /// </summary>
+    /// <remarks>
+    /// Only for <see cref="SubscriptionType.Webhook"/>
+    /// </remarks>
+    public Uri? TargetUrl { get; set; }
 }

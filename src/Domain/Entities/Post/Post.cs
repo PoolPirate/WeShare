@@ -14,12 +14,12 @@ public class Post : AuditableEntity, IHasDomainEvents
     /// <summary>
     /// The amount of bytes that this posts headers contains.
     /// </summary>
-    public ByteCount HeadersSize { get; init; }
+    public ByteCount HeadersSize { get; private set; } = ByteCount.From(0);
 
     /// <summary>
     /// The amount of bytes that this posts payload contains.
     /// </summary>
-    public ByteCount PayloadSize { get; init; }
+    public ByteCount PayloadSize { get; private set; } = ByteCount.From(0);
 
     /// <summary>
     /// The id of the share that this has been posted in.
@@ -36,18 +36,25 @@ public class Post : AuditableEntity, IHasDomainEvents
     /// </summary>
     public List<SentPost>? SentPosts { get; init; }
 
-    public static Post Create(ByteCount headersSize, ByteCount payloadSize, ShareId shareId)
+    public void SetMetadata(ByteCount headerSize, ByteCount payloadSize)
     {
-        var post = new Post(headersSize, payloadSize, shareId);
+        HeadersSize = headerSize;
+        PayloadSize = payloadSize;
+    }
+
+    public static Post Create(ShareId shareId)
+    {
+        var post = new Post(shareId);
         post.DomainEvents.Add(new PostCreatedEvent(post));
         return post;
     }
 
-    private Post(ByteCount headersSize, ByteCount payloadSize, ShareId shareId)
+    private Post(ShareId shareId)
     {
-        HeadersSize = headersSize;
-        PayloadSize = payloadSize;
         ShareId = shareId;
+    }
+    public Post()
+    {
     }
 }
 

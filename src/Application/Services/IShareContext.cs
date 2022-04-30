@@ -13,6 +13,7 @@ public interface IShareContext
     DbSet<Callback> Callbacks { get; }
     DbSet<Post> Posts { get; }
     DbSet<Subscription> Subscriptions { get; }
+    DbSet<WebhookSubscription> WebhookSubscriptions { get; }
     DbSet<SentPost> SentPosts { get; }
 
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);

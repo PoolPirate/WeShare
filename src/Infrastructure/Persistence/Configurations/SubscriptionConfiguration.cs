@@ -7,6 +7,11 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
 {
     public void Configure(EntityTypeBuilder<Subscription> builder)
     {
+        builder.HasDiscriminator(x => x.Type)
+            .HasValue(SubscriptionType.Dashboard)
+            .HasValue<WebhookSubscription>(SubscriptionType.Webhook)
+            .IsComplete();
+
         builder.Property(x => x.Id)
         .ValueGeneratedOnAdd()
         .HasValueGenerator<StronglyTypedIdValueGenerator<SubscriptionId>>()

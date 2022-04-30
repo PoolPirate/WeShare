@@ -9,16 +9,16 @@ public readonly partial struct SubscriptionName
     {
         if (value is null)
         {
-            return Validation.Ok;
+            return Validation.Invalid($"SubscriptionName cant be empty");
         }
 
         if (value.Length < DomainConstraints.SubscriptionnameLengthMinimum)
         {
-            return Validation.Invalid($"Nickname needs to have at least {DomainConstraints.SubscriptionnameLengthMinimum} characters");
+            return Validation.Invalid($"SubscriptionName needs to have at least {DomainConstraints.SubscriptionnameLengthMinimum} characters");
         }
         if (value.Length > DomainConstraints.SubscriptionnameLengthMaximum)
         {
-            return Validation.Invalid($"Nickname needs to have at most {DomainConstraints.SubscriptionnameLengthMaximum} characters");
+            return Validation.Invalid($"SubscriptionNameSubscriptionName needs to have at most {DomainConstraints.SubscriptionnameLengthMaximum} characters");
         }
         //
         return Validation.Ok;

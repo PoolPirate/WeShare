@@ -12,9 +12,19 @@ public class SubscriptionManageController : ExtendedControllerBase
     public async Task<ActionResult<long>> CreateSubscriptionAsync([FromBody] SubscriptionCreateForm createForm,
         CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new SubscriptionCreateAction
-            .Command(createForm.Type, SubscriptionName.From(createForm.Name),
-            new ShareId(createForm.ShareId), new UserId(createForm.UserId)), cancellationToken);
+        var request = createForm.Type switch
+        {
+            SubscriptionType.Dashboard => SubscriptionCreateAction.Command
+                .ForDashboard(SubscriptionName.From(createForm.Name), new ShareId(createForm.ShareId), new UserId(createForm.UserId)),
+            SubscriptionType.AndroidPushNotification => throw new NotImplementedException(),
+            SubscriptionType.MessagerDiscord => throw new NotImplementedException(),
+            SubscriptionType.Email => throw new NotImplementedException(),
+            SubscriptionType.Webhook => SubscriptionCreateAction.Command
+                .ForWebhook(SubscriptionName.From(createForm.Name), new ShareId(createForm.ShareId), new UserId(createForm.UserId), createForm.TargetUrl),
+            _ => throw new InvalidOperationException(),
+        };
+
+        var result = await Mediator.Send(request, cancellationToken);
 
         return result.Status switch
         {
