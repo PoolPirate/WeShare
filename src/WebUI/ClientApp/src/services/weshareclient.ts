@@ -1,11 +1,11 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { shareReplay } from "rxjs/operators";
+import { map, shareReplay } from "rxjs/operators";
 import { AccountInfo } from "../types/account-types";
 import { CallbackInfo } from "../types/callback-types";
 import { PaginatedResponse } from "../types/general-types";
-import { PostSnippet } from "../types/post-types";
+import { ParsedPostContent, PostContent, PostSnippet } from "../types/post-types";
 import { ProfileInfo } from "../types/profile-types";
 import { ShareData, ShareInfo, ShareSecrets, ShareSnippet, ShareUserData } from "../types/share-types";
 import { SubscriptionInfo, SubscriptionSnippet, SubscriptionType } from "../types/subscription-types";
@@ -92,6 +92,11 @@ export class WeShareClient {
       .pipe(shareReplay(1));
   }
 
+  getShareSnippet(shareId: number) {
+    return this.client.get<ShareSnippet>("Api/Share/Snippet/Id/" + shareId, { headers: this.getHeaders() })
+      .pipe(shareReplay(1));
+  }
+
   getShareInfo(shareId: number) {
     return this.client.get<ShareData>("Api/Share/Data/Id/" + shareId)
       .pipe(shareReplay(1));
@@ -174,6 +179,28 @@ export class WeShareClient {
   getPosts(shareId: number, page: number, pageSize: number) {
     return this.client.get<PaginatedResponse<PostSnippet>>("Api/Share/Posts/Metadata/" + shareId + "/" + page + "/" + pageSize)
       .pipe(shareReplay(1));
+  }
+
+  getPostSnippet(postId: number) {
+    return this.client.get<PostSnippet>("Api/Post/Snippet/Id/" + postId)
+      .pipe(shareReplay(1));
+  }
+
+  getPostContent(postId: number) {
+    return this.client.get<ParsedPostContent>("Api/Post/Content/" + postId)
+      .pipe(shareReplay(1))
+      .pipe(
+        map(parsedContent => {
+          if (parsedContent == null) {
+            return null;
+          }
+
+          var content = new PostContent();
+          content.headers = new Map<string, string[]>(Object.entries(parsedContent.headers));
+          content.payload = Uint8Array.from(atob(parsedContent.payload), c => c.charCodeAt(0))
+          return content;
+        })
+      );
   }
 
   //Likes

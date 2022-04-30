@@ -1,0 +1,12 @@
+{
+  "content": null,
+  "embeds": [
+    {
+      "title": "Hello from WeShare",
+      "description": "This is the first embed sent through a discord subscription on WeShare.\nTHE FUTURE IS NOW!",
+      "color": null
+    }
+  ],
+  "username": "WeShare",
+  "attachments": []
+}

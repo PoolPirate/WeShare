@@ -51,7 +51,6 @@ export class ShareViewCreateDashboardSubscriptionDialog {
       this.dialogRef.close();
     }, error => {
       alert("Faild: The server responded with: " + error.status);
-    }, () => {
       this.submitRequest = null;
     });
   }

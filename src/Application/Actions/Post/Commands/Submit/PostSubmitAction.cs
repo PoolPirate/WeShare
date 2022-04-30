@@ -74,7 +74,7 @@ public class PostSubmitAction
 
             try
             {
-                post.SetMetadata(post.HeadersSize, post.PayloadSize);
+                post.SetMetadata(metadata.HeadersSize, metadata.PayloadSize);
 
                 await DbContext.SaveChangesAsync(transaction: transaction, cancellationToken: cancellationToken);
             }

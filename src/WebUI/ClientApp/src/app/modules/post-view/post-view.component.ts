@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Resolve, Router } from '@angular/router';
 import { AuthService } from '../../../services/authservice';
+import { Resolved } from '../../../types/general-types';
+import { PostContent, PostSnippet } from '../../../types/post-types';
+import { ShareSnippet } from '../../../types/share-types';
 import { PostViewService } from './services/postviewservice';
 
 @Component({
@@ -9,32 +12,40 @@ import { PostViewService } from './services/postviewservice';
   providers: [PostViewService]
 })
 export class PostViewComponent {
-  errorCode: number = 0;
+  constructor(route: ActivatedRoute, router: Router, authService: AuthService, postViewService: PostViewService) {
+    route.data.subscribe(data => {
+      const snippetsResponse: Resolved<[ShareSnippet, PostSnippet]> = data.snippetsResponse;
 
-  constructor(route: ActivatedRoute, router: Router, authService: AuthService) {
-    //route.data.subscribe(data => {
-    //  var shareInfoResponse: Resolved<SubscriptionInfo> = data.subscriptionInfoResponse;
+      if (snippetsResponse.ok) {
+        postViewService.shareSnippet = snippetsResponse.content![0];
+          postViewService.postSnippet = snippetsResponse.content![1];
+      } else {
+        if (snippetsResponse.status == 404) {
+          router.navigateByUrl("/notfound");
+          return;
+        }
+        if (snippetsResponse.status == 403) {
+          router.navigateByUrl("/forbidden");
+          return;
+        }
+        return;
+      }
 
-    //  if (shareInfoResponse.ok) {
-    //    this.subscriptionInfo = shareInfoResponse.content!;
-    //    subscriptionViewService.subscriptionInfo = this.subscriptionInfo;
-    //  } else {
-    //    if (shareInfoResponse.status == 404) {
-    //      router.navigateByUrl("/notfound");
-    //      return;
-    //    }
-    //    if (shareInfoResponse.status == 403) {
-    //      router.navigateByUrl("/forbidden");
-    //      return;
-    //    }
+      const postContentResponse: Resolved<PostContent> = data.postContentResponse;
 
-    //    this.errorCode = shareInfoResponse.status;
-    //    return;
-    //  }
+      if (postContentResponse.ok) {
+        postViewService.content = postContentResponse.content!;
+      } else {
+        if (postContentResponse.status == 404) {
+          return; //Post exists but content already deleted
+        }
+        if (postContentResponse.status == 403) {
+          router.navigateByUrl("/forbidden");
+          return;
+        }
+        return;
+      }
 
-    //  if (authService.isLoggedOut()) {
-    //    return;
-    //  }
-    //});
+    });
   }
 }

@@ -8,6 +8,21 @@ namespace WeShare.WebAPI.Controllers;
 [ApiController]
 public class ShareInfoController : ExtendedControllerBase
 {
+    [HttpGet("Snippet/Id/{shareId}")]
+    public async Task<ActionResult<ShareSnippetDto>> GetShareSnippetAsync([FromRoute] long shareId,
+        CancellationToken cancellationToken)
+    {
+        var result = await Mediator.Send(new GetShareSnippet
+            .Query(new ShareId(shareId)), cancellationToken);
+
+        return result.Status switch
+        {
+            GetShareSnippet.Status.Success => Ok(result.ShareSnippet),
+            GetShareSnippet.Status.ShareNotFound => NotFound(),
+            _ => throw new InvalidOperationException(),
+        };
+    }
+
     [HttpGet("Data/Id/{shareId}")]
     public async Task<ActionResult<ShareDataDto>> GetShareDataAsync([FromRoute] long shareId,
         CancellationToken cancellationToken)

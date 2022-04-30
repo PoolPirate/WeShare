@@ -29,6 +29,8 @@ import { MaterialModule } from '../modules/material/material.module';
 import { ProfileStore } from '../modules/profile/services/profile-store';
 import { DashboardSubscriptionSnippetsResolver } from '../modules/dashboard/resolvers/dashboard-subscriptionsnippets.resolver';
 import { PostViewComponent } from '../modules/post-view/post-view.component';
+import { PostViewSnippetsResolver } from '../modules/post-view/resolvers/post-view-snippets.resolver';
+import { PostViewPostContentResolver } from '../modules/post-view/resolvers/post-view-post-content.resolver';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -69,6 +71,7 @@ const routes: Routes = [
   {
     path: 'post/:postId', component: PostViewComponent,
     loadChildren: () => import('../modules/post-view/post-view.module').then(m => m.PostViewModule),
+    resolve: { snippetsResponse: PostViewSnippetsResolver, postContentResponse: PostViewPostContentResolver }
   }
 ]
 
@@ -99,6 +102,9 @@ const routes: Routes = [
     ProfileProfileInfoResolver,
     DashboardSubscriptionSnippetsResolver,
     SubscriptionViewSubscriptionInfoResolver,
+    PostViewPostContentResolver,
+    PostViewSnippetsResolver,
+
     ProfileStore
   ],
   bootstrap: [AppComponent]

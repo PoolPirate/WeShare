@@ -13,6 +13,10 @@ export class UnreceivedPostsComponent {
   subscriptionPostMap: Compound[] | null = null;
 
   constructor(private dashboardService: DashboardService, private weShareClient: WeShareClient) {
+    if (this.dashboardService.subscriptionInfos.length == 0) {
+      this.subscriptionPostMap = [];
+    }
+
     dashboardService.subscriptionInfos.forEach(subscriptionSnippet => {
       weShareClient.getUnsentPosts(subscriptionSnippet.id)
         .subscribe(response => {

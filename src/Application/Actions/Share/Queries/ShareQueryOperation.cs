@@ -2,6 +2,7 @@
 
 public enum ShareQueryOperation : byte
 {
+    ReadSnippet,
     ReadData,
     ReadSecrets,
     ReadLikes,

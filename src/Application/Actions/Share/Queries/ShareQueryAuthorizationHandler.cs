@@ -18,6 +18,7 @@ public class ShareQueryAuthorizationHandler : AuthorizationHandler<ShareId, Shar
     {
         switch (operation)
         {
+            case ShareQueryOperation.ReadSnippet:
             case ShareQueryOperation.ReadData:
             case ShareQueryOperation.ReadPosts:
                 return true;

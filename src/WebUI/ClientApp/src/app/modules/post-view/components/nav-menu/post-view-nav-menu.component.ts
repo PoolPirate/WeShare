@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../../../services/authservice';
+import { PostViewService } from '../../services/postviewservice';
 
 @Component({
   selector: 'post-view-nav-menu',
@@ -10,13 +11,13 @@ import { AuthService } from '../../../../../services/authservice';
 export class PostViewNavMenuComponent {
   activeLink: string;
 
-  constructor(route: ActivatedRoute, router: Router, authService: AuthService) {
-    if (authService.isLoggedOut()) {
-      return;
-    }
-
+  constructor(private postViewService: PostViewService, route: ActivatedRoute, router: Router) {
     route.url.subscribe(url => {
       this.activeLink = router.url.split('/').pop()!.toLowerCase();
     });
+  }
+
+  get hasContent() {
+    return this.postViewService.content != null;
   }
 }

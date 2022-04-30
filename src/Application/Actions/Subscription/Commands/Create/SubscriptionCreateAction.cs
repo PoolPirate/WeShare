@@ -20,7 +20,7 @@ public class SubscriptionCreateAction
         public Uri? TargetUri { get; }
 
         public static Command ForDashboard(SubscriptionName name, ShareId shareId, UserId userId)
-            => new Command(SubscriptionType.Webhook, name, shareId, userId, null);
+            => new Command(SubscriptionType.Dashboard, name, shareId, userId, null);
         public static Command ForWebhook(SubscriptionName name, ShareId shareId, UserId userId, Uri? targetUri)
             => new Command(SubscriptionType.Webhook, name, shareId, userId, targetUri);
 
@@ -84,7 +84,7 @@ public class SubscriptionCreateAction
             DbContext.Subscriptions.Add(subscription);
             await DbContext.Shares
                 .Where(x => x.Id == request.ShareId)
-                .UpdateFromQueryAsync(x => new Share() { LikeCount = x.LikeCount + 1 }, cancellationToken: cancellationToken);
+                .UpdateFromQueryAsync(x => new Share() { SubscriberCount = x.SubscriberCount + 1 }, cancellationToken: cancellationToken);
 
             var saveResult = await DbContext.SaveChangesAsync(transaction: transaction, cancellationToken: cancellationToken);
 

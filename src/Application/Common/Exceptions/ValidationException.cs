@@ -13,7 +13,7 @@ public class ValidationException : Exception
         : this()
     {
         Errors = failures
-            .GroupBy(e => e.MemberNames.Single(), e => e.ErrorMessage ?? String.Empty)
+            .GroupBy(e => e.MemberNames.SingleOrDefault() ?? String.Empty, e => e.ErrorMessage ?? String.Empty)
             .ToDictionary(failureGroup => failureGroup.Key, failureGroup => failureGroup.ToArray());
     }
 
