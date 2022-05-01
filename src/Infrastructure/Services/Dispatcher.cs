@@ -12,6 +12,12 @@ public class Dispatcher : Singleton, IDispatcher
         var client = new BackgroundJobClient();
         client.Enqueue<DispatcherBridge>(x => x.Send(jobName, request));
     }
+
+    public void Schedule(IRequest request, string jobName, TimeSpan delay)
+    {
+        var client = new BackgroundJobClient();
+        client.Schedule<DispatcherBridge>(x => x.Send(jobName, request), delay);
+    }
 }
 
 public class DispatcherBridge : Scoped

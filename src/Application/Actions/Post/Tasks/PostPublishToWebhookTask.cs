@@ -10,6 +10,7 @@ namespace WeShare.Application.Actions.Tasks;
 public class PostPublishToWebhookTask
 {
     private const int ChunkSize = 50;
+    private const int MaxRetries = 4;
 
     public class Command : IRequest
     {
@@ -33,15 +34,19 @@ public class PostPublishToWebhookTask
         private readonly IWebhookClient WebhookClient;
         private readonly IPostStorage PostStorage;
         private readonly IServiceProvider Provider;
+        private readonly IDispatcher Dispatcher;
 
-        public Handler(IShareContext dbContext, ILogger<PostPublishToWebhookTask> logger, IWebhookClient webhookClient, 
-            IPostStorage postStorage, IServiceProvider provider)
+        public bool AllDelivered = true;
+
+        public Handler(IShareContext dbContext, ILogger<PostPublishToWebhookTask> logger, IWebhookClient webhookClient,
+            IPostStorage postStorage, IServiceProvider provider, IDispatcher dispatcher)
         {
             DbContext = dbContext;
             Logger = logger;
             WebhookClient = webhookClient;
             PostStorage = postStorage;
             Provider = provider;
+            Dispatcher = dispatcher;
         }
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -73,6 +78,11 @@ public class PostPublishToWebhookTask
             await Parallel.ForEachAsync(await GetTargetSubscriptionChunks(request.PostId, post.CreatedAt, post.ShareId, cancellationToken), options,
                 (subscribers, cancellationToken) => PublishPostChunkToSubscribersAsync(post, content, subscribers, cancellationToken));
 
+            if (!AllDelivered)
+            {
+                Dispatcher.Schedule(request, $"Retry Publish Post To Webhook: {request.PostId}", TimeSpan.FromSeconds(30));
+            }
+
             return Unit.Value;
         }
 
@@ -101,6 +111,10 @@ public class PostPublishToWebhookTask
                 {
                     sentPost.SetReceived();
                 }
+                else
+                {
+                    AllDelivered = false;
+                }
             }
 
             //Ignore errors caused by subscriptions being removed during the execution
@@ -118,7 +132,8 @@ public class PostPublishToWebhookTask
                            .AsNoTracking()
                            .Where(x => x.ShareId == shareId && postCreatedAt >= x.CreatedAt)
                            .Where(x => !x.SentPosts!
-                               .Where(x => x.PostId == postId && x.Received)
+                               .Where(x => x.PostId == postId)
+                               .Where(x => x.Received || x.Attempts > MaxRetries)
                                .Any())
                            .ToArrayAsync(cancellationToken: cancellation);
 
