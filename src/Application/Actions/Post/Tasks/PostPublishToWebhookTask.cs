@@ -105,16 +105,18 @@ public class PostPublishToWebhookTask
 
                 sentPost.IncrementAttempts();
 
-                bool success = await WebhookClient.TrySendPostAsync(subscription.TargetUrl, post, content, cancellationToken);
+                var (success, status, latency) = await WebhookClient.TrySendPostAsync(subscription.TargetUrl, post, content, cancellationToken);
 
                 if (success)
                 {
                     sentPost.SetReceived();
+                    continue;
                 }
-                else
-                {
-                    AllDelivered = false;
-                }
+
+                AllDelivered = false;
+
+                var postSendFailure = WebhookPostSendFailure.Create(post.Id, subscription.Id, status, latency);
+                DbContext.PostSendFailures.Add(postSendFailure);
             }
 
             //Ignore errors caused by subscriptions being removed during the execution
