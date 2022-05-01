@@ -107,6 +107,7 @@ public class Startup
 
         app.UseStaticFiles();
 
+        app.UseOpenApi();
         app.UseSwaggerUi3(settings =>
         {
             settings.Path = "/api";
