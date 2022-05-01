@@ -7,4 +7,5 @@ public enum UserQueryOperation : byte
     ReadPopularShares,
     ReadProfile,
     ReadAccount,
+    ReadShareUserdata,
 }

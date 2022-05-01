@@ -37,10 +37,6 @@ public class ShareQueryAuthorizationHandler : AuthorizationHandler<ShareId, Shar
                 await DbContext.Shares
                  .Where(x => x.Id == shareId)
                  .AllAsync(x => x.OwnerId == userId, cancellationToken),
-            ShareQueryOperation.ReadLikes =>
-                await DbContext.Shares
-                 .Where(x => x.Id == shareId)
-                 .AllAsync(x => x.OwnerId == userId || x.Owner!.LikesPublished, cancellationToken),
             _ => throw new NotImplementedException(nameof(operation)),
         };
     }

@@ -40,7 +40,8 @@ public class UserQueryAuthorizationHandler : AuthorizationHandler<UserId, UserQu
         {
             UserQueryOperation.ReadLikedShares or
             UserQueryOperation.ReadAccount or
-            UserQueryOperation.ReadSubscriptions
+            UserQueryOperation.ReadSubscriptions or
+            UserQueryOperation.ReadShareUserdata
                 => userId == entity,
             _ => throw new NotImplementedException(nameof(operation)),
         };
