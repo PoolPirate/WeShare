@@ -41,3 +41,8 @@ code {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.restrict-images img {
+  max-width: 55vw;
+}

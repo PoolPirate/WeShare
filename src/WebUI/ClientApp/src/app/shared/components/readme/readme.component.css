@@ -1,8 +1,4 @@
 .restrict-width {
   word-wrap: break-word;
-  max-width: inherit;
-}
-
-:host {
-  max-width: 300px;
+  max-width: 65vw;
 }
