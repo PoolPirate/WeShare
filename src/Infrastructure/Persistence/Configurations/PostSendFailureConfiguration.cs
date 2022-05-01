@@ -14,6 +14,8 @@ public class PostSendFailureConfiguration : IEntityTypeConfiguration<PostSendFai
         builder.Property(x => x.Id);
         builder.HasKey(x => x.Id);
 
+        builder.Property(x => x.CreatedAt);
+
         builder.Property(x => x.PostId);
         builder.Property(x => x.SubscriptionId);
 

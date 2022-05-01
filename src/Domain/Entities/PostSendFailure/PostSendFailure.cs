@@ -1,5 +1,7 @@
-﻿namespace WeShare.Domain.Entities;
-public class PostSendFailure
+﻿using WeShare.Domain.Common;
+
+namespace WeShare.Domain.Entities;
+public class PostSendFailure : AuditableEntity
 {
     public Guid Id { get; init; }
     public PostId PostId { get; init; }
