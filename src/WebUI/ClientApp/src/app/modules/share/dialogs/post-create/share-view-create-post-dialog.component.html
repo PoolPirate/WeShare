@@ -3,24 +3,77 @@
 <mat-stepper>
   <mat-step>
     <ng-template matStepLabel>Headers</ng-template>
+
+    <shared-header-pair *ngFor="let header of headers"
+                        [key]="header[0]" [value]="header[1]"></shared-header-pair>
+
+    <div class="inputs-box">
+      <mat-form-field appearance="fill">
+        <mat-label>Key</mat-label>
+        <input matInput [formControl]="key"
+               placeholder="Content-Type" autocomplete="off">
+        <button *ngIf="key.value" matSuffix mat-icon-button (click)="key.reset()" class="borderless">
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-error *ngIf="key.invalid">
+          {{ key.hasError('required') ? "Key is required" : "" }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Value</mat-label>
+        <input matInput [formControl]="value"
+               placeholder="application/json" autocomplete="off">
+        <button *ngIf="value.value" matSuffix mat-icon-button (click)="value.reset()" class="borderless">
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-error *ngIf="value.invalid">
+          {{ value.hasError('required') ? "Value is required" : "" }}
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button
+              (click)="addToHeaderList()">
+        Add
+      </button>
+    </div>
+
     <div mat-dialog-actions class="flex">
-      <button class="push-right" mat-button mat-dialog-close color="error">Cancel</button>
-      <button class="push-right" mat-button matStepperNext color="primary">Next</button>
+      <button mat-button mat-dialog-close color="error">Cancel</button>
+      <button matStepperNext mat-raised-button class="push-right" color="primary">Next</button>
     </div>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Payload</ng-template>
+
+    <div class="inputs-box">
+
+      <mat-form-field class="fill-space" appearance="fill">
+        <textarea matInput
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="5"
+                  cdkAutosizeMaxRows="100"></textarea>
+      </mat-form-field>
+
+    </div>
+
     <div mat-dialog-actions class="flex">
-      <button class="push-right" mat-button mat-dialog-close color="error">Cancel</button>
-      <button class="push-right" mat-button matStepperNext color="primary">Next</button>
+      <button matStepperPrevious mat-raised-button color="accent">Back</button>
+      <button mat-button mat-dialog-close color="error">Cancel</button>
+      <button matStepperNext mat-raised-button class="push-right" color="primary">Next</button>
     </div>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Publish</ng-template>
 
     <div mat-dialog-actions class="flex">
-      <button class="push-right" mat-button mat-dialog-close color="error">Cancel</button>
-      <button class="push-right" mat-button color="primary" (click)="submit()">Submit</button>
+      <button matStepperPrevious mat-raised-button color="accent">Back</button>
+      <button mat-button mat-dialog-close color="error">Cancel</button>
+      <button mat-raised-button class="push-right" color="primary"
+              (click)="submit()">
+        Submit
+      </button>
     </div>
   </mat-step>
 </mat-stepper>
