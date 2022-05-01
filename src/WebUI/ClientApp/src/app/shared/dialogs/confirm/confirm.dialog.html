@@ -1,0 +1,19 @@
+<div class="main">
+
+  <h1>{{ title }}</h1>
+  <p>{{ description }}</p>
+  <br />
+  <div mat-dialog-actions class="grid">
+
+    <button mat-button color="error"
+            (click)="reject()">
+      Cancel
+    </button>
+    <button mat-raised-button color="primary"
+            (click)="accept()">
+      Confirm
+    </button>
+  </div>
+
+</div>
+

@@ -1,0 +1,14 @@
+.main {
+    padding: 3px;
+}
+
+.grid {
+    display: grid;
+    grid-auto-flow: column;
+    padding: 3px;
+    margin: 3px;
+}
+
+.grid button {
+    margin:  10px 8px 0 8px;
+}

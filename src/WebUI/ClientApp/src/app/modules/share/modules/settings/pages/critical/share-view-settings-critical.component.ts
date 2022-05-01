@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { DialogService } from '../../../../../../../services/dialogservice';
 import { WeShareClient } from '../../../../../../../services/weshareclient';
 import { ShareData, ShareSecrets } from '../../../../../../../types/share-types';
 import { ShareService } from '../../../../services/shareservice';
@@ -19,35 +20,17 @@ export class ShareViewSettingsCriticalComponent {
 
   errorCode: number = 0;
 
-  constructor(private weShareClient: WeShareClient, private router: Router,
+  constructor(private weShareClient: WeShareClient, private router: Router, private dialogService: DialogService,
     shareSecretsService: ShareSecretsService, shareService: ShareService) {
     this.shareSecrets = shareSecretsService.shareSecrets;
     this.shareData = shareService.shareData;
   }
 
-  delete() {
+  async delete() {
     if (this.deleteRan) {
       return;
     }
-    if (confirm("Do you  want to delete this?")) {
-      if (confirm("Do you really want to delete this?")) {
-        if (confirm("Do you REAAAAAALLY want to delete this?")) {
-          if (confirm("Are you 1000% sure you want to delete this?")) {
-            this.deleteRan = true;
-          }
-          else {
-            return;
-          }
-        }
-        else {
-          return;
-        }
-      }
-      else {
-        return;
-      }
-    }
-    else {
+    if (!await this.dialogService.confirm("Delete Share?", "All posts and subscribers will be permanently deleted")) {
       return;
     }
     

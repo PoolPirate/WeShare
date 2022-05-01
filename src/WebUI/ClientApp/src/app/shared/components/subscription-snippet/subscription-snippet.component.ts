@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { DialogService } from '../../../../services/dialogservice';
 import { SubscriptionSnippet } from '../../../../types/subscription-types';
 
 @Component({
@@ -7,13 +8,17 @@ import { SubscriptionSnippet } from '../../../../types/subscription-types';
   styleUrls: ['./subscription-snippet.component.css']
 })
 export class SubscriptionSnippetComponent {
+  constructor(private dialogService: DialogService) { }
+
   @Input()
   subscriptionSnippet: SubscriptionSnippet;
 
   @Output()
   delete = new EventEmitter();
 
-  onDelete() {
-    this.delete.emit();
+  async onDelete() {
+    if (await this.dialogService.confirm("Delete Subscription?", "You cannot undo this action")) {
+      this.delete.emit();
+    }
   }
 }

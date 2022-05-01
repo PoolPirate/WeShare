@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '../../services/authservice';
 import { WeShareClient } from '../../services/weshareclient';
 import { ShareSnippetComponent } from './components/share-snippet/share-snippet.component';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
@@ -23,6 +22,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { HeaderPairComponent } from './components/header-pair/header-pair.component';
 import { SharedLoadingDialog } from './dialogs/loading/loading.dialog.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { SharedConfirmDialog } from './dialogs/confirm/confirm.dialog';
+import { DialogService } from '../../services/dialogservice';
+import { AuthService } from '../../services/authservice';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     PagedListHeaderComponent,
     HeaderPairComponent,
 
-    SharedLoadingDialog
+    SharedLoadingDialog,
+    SharedConfirmDialog
   ],
   imports: [
     CommonModule,
@@ -65,6 +68,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     CreateButtonComponent,
 
     SharedLoadingDialog,
+    SharedConfirmDialog,
 
     ShareSnippetComponent,
     SubscriptionSnippetComponent,
@@ -91,6 +95,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   providers: [
     AuthService,
     WeShareClient,
+    DialogService
   ]
 })
 export class SharedModule { }
