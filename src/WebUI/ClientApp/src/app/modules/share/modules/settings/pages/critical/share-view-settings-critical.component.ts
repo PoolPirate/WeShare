@@ -8,7 +8,8 @@ import { ShareSecretsService } from '../../services/sharesecretsservice';
 
 @Component({
   selector: 'share-view-settings-critical',
-  templateUrl: './share-view-settings-critical.component.html'
+  templateUrl: './share-view-settings-critical.component.html',
+  styleUrls: ['./share-view-settings-critical.component.scss']
 })
 export class ShareViewSettingsCriticalComponent {
   shareSecrets: ShareSecrets;
