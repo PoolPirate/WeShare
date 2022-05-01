@@ -5,8 +5,6 @@ import { RouterModule } from '@angular/router';
 import { WeShareClient } from '../../services/weshareclient';
 import { ShareSnippetComponent } from './components/share-snippet/share-snippet.component';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
-import { MarkdownModule } from 'ngx-markdown';
-import { ReadmeComponent } from './components/readme/readme.component';
 import { MatIconModule } from '@angular/material/icon';
 import { LikeButtonComponent } from './components/like-button/like-button.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,13 +23,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SharedConfirmDialog } from './dialogs/confirm/confirm.dialog';
 import { DialogService } from '../../services/dialogservice';
 import { AuthService } from '../../services/authservice';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
     NotFoundComponent,
     ForbiddenComponent,
     ShareSnippetComponent,
-    ReadmeComponent,
     LikeButtonComponent,
     SubscriptionSnippetComponent,
     PostSnippetComponent,
@@ -47,7 +45,6 @@ import { AuthService } from '../../services/authservice';
     RouterModule.forChild([]),
 
     LoadingBarRouterModule,
-    MarkdownModule.forRoot(),
 
     FormsModule,
     ReactiveFormsModule,
@@ -58,12 +55,12 @@ import { AuthService } from '../../services/authservice';
     MatExpansionModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatMenuModule,
   ],
   exports: [ 
     NotFoundComponent,
     ForbiddenComponent,
 
-    ReadmeComponent,
     LikeButtonComponent,
     CreateButtonComponent,
 
@@ -81,7 +78,6 @@ import { AuthService } from '../../services/authservice';
     CommonModule,
 
     LoadingBarRouterModule,
-    MarkdownModule,
 
     FormsModule,
     ReactiveFormsModule,
@@ -91,6 +87,7 @@ import { AuthService } from '../../services/authservice';
     MatCardModule,
     MatExpansionModule,
     MatPaginatorModule,
+    MatMenuModule,
   ],
   providers: [
     AuthService,

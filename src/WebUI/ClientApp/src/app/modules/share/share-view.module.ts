@@ -20,6 +20,8 @@ import { ShareViewCreatePostDialogComponent } from './dialogs/post-create/share-
 import { ShareViewSubscriptionTypeDialogComponent } from './dialogs/subscription-type/share-view-subscription-type-dialog.component';
 import { ShareViewCreateDashboardSubscriptionDialog } from './dialogs/subscription-create/dashboard/create-dashboard-subscription.dialog';
 import { ShareViewCreateWebhookSubscriptionDialog } from './dialogs/subscription-create/webhook/create-webhook-subscription.dialog';
+import { ReadmeComponent } from './components/readme/readme.component';
+import { MarkdownModule } from 'ngx-markdown';
 
 const routes: Routes = [
   { path: '', redirectTo: 'overview' },
@@ -54,6 +56,8 @@ const routes: Routes = [
     ShareViewSubscriptionTypeDialogComponent,
     ShareViewCreatePostDialogComponent,
 
+    ReadmeComponent,
+
     ShareViewCreateDashboardSubscriptionDialog,
     ShareViewCreateWebhookSubscriptionDialog
   ],
@@ -62,6 +66,7 @@ const routes: Routes = [
     SharedModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
+    MarkdownModule.forRoot(),
   ],
   providers: [
     ViewSharePostsResolver,

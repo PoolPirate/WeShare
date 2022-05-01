@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { ShareSnippet } from '../../../../types/share-types';
+import { ShareSnippet } from '../../../../../types/share-types';
 
 @Component({
-  selector: 'shared-readme',
+  selector: 'readme',
   templateUrl: './readme.component.html',
   styleUrls: ['./readme.component.css']
 })

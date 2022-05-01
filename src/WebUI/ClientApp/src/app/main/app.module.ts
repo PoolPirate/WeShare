@@ -25,7 +25,6 @@ import { ShareCreateModule } from '../modules/share-create/share-create.module';
 import { SubscriptionViewSubscriptionInfoResolver } from '../modules/subscription-view/services/resolvers/subscription-view-subscriptioninfo.resolver';
 import { SubscriptionViewComponent } from '../modules/subscription-view/subscription-view.component';
 import { UserSettingsComponent } from '../modules/user-settings/user-settings.component';
-import { MaterialModule } from '../modules/material/material.module';
 import { ProfileStore } from '../modules/profile/services/profile-store';
 import { DashboardSubscriptionSnippetsResolver } from '../modules/dashboard/resolvers/dashboard-subscriptionsnippets.resolver';
 import { PostViewComponent } from '../modules/post-view/post-view.component';
@@ -88,12 +87,11 @@ const routes: Routes = [
     LogoutComponent,
   ],
   imports: [
-    MaterialModule,
     BrowserAnimationsModule,
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     RouterModule.forRoot(routes),
-    SharedModule
+    SharedModule,
   ],
   providers: [
     ViewShareShareInfoResolver,

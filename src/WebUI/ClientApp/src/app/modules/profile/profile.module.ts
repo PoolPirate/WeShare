@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ProfileNavMenuComponent } from './nav-menu/profile-nav-menu.component';
+import { ProfileNavMenuComponent } from './components/nav-menu/profile-nav-menu.component';
 import { ProfileOverviewComponent } from './pages/overview/profile-overview.component';
 import { SharedModule } from '../../shared/shared.module';
 import { ProfileSharesComponent } from './pages/shares/profile-shares.component';
@@ -46,7 +46,7 @@ const routes: Routes = [
   imports: [
     MaterialModule,
     SharedModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
   ],
   providers: [
     ProfilePopularSharesResolver,
