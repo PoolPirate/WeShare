@@ -7,8 +7,4 @@ import { ShareSnippet } from '../../../../types/share-types';
   styleUrls: ['./readme.component.css']
 })
 export class ReadmeComponent {
-  @Input()
-  readme: string;
-
-
 }
