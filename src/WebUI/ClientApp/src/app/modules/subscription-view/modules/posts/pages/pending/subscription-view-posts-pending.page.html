@@ -5,6 +5,10 @@
     <h1>Send attempts: {{ post.attempts }}</h1>
 
     <shared-post-snippet [postSnippet]="post.postSnippet"></shared-post-snippet>
+    <h1>Errors</h1>
+    <shared-post-send-failure-snippet *ngFor="let postSendFailure of post.postSendFailures"
+                                      [subscriptionType]="subscriptionType"
+                                      [postSendFailure]="postSendFailure"></shared-post-send-failure-snippet>
   </mat-card>
 
 </div>

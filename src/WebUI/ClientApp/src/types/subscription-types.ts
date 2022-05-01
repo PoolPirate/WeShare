@@ -1,3 +1,5 @@
+import { PostSnippet } from "./post-types";
+
 export class SubscriptionInfo {
   id: number;
   createdAt: Date;

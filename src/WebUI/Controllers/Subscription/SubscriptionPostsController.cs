@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using WeShare.Application.Actions.Queries;
 using WeShare.Application.Common.Models;
 using WeShare.Application.DTOs;
@@ -10,7 +11,7 @@ namespace WeShare.WebAPI.Controllers;
 public class SubscriptionPostsController : ExtendedControllerBase
 {
     [HttpGet("Unsent/Id/{subscriptionId}/{page}/{pageSize}")]
-    public async Task<ActionResult<PaginatedList<PostSnippetDto>>> GetUnsentPostSnippetsAsync([FromRoute] long subscriptionId,
+    public async Task<ActionResult<PaginatedList<PostSendInfoDto>>> GetUnsentPostSnippetsAsync([FromRoute] long subscriptionId,
         [FromRoute] ushort page, [FromRoute] ushort pageSize,
         CancellationToken cancellationToken)
     {
@@ -26,7 +27,7 @@ public class SubscriptionPostsController : ExtendedControllerBase
     }
 
     [HttpGet("Pending/Id/{subscriptionId}/{page}/{pageSize}")]
-    public async Task<ActionResult<PaginatedList<SentPostInfoDto>>> GetPendingPostSnippetsAsync([FromRoute] long subscriptionId,
+    public async Task<ActionResult<object>> GetPendingPostSnippetsAsync([FromRoute] long subscriptionId,
     [FromRoute] ushort page, [FromRoute] ushort pageSize,
     CancellationToken cancellationToken)
     {
@@ -35,6 +36,7 @@ public class SubscriptionPostsController : ExtendedControllerBase
 
         return result.Status switch
         {
+            
             GetSubscriptionPendingPostSnippetsPaginated.Status.Success => Ok(result.PostSnippets),
             GetSubscriptionPendingPostSnippetsPaginated.Status.SubscriptionNotFound => NotFound(),
             _ => throw new InvalidOperationException(),
@@ -42,7 +44,7 @@ public class SubscriptionPostsController : ExtendedControllerBase
     }
 
     [HttpGet("Received/Id/{subscriptionId}/{page}/{pageSize}")]
-    public async Task<ActionResult<PaginatedList<SentPostInfoDto>>> GetReceivedPostSnippetsAsync([FromRoute] long subscriptionId,
+    public async Task<ActionResult<PaginatedList<PostSendInfoDto>>> GetReceivedPostSnippetsAsync([FromRoute] long subscriptionId,
     [FromRoute] ushort page, [FromRoute] ushort pageSize,
     CancellationToken cancellationToken)
     {

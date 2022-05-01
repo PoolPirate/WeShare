@@ -36,7 +36,7 @@ public class GetSubscriptionPendingPostSnippetsPaginated
         SubscriptionNotFound,
     }
 
-    public record Result(Status Status, PaginatedList<SentPostInfoDto>? PostSnippets = null);
+    public record Result(Status Status, PaginatedList<PostSendInfoDto>? PostSnippets = null);
 
     public class Handler : IRequestHandler<Query, Result>
     {
@@ -55,13 +55,15 @@ public class GetSubscriptionPendingPostSnippetsPaginated
         {
             await Authorizer.EnsureAuthorizationAsync(request.SubscriptionId, SubscriptionQueryOperation.ReadPendingPosts, cancellationToken);
 
-            var postSnippets = await DbContext.SentPosts
+            //ToDo: Projection instead of mapping!
+
+            var postSendInfos = await DbContext.SentPosts
                 .Where(x => x.SubscriptionId == request.SubscriptionId)
                 .Where(x => !x.Received)
-                .ProjectTo<SentPostInfoDto>(Mapper.ConfigurationProvider)
+                .ProjectTo<PostSendInfoDto>(Mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.Page, request.PageSize, cancellationToken);
 
-            if (postSnippets.TotalCount == 0)
+            if (postSendInfos.TotalCount == 0)
             {
                 if (!await DbContext.Subscriptions.AnyAsync(x => x.Id == request.SubscriptionId, cancellationToken))
                 {
@@ -69,7 +71,24 @@ public class GetSubscriptionPendingPostSnippetsPaginated
                 }
             }
 
-            return new Result(Status.Success, postSnippets);
+            var postIds = postSendInfos.Items.Select(x => x.PostSnippet.Id).ToArray();
+
+            var postSendfailures = await DbContext.PostSendFailures
+                .Where(x => postIds.Contains(x.PostId))
+                .Where(x => x.SubscriptionId == request.SubscriptionId)
+                .Where(x => !x.SentPost!.Received)
+                .ToListAsync(cancellationToken);
+
+            var postSendfailureDtos = postSendfailures.GroupBy(x => x.PostId)
+                .Select(x => new { x.Key, DTOs = x.Select(x => (object) Mapper.Map<PostSendFailureDto>(x)).ToList() })
+                .ToList();
+
+            foreach(var item in postSendInfos.Items)
+            {
+                item.PostSendFailures = postSendfailureDtos.Single(x => x.Key == item.PostSnippet.Id).DTOs;
+            }
+
+            return new Result(Status.Success, postSendInfos);
         }
     }
 }

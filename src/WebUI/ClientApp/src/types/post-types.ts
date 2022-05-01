@@ -16,10 +16,20 @@ export interface ParsedPostContent {
   payload: string;
 }
 
-export class SentPostInfoDto {
+export class PostSendFailure {
+  createdAt: Date;
+}
+export class WebhookPostSendFailure extends PostSendFailure {
+  statusCode: number;
+  responseLatency: number;
+}
+
+
+export class PostSendInfo {
   postSnippet: PostSnippet;
+  postSendFailures: PostSendFailure[];
 
   received: boolean;
-  receivedAt: Date;
+  receivedAt: Date | null;
   attempts: number;
 }

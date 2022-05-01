@@ -35,6 +35,11 @@ public class SentPost
     /// </summary>
     public short Attempts { get; private set; } = 0;
 
+    /// <summary>
+    /// The failure reports that have been created during failed attempts.
+    /// </summary>
+    public List<PostSendFailure>? PostSendFailures { get; init; } = null; //Navigation Property
+
     public void SetReceived()
     {
         Received = true;

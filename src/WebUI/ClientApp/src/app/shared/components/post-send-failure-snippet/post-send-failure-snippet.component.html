@@ -1,0 +1,7 @@
+<div *ngIf="subscriptionType == type.Dashboard">
+  Dashboard halt
+</div>
+<div *ngIf="subscriptionType == type.Webhook">
+  <p>Status Code : {{ webhook.statusCode }}</p>
+  <p>Latency : {{ webhook.responseLatency }}</p>
+</div>

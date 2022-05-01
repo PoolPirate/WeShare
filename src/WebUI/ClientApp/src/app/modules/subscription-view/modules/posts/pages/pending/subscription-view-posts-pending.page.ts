@@ -1,22 +1,23 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaginatedResponse, Resolved } from '../../../../../../../types/general-types';
-import { SentPostInfoDto } from '../../../../../../../types/post-types';
+import { PostSendInfo } from '../../../../../../../types/post-types';
+import { SubscriptionViewService } from '../../../../services/subscriptionviewservice';
 
 @Component({
   selector: 'subscription-view-posts-pending',
   templateUrl: './subscription-view-posts-pending.page.html'
 })
 export class SubscriptionViewPostsPendingPage {
-  pendingPostsResponse: PaginatedResponse<SentPostInfoDto>;
-  pendingPosts: SentPostInfoDto[];
+  pendingPostsResponse: PaginatedResponse<PostSendInfo>;
+  pendingPosts: PostSendInfo[];
 
   errorCode: number;
 
-  constructor(route: ActivatedRoute, router: Router) {
+  constructor(private subscriptionViewService: SubscriptionViewService, route: ActivatedRoute, router: Router) {
     route.data.subscribe(data => {
-      const pendingResponse: Resolved<PaginatedResponse<SentPostInfoDto>> = data.pendingResponse;
-
+      const pendingResponse: Resolved<PaginatedResponse<PostSendInfo>> = data.pendingResponse;
+      console.log(pendingResponse);
       if (pendingResponse.ok) {
         this.pendingPostsResponse = pendingResponse.content!;
         this.pendingPosts = this.pendingPostsResponse.items;
@@ -30,5 +31,9 @@ export class SubscriptionViewPostsPendingPage {
         return;
       }
     });
+  }
+
+  get subscriptionType() {
+    return this.subscriptionViewService.subscriptionInfo.type;
   }
 }

@@ -17,6 +17,10 @@ public class SentPostConfiguration : IEntityTypeConfiguration<SentPost>
 
         builder.Property(x => x.Attempts);
 
+        builder.HasMany(x => x.PostSendFailures)
+        .WithOne(x => x.SentPost)
+        .HasForeignKey(x => new { x.PostId, x.SubscriptionId });
+
         builder.ToTable("SentPosts");
     }
 }

@@ -24,6 +24,7 @@ import { SharedConfirmDialog } from './dialogs/confirm/confirm.dialog';
 import { DialogService } from '../../services/dialogservice';
 import { AuthService } from '../../services/authservice';
 import { MatMenuModule } from '@angular/material/menu';
+import { PostSendFailureSnippetComponent } from './components/post-send-failure-snippet/post-send-failure-snippet.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { MatMenuModule } from '@angular/material/menu';
     CreateButtonComponent,
     PagedListHeaderComponent,
     HeaderPairComponent,
+    PostSendFailureSnippetComponent,
 
     SharedLoadingDialog,
     SharedConfirmDialog
@@ -70,6 +72,7 @@ import { MatMenuModule } from '@angular/material/menu';
     ShareSnippetComponent,
     SubscriptionSnippetComponent,
     PostSnippetComponent,
+    PostSendFailureSnippetComponent,
 
     HeaderPairComponent,
 
