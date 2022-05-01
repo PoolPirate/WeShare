@@ -176,6 +176,10 @@ export class WeShareClient {
 
   //Posts
 
+  submitPost(shareSecret: string, postHeaders: [string, string][], payload: Uint8Array) {
+    return this.client.post("Api/Post/Submit/" + shareSecret, payload.buffer, { headers: Object.fromEntries(postHeaders) });
+  }
+
   getPosts(shareId: number, page: number, pageSize: number) {
     return this.client.get<PaginatedResponse<PostSnippet>>("Api/Share/Posts/Metadata/" + shareId + "/" + page + "/" + pageSize)
       .pipe(shareReplay(1));

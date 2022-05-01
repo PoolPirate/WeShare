@@ -20,6 +20,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { CreateButtonComponent } from './components/create-button/create-button.component';
 import { PagedListHeaderComponent } from './components/paged-list-header/paged-list-header.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { HeaderPairComponent } from './components/header-pair/header-pair.component';
+import { SharedLoadingDialog } from './dialogs/loading/loading.dialog.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     SubscriptionSnippetComponent,
     PostSnippetComponent,
     CreateButtonComponent,
-    PagedListHeaderComponent
+    PagedListHeaderComponent,
+    HeaderPairComponent,
+
+    SharedLoadingDialog
   ],
   imports: [
     CommonModule,
@@ -47,7 +53,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatButtonModule,
     MatCardModule,
     MatExpansionModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
   ],
   exports: [ 
     NotFoundComponent,
@@ -57,9 +64,13 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     LikeButtonComponent,
     CreateButtonComponent,
 
+    SharedLoadingDialog,
+
     ShareSnippetComponent,
     SubscriptionSnippetComponent,
     PostSnippetComponent,
+
+    HeaderPairComponent,
 
     PagedListHeaderComponent,
 

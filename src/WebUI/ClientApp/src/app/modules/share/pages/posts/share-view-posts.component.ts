@@ -7,6 +7,7 @@ import { WeShareClient } from '../../../../../services/weshareclient';
 import { PaginatedResponse, Resolved } from '../../../../../types/general-types';
 import { PostSnippet } from '../../../../../types/post-types';
 import { ShareData } from '../../../../../types/share-types';
+import { SharedLoadingDialog } from '../../../../shared/dialogs/loading/loading.dialog.component';
 import { ShareViewCreatePostDialogComponent } from '../../dialogs/post-create/share-view-create-post-dialog.component';
 import { ShareService } from '../../services/shareservice';
 
@@ -23,7 +24,7 @@ export class ShareViewPostsComponent {
   errorCode: number;
 
   constructor(private weShareClient: WeShareClient, private matDialog: MatDialog, private authService: AuthService,
-    shareService: ShareService, router: Router, route: ActivatedRoute) {
+    private shareService: ShareService, router: Router, route: ActivatedRoute) {
     this.shareData = shareService.shareData;
 
     route.data.subscribe(data => {
@@ -56,7 +57,24 @@ export class ShareViewPostsComponent {
   }
 
   createPost() {
-    this.matDialog.open(ShareViewCreatePostDialogComponent);
+    if (this.shareService.shareSecrets == null) {
+      var loadingDialog = this.matDialog.open(SharedLoadingDialog);
+
+      this.weShareClient.getShareSecrets(this.shareData.shareInfo.id)
+        .subscribe(success => {
+          loadingDialog.close();
+          this.shareService.shareSecrets = success;
+          this.matDialog.open(ShareViewCreatePostDialogComponent,
+            { data: this.shareService.shareSecrets });
+        }, error => {
+          alert("Could not retrieve secret: " + error.status);
+          loadingDialog.close();
+        });
+    }
+    else {
+      this.matDialog.open(ShareViewCreatePostDialogComponent,
+        { data: this.shareService.shareSecrets });
+    }
   }
 
   get isOwnShare() {
