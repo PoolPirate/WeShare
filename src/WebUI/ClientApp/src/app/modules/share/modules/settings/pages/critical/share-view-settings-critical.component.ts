@@ -29,8 +29,28 @@ export class ShareViewSettingsCriticalComponent {
     if (this.deleteRan) {
       return;
     }
-    this.deleteRan = true;
-
+    if (confirm("Do you  want to delete this?")) {
+      if (confirm("Do you really want to delete this?")) {
+        if (confirm("Do you REAAAAAALLY want to delete this?")) {
+          if (confirm("Are you 1000% sure you want to delete this?")) {
+            this.deleteRan = true;
+          }
+          else {
+            return;
+          }
+        }
+        else {
+          return;
+        }
+      }
+      else {
+        return;
+      }
+    }
+    else {
+      return;
+    }
+    
     this.weShareClient.deleteShare(this.shareData.shareInfo.id)
       .subscribe(response => {
         this.errorCode = 200;
