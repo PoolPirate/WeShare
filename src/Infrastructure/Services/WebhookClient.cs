@@ -35,7 +35,7 @@ public class WebhookClient : Singleton, IWebhookClient
         catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException)
         {
             Logger.LogDebug("Timeout reached when sending post via webhook");
-            return (false, null, (int) sw.ElapsedMilliseconds);
+            return (false, null, (int)sw.ElapsedMilliseconds);
         }
         catch (Exception ex)
         {
@@ -61,7 +61,7 @@ public class WebhookClient : Singleton, IWebhookClient
 
         request.Headers.Clear();
 
-        foreach(var header in content.Headers)
+        foreach (var header in content.Headers)
         {
             if (header.Key == "Host" || header.Key == "Content-Length")
             {

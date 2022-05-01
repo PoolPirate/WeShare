@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
-
-namespace WeShare.Domain.Entities;
+﻿namespace WeShare.Domain.Entities;
 public class PostContent
 {
     public IDictionary<string, string[]> Headers { get; }

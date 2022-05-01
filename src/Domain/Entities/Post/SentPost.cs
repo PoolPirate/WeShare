@@ -5,16 +5,16 @@ public class SentPost
     /// The id of the post that has been sent.
     /// </summary>
     public PostId PostId { get; private set; }
-    
+
     /// <summary>
     /// The post that has been sent.
     /// </summary>
     public Post? Post { get; private set; }
-    
+
     /// <summary>
     /// The id of the subscription that this has been sent to.
     /// </summary>
-    public SubscriptionId SubscriptionId { get; private set;  }
+    public SubscriptionId SubscriptionId { get; private set; }
 
     /// <summary>
     /// The subscription that this has been sent to.
@@ -45,7 +45,7 @@ public class SentPost
         Received = true;
         ReceivedAt = DateTimeOffset.UtcNow;
     }
-    public void IncrementAttempts() 
+    public void IncrementAttempts()
         => Attempts++;
 
     public static SentPost Create(PostId postId, SubscriptionId subscriptionId)

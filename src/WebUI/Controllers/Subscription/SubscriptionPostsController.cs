@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 using WeShare.Application.Actions.Queries;
 using WeShare.Application.Common.Models;
 using WeShare.Application.DTOs;
@@ -36,7 +35,7 @@ public class SubscriptionPostsController : ExtendedControllerBase
 
         return result.Status switch
         {
-            
+
             GetSubscriptionPendingPostSnippetsPaginated.Status.Success => Ok(result.PostSnippets),
             GetSubscriptionPendingPostSnippetsPaginated.Status.SubscriptionNotFound => NotFound(),
             _ => throw new InvalidOperationException(),

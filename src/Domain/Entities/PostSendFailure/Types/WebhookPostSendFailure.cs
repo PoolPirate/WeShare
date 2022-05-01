@@ -12,7 +12,7 @@ public class WebhookPostSendFailure : PostSendFailure
         return failure;
     }
 
-    protected WebhookPostSendFailure(PostId postId, SubscriptionId subscriptionId, HttpStatusCode? statusCode, int responseLatency) 
+    protected WebhookPostSendFailure(PostId postId, SubscriptionId subscriptionId, HttpStatusCode? statusCode, int responseLatency)
         : base(postId, subscriptionId)
     {
         StatusCode = statusCode;

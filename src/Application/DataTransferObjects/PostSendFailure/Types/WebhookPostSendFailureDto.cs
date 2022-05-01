@@ -9,7 +9,7 @@ public class WebhookPostSendFailureDto : PostSendFailureDto, IMapFrom<PostSendFa
     public HttpStatusCode? StatusCode { get; set; }
     public int ResponseLatency { get; set; }
 
-    public WebhookPostSendFailureDto(HttpStatusCode? statusCode, int responseLatency, DateTimeOffset createdAt) 
+    public WebhookPostSendFailureDto(HttpStatusCode? statusCode, int responseLatency, DateTimeOffset createdAt)
         : base(createdAt)
     {
         StatusCode = statusCode;

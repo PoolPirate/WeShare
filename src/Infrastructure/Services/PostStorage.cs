@@ -1,6 +1,5 @@
 ﻿using Common.Services;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
 using System.Text;
 using System.Text.Json;
 using WeShare.Application.Entities;
@@ -78,7 +77,7 @@ public class PostStorage : Singleton, IPostStorage
     }
 
     public async Task<PostMetadata> StoreAsync(PostId postId, IDictionary<string, string[]> headers, Stream payload, CancellationToken cancellationToken)
-{
+    {
         var storeHeadersTask = StorePostHeadersAsync(postId, headers);
         var storeBodyTask = StorePostPayloadAsync(postId, payload);
 

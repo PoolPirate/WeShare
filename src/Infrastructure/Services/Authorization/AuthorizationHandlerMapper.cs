@@ -54,7 +54,7 @@ public class AuthorizationHandlerMapper : Singleton
         return base.InitializeAsync();
     }
 
-    public (Type, Func<object, object, Enum, CancellationToken, ValueTask<bool>>) GetAuthorizationHandlerType(Type entityType, Type operationType) 
+    public (Type, Func<object, object, Enum, CancellationToken, ValueTask<bool>>) GetAuthorizationHandlerType(Type entityType, Type operationType)
         => AuthorizationHandlerMap.TryGetValue((entityType, operationType), out var handlerType)
             ? handlerType
             : entityType.BaseType is not null &&

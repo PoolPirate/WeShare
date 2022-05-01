@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Primitives;
 using WeShare.Application.Actions.Command;
 using WeShare.Domain.Entities;
 
@@ -18,7 +17,7 @@ public class PostManageController : ExtendedControllerBase
         {
             PostSubmitAction.Status.Success => Ok(),
             PostSubmitAction.Status.ShareNotFound => NotFound(),
-               _ => throw new NotImplementedException(),
+            _ => throw new NotImplementedException(),
         };
     }
 }

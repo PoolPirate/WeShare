@@ -2,8 +2,6 @@
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Primitives;
-using System.Collections.Generic;
 using WeShare.Application.Entities;
 using WeShare.Application.Services;
 using WeShare.Domain.Entities;

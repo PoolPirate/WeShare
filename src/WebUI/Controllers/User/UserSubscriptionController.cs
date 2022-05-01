@@ -12,7 +12,7 @@ public class UserSubscriptionController : ExtendedControllerBase
     [HttpGet("Snippets/Id/{userId}/{page}/{pageSize}")]
     public async Task<ActionResult<PaginatedList<SubscriptionSnippetDto>>> GetShareSnippetsAsync([FromRoute] long userId,
         [FromRoute] ushort page, [FromRoute] ushort pageSize,
-        [FromQuery] SubscriptionType? type, 
+        [FromQuery] SubscriptionType? type,
         CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new GetUserSubscriptionSnippetsPaginated

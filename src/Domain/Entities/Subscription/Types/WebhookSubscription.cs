@@ -9,7 +9,7 @@ public class WebhookSubscription : Subscription
         return subscription;
     }
 
-    protected WebhookSubscription(SubscriptionType type, SubscriptionName name, UserId userId, ShareId shareId, Uri targetUrl) 
+    protected WebhookSubscription(SubscriptionType type, SubscriptionName name, UserId userId, ShareId shareId, Uri targetUrl)
         : base(type, name, userId, shareId)
     {
         TargetUrl = targetUrl;

@@ -1,7 +1,5 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Threading.Tasks;
 using WeShare.Application.Services;
 using WeShare.Domain.Entities;
 
@@ -51,8 +49,8 @@ public class GetPostContent
 
             var content = await PostStorage.LoadAsync(request.PostId, cancellationToken);
 
-            return content is null 
-                ? new Result(Status.ContentNotFound) 
+            return content is null
+                ? new Result(Status.ContentNotFound)
                 : new Result(Status.Success, content);
         }
     }

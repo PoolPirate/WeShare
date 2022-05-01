@@ -74,7 +74,7 @@ public class SubscriptionCreateAction
 
             await Authorizer.EnsureAuthorizationAsync(subscription, SubscriptionCommandOperation.Create, cancellationToken);
 
-            if(!await DbContext.Shares.AnyAsync(x => x.Id == request.ShareId, cancellationToken))
+            if (!await DbContext.Shares.AnyAsync(x => x.Id == request.ShareId, cancellationToken))
             {
                 return new Result(Status.ShareNotFound);
             }
@@ -95,7 +95,7 @@ public class SubscriptionCreateAction
             };
         }
 
-        private static Subscription MakeSubscription(Command request) 
+        private static Subscription MakeSubscription(Command request)
             => request.Type switch
             {
                 SubscriptionType.Dashboard => Subscription.Create(SubscriptionType.Dashboard, request.Name, request.UserId, request.ShareId),

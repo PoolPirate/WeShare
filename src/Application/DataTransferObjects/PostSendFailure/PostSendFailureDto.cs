@@ -17,7 +17,7 @@ public class PostSendFailureDto : IMapFrom<PostSendFailure>
     }
 
     void IMapFrom<PostSendFailure>.Mapping(Profile profile) => profile.CreateMap<PostSendFailure, PostSendFailureDto>()
-            .ConstructUsing((postSendFailure, context) 
+            .ConstructUsing((postSendFailure, context)
                 => postSendFailure.SubscriptionType switch
                 {
                     SubscriptionType.Dashboard => context.Mapper.Map<PostSendFailureDto>(postSendFailure),

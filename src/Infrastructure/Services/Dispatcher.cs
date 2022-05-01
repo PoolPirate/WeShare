@@ -1,7 +1,6 @@
 ﻿using Common.Services;
 using Hangfire;
 using MediatR;
-using System.Transactions;
 using WeShare.Application.Services;
 
 namespace WeShare.Infrastructure.Services;

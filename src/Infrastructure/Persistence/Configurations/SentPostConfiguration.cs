@@ -10,7 +10,7 @@ public class SentPostConfiguration : IEntityTypeConfiguration<SentPost>
         builder.Property(x => x.PostId);
         builder.Property(x => x.SubscriptionId);
 
-        builder.HasKey(x => new {x.PostId, x.SubscriptionId});
+        builder.HasKey(x => new { x.PostId, x.SubscriptionId });
 
         builder.Property(x => x.Received);
         builder.Property(x => x.ReceivedAt);

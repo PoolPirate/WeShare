@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -7,7 +6,7 @@ namespace WeShare.Infrastructure.Migrations;
 
 public partial class PostSendFailures : Migration
 {
-    protected override void Up(MigrationBuilder migrationBuilder) 
+    protected override void Up(MigrationBuilder migrationBuilder)
         => migrationBuilder.CreateTable(
             name: "PostSendFailures",
             columns: table => new
@@ -21,7 +20,7 @@ public partial class PostSendFailures : Migration
             },
             constraints: table => table.PrimaryKey("PK_PostSendFailures", x => x.Id));
 
-    protected override void Down(MigrationBuilder migrationBuilder) 
+    protected override void Down(MigrationBuilder migrationBuilder)
         => migrationBuilder.DropTable(
             name: "PostSendFailures");
 }

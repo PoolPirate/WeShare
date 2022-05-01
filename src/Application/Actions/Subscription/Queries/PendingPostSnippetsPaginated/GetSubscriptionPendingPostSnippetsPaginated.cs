@@ -80,10 +80,10 @@ public class GetSubscriptionPendingPostSnippetsPaginated
                 .ToListAsync(cancellationToken);
 
             var postSendfailureDtos = postSendfailures.GroupBy(x => x.PostId)
-                .Select(x => new { x.Key, DTOs = x.Select(x => (object) Mapper.Map<PostSendFailureDto>(x)).ToList() })
+                .Select(x => new { x.Key, DTOs = x.Select(x => (object)Mapper.Map<PostSendFailureDto>(x)).ToList() })
                 .ToList();
 
-            foreach(var item in postSendInfos.Items)
+            foreach (var item in postSendInfos.Items)
             {
                 item.PostSendFailures = postSendfailureDtos.Single(x => x.Key == item.PostSnippet.Id).DTOs;
             }

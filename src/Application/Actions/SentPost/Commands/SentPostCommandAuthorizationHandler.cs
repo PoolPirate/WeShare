@@ -24,7 +24,7 @@ public class SentPostCommandAuthorizationHandler : AuthorizationHandler<SentPost
 
         return operation switch
         {
-            SentPostCommandOperation.MarkAsReceived 
+            SentPostCommandOperation.MarkAsReceived
                 => await DbContext.Subscriptions
                     .Where(x => x.Id == entity.SubscriptionId)
                     .AllAsync(x => x.UserId == userId, cancellationToken: cancellationToken),

@@ -2,9 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using WeShare.Application.Common.Mappings;
 using WeShare.Application.Common.Models;
 using WeShare.Application.DTOs;

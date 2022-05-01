@@ -59,7 +59,7 @@ public class UserCreateAction
             DbContext.Users.Add(user);
 
             using var transactionScope = new TransactionScope(TransactionScopeOption.Required,
-                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }, 
+                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
                 TransactionScopeAsyncFlowOption.Enabled);
 
             var saveResult = await DbContext.SaveChangesAsync(allowedStatuses: DbStatus.DuplicateIndex, cancellationToken: cancellationToken);

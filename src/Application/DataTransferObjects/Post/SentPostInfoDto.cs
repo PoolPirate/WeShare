@@ -11,7 +11,7 @@ public class SentPostInfoDto : IMapFrom<SentPost>
     public DateTimeOffset? ReceivedAt { get; set; }
     public short Attempts { get; set; }
 
-    void IMapFrom<SentPost>.Mapping(Profile profile) 
+    void IMapFrom<SentPost>.Mapping(Profile profile)
         => profile.CreateMap<SentPost, SentPostInfoDto>()
             .ForMember(x => x.PostSnippet,
                 options => options.MapFrom(s => s.Post));

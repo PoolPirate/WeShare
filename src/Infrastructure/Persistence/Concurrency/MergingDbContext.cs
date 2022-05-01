@@ -45,7 +45,7 @@ public abstract class MergingDbContext : DbContext
         {
             try
             {
-                return await base.SaveChangesAsync(true ,cancellationToken);
+                return await base.SaveChangesAsync(true, cancellationToken);
             }
             catch (DbUpdateConcurrencyException ex)
             {
