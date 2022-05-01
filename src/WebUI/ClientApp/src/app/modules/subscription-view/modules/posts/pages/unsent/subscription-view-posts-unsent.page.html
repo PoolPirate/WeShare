@@ -1,0 +1,8 @@
+<shared-post-snippet *ngFor="let post of unsentPosts" [postSnippet]="post"></shared-post-snippet>
+
+<div *ngIf="unsentPostsResponse.totalCount == 0">
+
+  <h1>All posts have been sent.</h1>
+  <h2>Check pending tab for posts that were sent but could not be received.</h2>
+
+</div>

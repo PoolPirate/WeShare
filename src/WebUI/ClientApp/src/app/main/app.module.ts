@@ -22,7 +22,7 @@ import { ViewShareShareInfoResolver } from '../modules/share/services/resolvers/
 import { ViewShareShareUserDataResolver } from '../modules/share/services/resolvers/share-view-shareuserdata.resolver';
 import { ShareViewComponent } from '../modules/share/share-view.component';
 import { ShareCreateModule } from '../modules/share-create/share-create.module';
-import { SubscriptionViewSubscriptionInfoResolver } from '../modules/subscription-view/resolvers/subscription-view-subscriptioninfo.resolver';
+import { SubscriptionViewSubscriptionInfoResolver } from '../modules/subscription-view/services/resolvers/subscription-view-subscriptioninfo.resolver';
 import { SubscriptionViewComponent } from '../modules/subscription-view/subscription-view.component';
 import { UserSettingsComponent } from '../modules/user-settings/user-settings.component';
 import { MaterialModule } from '../modules/material/material.module';

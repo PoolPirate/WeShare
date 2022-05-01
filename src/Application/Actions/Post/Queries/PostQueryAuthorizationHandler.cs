@@ -24,12 +24,11 @@ public class PostQueryAuthorizationHandler : AuthorizationHandler<PostId, PostQu
         {
             return ValueTask.FromResult(false);
         }
-        var userId = optionalUserId.Value;
+        //var userId = optionalUserId.Value;
 
-        switch (operation)
+        throw operation switch
         {
-            default:
-                throw new NotImplementedException(nameof(operation));
-        }
+            _ => new NotImplementedException(nameof(operation)),
+        };
     }
 }

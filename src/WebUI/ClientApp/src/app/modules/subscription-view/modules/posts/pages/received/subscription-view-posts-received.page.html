@@ -1,0 +1,9 @@
+<div *ngFor="let post of receivedPosts">
+  <mat-card>
+    <h2>Received at {{ post.receivedAt }}</h2>
+    <p>Took {{ post.attempts }} Attempts</p>
+    <shared-post-snippet [postSnippet]="post.postSnippet"></shared-post-snippet>
+  </mat-card>
+
+
+</div>

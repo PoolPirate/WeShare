@@ -10,7 +10,7 @@ using WeShare.Application.Services;
 using WeShare.Domain.Entities;
 
 namespace WeShare.Application.Actions.Queries;
-public class GetSubscriptionUnreceivedPostSnippetsPaginated
+public class GetSubscriptionPendingPostSnippetsPaginated
 {
     public class Query : IRequest<Result>
     {
@@ -36,7 +36,7 @@ public class GetSubscriptionUnreceivedPostSnippetsPaginated
         SubscriptionNotFound,
     }
 
-    public record Result(Status Status, PaginatedList<PostSnippetDto>? PostMetadatas = null);
+    public record Result(Status Status, PaginatedList<SentPostInfoDto>? PostSnippets = null);
 
     public class Handler : IRequestHandler<Query, Result>
     {
@@ -53,27 +53,23 @@ public class GetSubscriptionUnreceivedPostSnippetsPaginated
 
         public async Task<Result> Handle(Query request, CancellationToken cancellationToken)
         {
-            await Authorizer.EnsureAuthorizationAsync(request.SubscriptionId, SubscriptionQueryOperation.ReadUnsentPostMetadata, cancellationToken);
+            await Authorizer.EnsureAuthorizationAsync(request.SubscriptionId, SubscriptionQueryOperation.ReadPendingPosts, cancellationToken);
 
-            var subscriptionData = await DbContext.Subscriptions
-                .Where(x => x.Id == request.SubscriptionId)
-                .Select(x => new { x.ShareId, x.CreatedAt })
-                .SingleOrDefaultAsync(cancellationToken);
-
-            if (subscriptionData is null)
-            {
-                return new Result(Status.SubscriptionNotFound);
-            }
-
-            var postMetadatas = await DbContext.Posts
-                .Where(x => x.ShareId == subscriptionData.ShareId)
-                .Where(x => x.CreatedAt >= subscriptionData.CreatedAt)
-                .Where(x => !x.SentPosts!
-                    .Any(x => x.Received && x.SubscriptionId == request.SubscriptionId))
-                .ProjectTo<PostSnippetDto>(Mapper.ConfigurationProvider)
+            var postSnippets = await DbContext.SentPosts
+                .Where(x => x.SubscriptionId == request.SubscriptionId)
+                .Where(x => !x.Received)
+                .ProjectTo<SentPostInfoDto>(Mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.Page, request.PageSize, cancellationToken);
 
-            return new Result(Status.Success, postMetadatas);
+            if (postSnippets.TotalCount == 0)
+            {
+                if (!await DbContext.Subscriptions.AnyAsync(x => x.Id == request.SubscriptionId, cancellationToken))
+                {
+                    return new Result(Status.SubscriptionNotFound);
+                }
+            }
+
+            return new Result(Status.Success, postSnippets);
         }
     }
 }

@@ -1,0 +1,18 @@
+<nav mat-tab-nav-bar class="border mb-3">
+  <a mat-tab-link [routerLink]="['./unsent']"
+     (click)="activeLink = 'unsent'"
+     [active]="activeLink == 'unsent'">
+    Unsent
+  </a>
+  <a mat-tab-link [routerLink]="['./pending']"
+     (click)="activeLink = 'pending'"
+     [active]="activeLink == 'pending'">
+    Pending
+  </a>
+  <a mat-tab-link [routerLink]="['./received']"
+     (click)="activeLink = 'received'"
+     [active]="activeLink == 'received'">
+    Received
+  </a>
+</nav>
+

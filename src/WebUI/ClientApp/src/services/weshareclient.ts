@@ -5,7 +5,7 @@ import { map, shareReplay } from "rxjs/operators";
 import { AccountInfo } from "../types/account-types";
 import { CallbackInfo } from "../types/callback-types";
 import { PaginatedResponse } from "../types/general-types";
-import { ParsedPostContent, PostContent, PostSnippet } from "../types/post-types";
+import { ParsedPostContent, PostContent, PostSnippet, SentPostInfoDto } from "../types/post-types";
 import { ProfileInfo } from "../types/profile-types";
 import { ShareData, ShareInfo, ShareSecrets, ShareSnippet, ShareUserData } from "../types/share-types";
 import { SubscriptionInfo, SubscriptionSnippet, SubscriptionType } from "../types/subscription-types";
@@ -148,6 +148,14 @@ export class WeShareClient {
 
   getUnsentPosts(subscriptionId: number) {
     return this.client.get<PaginatedResponse<PostSnippet>>("Api/Subscription/Posts/Unsent/Id/" + subscriptionId + "/" + 0 + "/" + 10, { headers: this.getHeaders() })
+      .pipe(shareReplay(1));
+  }
+  getPendingPosts(subscriptionId: number) {
+    return this.client.get<PaginatedResponse<SentPostInfoDto>>("Api/Subscription/Posts/Pending/Id/" + subscriptionId + "/" + 0 + "/" + 10, { headers: this.getHeaders() })
+      .pipe(shareReplay(1));
+  }
+  getReceivedPosts(subscriptionId: number) {
+    return this.client.get<PaginatedResponse<SentPostInfoDto>>("Api/Subscription/Posts/Received/Id/" + subscriptionId + "/" + 0 + "/" + 10, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 

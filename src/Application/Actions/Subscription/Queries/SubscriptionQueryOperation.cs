@@ -2,5 +2,7 @@
 public enum SubscriptionQueryOperation : byte
 {
     ReadInfo,
-    ReadUnsentPostMetadata,
+    ReadUnreceivedPosts,
+    ReadReceivedPosts,
+    ReadPendingPosts,
 }

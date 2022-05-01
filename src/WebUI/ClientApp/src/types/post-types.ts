@@ -15,3 +15,11 @@ export interface ParsedPostContent {
   headers: object;
   payload: string;
 }
+
+export class SentPostInfoDto {
+  postSnippet: PostSnippet;
+
+  received: boolean;
+  receivedAt: Date;
+  attempts: number;
+}

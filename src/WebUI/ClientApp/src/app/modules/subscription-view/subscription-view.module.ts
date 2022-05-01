@@ -8,13 +8,16 @@ import { SubscriptionViewConfigComponent } from './pages/config/subscription-vie
 import { SubscriptionViewNavMenuComponent } from './components/nav-menu/subscription-view-nav-menu.component';
 import { SubscriptionViewComponent } from './subscription-view.component';
 import { SubscriptionViewOverviewComponent } from './pages/overview/subscription-view-overview.component';
-import { SubscriptionViewPostsComponent } from './pages/posts/subscription-view-posts.component';
+import { SubscriptionViewPostsComponent } from './modules/posts/subscription-view-posts.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'overview' },
   { path: 'config', component: SubscriptionViewConfigComponent },
   { path: 'overview', component: SubscriptionViewOverviewComponent },
-  { path: 'posts', component: SubscriptionViewPostsComponent },
+  {
+    path: 'posts', component: SubscriptionViewPostsComponent,
+    loadChildren: () => import("./modules/posts/subscription-view-posts.module").then(m => m.SubscriptionViewPostsModule)
+  },
 ]
 
 @NgModule({
@@ -23,7 +26,6 @@ const routes: Routes = [
     SubscriptionViewNavMenuComponent,
     SubscriptionViewComponent,
     SubscriptionViewOverviewComponent,
-    SubscriptionViewPostsComponent
   ],
   imports: [
     MaterialModule,
