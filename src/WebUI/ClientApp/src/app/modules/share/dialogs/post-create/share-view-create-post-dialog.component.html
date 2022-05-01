@@ -49,7 +49,7 @@
     <div class="inputs-box">
 
       <mat-form-field class="fill-space" appearance="fill">
-        <textarea matInput
+        <textarea matInput [formControl]="payload"
                   cdkTextareaAutosize
                   #autosize="cdkTextareaAutosize"
                   cdkAutosizeMinRows="5"

@@ -57,19 +57,23 @@ export class ShareViewPostsComponent {
   }
 
   createPost() {
-    var loadingDialog = this.matDialog.open(SharedLoadingDialog);
-
     if (this.shareService.shareSecrets == null) {
+      var loadingDialog = this.matDialog.open(SharedLoadingDialog);
+
       this.weShareClient.getShareSecrets(this.shareData.shareInfo.id)
         .subscribe(success => {
           loadingDialog.close();
           this.shareService.shareSecrets = success;
           this.matDialog.open(ShareViewCreatePostDialogComponent,
-            { data: { shareService: this.shareService.shareSecrets } });
+            { data: this.shareService.shareSecrets });
         }, error => {
           alert("Could not retrieve secret: " + error.status);
           loadingDialog.close();
         });
+    }
+    else {
+      this.matDialog.open(ShareViewCreatePostDialogComponent,
+        { data: this.shareService.shareSecrets });
     }
   }
 

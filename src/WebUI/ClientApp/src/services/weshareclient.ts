@@ -177,7 +177,7 @@ export class WeShareClient {
   //Posts
 
   submitPost(shareSecret: string, postHeaders: [string, string][], payload: Uint8Array) {
-    return this.client.post("Api/Post/Submit/" + shareSecret, payload, { headers: Object.fromEntries(postHeaders) });
+    return this.client.post("Api/Post/Submit/" + shareSecret, payload.buffer, { headers: Object.fromEntries(postHeaders) });
   }
 
   getPosts(shareId: number, page: number, pageSize: number) {

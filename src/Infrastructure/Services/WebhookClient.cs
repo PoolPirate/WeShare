@@ -71,6 +71,8 @@ public class WebhookClient : Singleton, IWebhookClient
 
         request.Headers.Add("Host", targetUrl.Host);
 
+        string t = 
+
         return request;
     }
 }
