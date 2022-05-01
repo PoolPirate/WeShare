@@ -56,11 +56,7 @@ public class LikeAddAction
             return saveResult.Status switch
             {
                 DbStatus.Success => new Result(Status.Success),
-                DbStatus.DuplicateIndex => new Result(
-                 saveResult.IsConflictingIndex(typeof(Like), nameof(Like.OwnerId), nameof(Like.ShareId))
-                    ? Status.AlreadyAdded
-                    : throw new UnhandledIndexConflictException(saveResult)
-                ),
+                DbStatus.DuplicatePrimaryKey => new Result(Status.AlreadyAdded),
                 _ => throw new UnhandledDbStatusException(saveResult),
             };
         }
