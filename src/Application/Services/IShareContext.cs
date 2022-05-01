@@ -15,6 +15,7 @@ public interface IShareContext
     DbSet<Subscription> Subscriptions { get; }
     DbSet<WebhookSubscription> WebhookSubscriptions { get; }
     DbSet<SentPost> SentPosts { get; }
+    DbSet<PostSendFailure> PostSendFailures { get; }
 
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
     Task CloseConnectionAsync();

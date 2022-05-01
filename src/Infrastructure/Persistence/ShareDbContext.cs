@@ -22,6 +22,7 @@ public class ShareDbContext : MergingDbContext, IShareContext
     public DbSet<Subscription> Subscriptions { get; set; }
     public DbSet<WebhookSubscription> WebhookSubscriptions { get; set; }
     public DbSet<SentPost> SentPosts { get; set; }
+    public DbSet<PostSendFailure> PostSendFailures { get; set; }
 
     public ShareDbContext(
         DbContextOptions<ShareDbContext> options,
