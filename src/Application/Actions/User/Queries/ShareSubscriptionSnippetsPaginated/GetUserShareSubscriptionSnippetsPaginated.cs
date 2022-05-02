@@ -61,7 +61,7 @@ public class GetUserShareSubscriptionSnippetsPaginated
         {
             await Authorizer.EnsureAuthorizationAsync(request.UserId, UserQueryOperation.ReadSubscriptions, cancellationToken);
 
-            var authenticatedUserId = CurrentUserService.GetOrThrow();
+            var authenticatedUserId = CurrentUserService.GetUserId();
 
             var subscriptionInfos = await DbContext.Subscriptions
                 .Where(x => x.UserId == request.UserId)

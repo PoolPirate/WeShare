@@ -62,7 +62,7 @@ public class GetShareSnippetsOrderedPaginated
         {
             await Authorizer.EnsureAuthorizationAsync(request.UserId, UserQueryOperation.ReadPublicShareSnippets, cancellationToken);
 
-            var authenticatedUserId = CurrentUserService.GetOrThrow();
+            var authenticatedUserId = CurrentUserService.GetUserId();
 
             var shareSnippets = await DbContext.Shares
                 .Where(x => x.OwnerId == request.UserId)

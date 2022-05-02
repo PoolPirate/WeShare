@@ -62,7 +62,7 @@ public partial class GetLikedShareSnippetsPaginated
                 return new Result(Status.UserNotFound);
             }
 
-            var authenticatedUserId = CurrentUserService.GetOrThrow();
+            var authenticatedUserId = CurrentUserService.GetUserId();
 
             var likedShareSnippets = await DbContext.Likes
                 .Where(x => x.OwnerId == request.UserId)
