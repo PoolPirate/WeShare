@@ -14,7 +14,7 @@ export class ProfilePopularSharesResolver implements Resolve<Resolved<ShareSnipp
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Resolved<ShareSnippet[]>> {
     var username = route.parent!.params['username'];
-    return this.weShareClient.getPopularShareSnippets(username)
+    return this.weShareClient.getPopularShareSnippets(username, 0, 4)
       .pipe(
         map(value => (Resolved.success(value))),
         catchError(error => of(Resolved.error<ShareSnippet[]>(error))),

@@ -113,18 +113,21 @@ export class WeShareClient {
       .pipe(shareReplay(1));
   }
 
-  getShareSnippets(username: string, page: number) {
-    return this.client.get<PaginatedResponse<ShareSnippet>>("Api/User/Shares/Name/" + username + "/" + page + "/" + 10, { headers: this.getHeaders() })
+  getShareSnippets(username: string, page: number, pageSize: number) {
+    return this.client.get<PaginatedResponse<ShareSnippet>>("Api/User/Shares/Name/" + username,
+      { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
-  getPopularShareSnippets(username: string) {
-    return this.client.get<ShareSnippet[]>("Api/User/Shares/Name/" + username + "/" + 0 + "/" + 4 + "?ordering=SubscriberCount", { headers: this.getHeaders() })
+  getPopularShareSnippets(username: string, page: number, pageSize: number) {
+    return this.client.get<ShareSnippet[]>("Api/User/Shares/Name/" + username + "?ordering=SubscriberCount",
+      { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
-  getLikedShareSnippets(username: string, page: number) {
-    return this.client.get<PaginatedResponse<ShareSnippet>>("Api/User/Shares/Liked/Name/" + username + "/" + page + "/" + 10, { headers: this.getHeaders() })
+  getLikedShareSnippets(username: string, page: number, pageSize: number) {
+    return this.client.get<PaginatedResponse<ShareSnippet>>("Api/User/Shares/Liked/Name/" + username,
+      { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
@@ -141,26 +144,30 @@ export class WeShareClient {
   }
 
   getSubscriptionSnippets(userId: number, type: SubscriptionType | null, page: number, pageSize: number) {
-    return this.client.get<PaginatedResponse<SubscriptionSnippet>>("Api/User/Subscription/Snippets/Id/" + userId + "/" + page + "/" + pageSize + (type != null ? "?type=" + type : ""),
-      { headers: this.getHeaders() })
+    return this.client.get<PaginatedResponse<SubscriptionSnippet>>("Api/User/Subscription/Snippets/Id/" + userId,
+      { params: { page: page, pageSize: pageSize, type: (type == null ? "" : type) }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getShareSubscriptionSnippets(userId: number, shareId: number, page: number, pageSize: number) {
-    return this.client.get<PaginatedResponse<SubscriptionSnippet>>("Api/User/Share/Subscription/Snippets/Id/" + userId + "/" + shareId + "/" + page + "/" + pageSize, { headers: this.getHeaders() })
+    return this.client.get<PaginatedResponse<SubscriptionSnippet>>("Api/User/Share/Subscription/Snippets/Id/" + userId + "/" + shareId,
+      { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
-  getUnsentPosts(subscriptionId: number) {
-    return this.client.get<PaginatedResponse<PostSnippet>>("Api/Subscription/Posts/Unsent/Id/" + subscriptionId + "/" + 0 + "/" + 10, { headers: this.getHeaders() })
+  getUnsentPosts(subscriptionId: number, page: number, pageSize: number) {
+    return this.client.get<PaginatedResponse<PostSnippet>>("Api/Subscription/Posts/Unsent/Id/" + subscriptionId,
+      { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
-  getPendingPosts(subscriptionId: number) {
-    return this.client.get<PaginatedResponse<PostSendInfo>>("Api/Subscription/Posts/Pending/Id/" + subscriptionId + "/" + 0 + "/" + 10, { headers: this.getHeaders() })
+  getPendingPosts(subscriptionId: number, page: number, pageSize: number) {
+    return this.client.get<PaginatedResponse<PostSendInfo>>("Api/Subscription/Posts/Pending/Id/" + subscriptionId,
+      { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
-  getReceivedPosts(subscriptionId: number) {
-    return this.client.get<PaginatedResponse<PostSendInfo>>("Api/Subscription/Posts/Received/Id/" + subscriptionId + "/" + 0 + "/" + 10, { headers: this.getHeaders() })
+  getReceivedPosts(subscriptionId: number, page: number, pageSize: number) {
+    return this.client.get<PaginatedResponse<PostSendInfo>>("Api/Subscription/Posts/Received/Id/" + subscriptionId,
+      { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
@@ -194,7 +201,8 @@ export class WeShareClient {
   }
 
   getPosts(shareId: number, page: number, pageSize: number) {
-    return this.client.get<PaginatedResponse<PostSnippet>>("Api/Share/Posts/Metadata/" + shareId + "/" + page + "/" + pageSize, { headers: this.getHeaders() })
+    return this.client.get<PaginatedResponse<PostSnippet>>("Api/Share/Posts/Metadata/" + shareId,
+      { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 

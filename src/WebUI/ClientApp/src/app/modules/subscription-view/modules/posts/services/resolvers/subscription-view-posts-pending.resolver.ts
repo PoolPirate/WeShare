@@ -13,7 +13,7 @@ export class SubscriptionViewPostsPendingResolver implements Resolve<Resolved<Pa
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Resolved<PaginatedResponse<PostSendInfo>> | Observable<Resolved<PaginatedResponse<PostSendInfo>>> | Promise<Resolved<PaginatedResponse<PostSendInfo>>> {
     var subscriptionId = route.parent!.parent!.params['subscriptionId'];
 
-    return this.weShareClient.getPendingPosts(subscriptionId)
+    return this.weShareClient.getPendingPosts(subscriptionId, 0, 10)
       .pipe(
         map(value => (Resolved.success(value))),
         catchError(error => of(Resolved.error<PaginatedResponse<PostSendInfo>>(error))),

@@ -9,9 +9,9 @@ namespace WeShare.WebAPI.Controllers;
 [ApiController]
 public class SharePostsInfoController : ExtendedControllerBase
 {
-    [HttpGet("Metadata/{shareId}/{page}/{pageSize}")]
+    [HttpGet("Metadata/{shareId}")]
     public async Task<ActionResult<PaginatedList<PostSnippetDto>>> GetPostMetadatasAsync([FromRoute] long shareId,
-        [FromRoute] ushort page, [FromRoute] ushort pageSize,
+        [FromQuery] ushort page, [FromQuery] ushort pageSize,
         CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new GetPostSnippetsPaginated

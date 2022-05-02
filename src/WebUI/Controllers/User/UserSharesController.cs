@@ -9,9 +9,9 @@ namespace WeShare.WebAPI.Controllers;
 [ApiController]
 public class UserSharesController : ExtendedControllerBase
 {
-    [HttpGet("Liked/Id/{userId}/{page}/{pageSize}")]
-    public async Task<ActionResult<PaginatedList<ShareSnippetDto>>> GetLikedShareSnippetsAsync(
-        [FromRoute] long userId, [FromRoute] ushort page, [FromRoute] ushort pageSize,
+    [HttpGet("Liked/Id/{userId}")]
+    public async Task<ActionResult<PaginatedList<ShareSnippetDto>>> GetLikedShareSnippetsAsync([FromRoute] long userId, 
+        [FromQuery] ushort page, [FromQuery] ushort pageSize,
         CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new GetLikedShareSnippetsPaginated
@@ -25,9 +25,9 @@ public class UserSharesController : ExtendedControllerBase
         };
     }
 
-    [HttpGet("Liked/Name/{username}/{page}/{pageSize}")]
-    public async Task<ActionResult<PaginatedList<ShareSnippetDto>>> GetLikedShareSnippetsAsync(
-        [FromRoute] string username, [FromRoute] ushort page, [FromRoute] ushort pageSize,
+    [HttpGet("Liked/Name/{username}")]
+    public async Task<ActionResult<PaginatedList<ShareSnippetDto>>> GetLikedShareSnippetsAsync([FromRoute] string username, 
+        [FromQuery] ushort page, [FromQuery] ushort pageSize,
         CancellationToken cancellationToken)
     {
         var idResult = await Mediator.Send(new GetUserIdByUsername.Query(Username.From(username.ToLower())), cancellationToken);
@@ -43,9 +43,9 @@ public class UserSharesController : ExtendedControllerBase
         return await GetLikedShareSnippetsAsync(userId, page, pageSize, cancellationToken);
     }
 
-    [HttpGet("Name/{username}/{page}/{pageSize}")]
+    [HttpGet("Name/{username}")]
     public async Task<ActionResult<PaginatedList<ShareSnippetDto>>> GetShareSnippetsAsync([FromRoute] string username,
-        [FromRoute] ushort page, [FromRoute] ushort pageSize,
+        [FromQuery] ushort page, [FromQuery] ushort pageSize,
         [FromQuery] ShareOrdering ordering,
         CancellationToken cancellationToken)
     {
@@ -62,9 +62,9 @@ public class UserSharesController : ExtendedControllerBase
         return await GetShareSnippetsAsync(userId, page, pageSize, ordering, cancellationToken);
     }
 
-    [HttpGet("Id/{userId}/{page}/{pageSize}")]
+    [HttpGet("Id/{userId}")]
     public async Task<ActionResult<PaginatedList<ShareSnippetDto>>> GetShareSnippetsAsync([FromRoute] long userId,
-        [FromRoute] ushort page, [FromRoute] ushort pageSize,
+        [FromQuery] ushort page, [FromQuery] ushort pageSize,
         [FromQuery] ShareOrdering ordering,
         CancellationToken cancellationToken)
     {

@@ -13,7 +13,7 @@ export class SubscriptionViewPostsUnsentResolver implements Resolve<Resolved<Pag
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Resolved<PaginatedResponse<PostSnippet>> | Observable<Resolved<PaginatedResponse<PostSnippet>>> | Promise<Resolved<PaginatedResponse<PostSnippet>>> {
     var subscriptionId = route.parent!.parent!.params['subscriptionId'];
 
-    return this.weShareClient.getUnsentPosts(subscriptionId)
+    return this.weShareClient.getUnsentPosts(subscriptionId, 0, 10)
       .pipe(
         map(value => (Resolved.success(value))),
         catchError(error => of(Resolved.error<PaginatedResponse<PostSnippet>>(error))),

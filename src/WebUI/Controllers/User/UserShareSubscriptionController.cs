@@ -9,9 +9,9 @@ namespace WeShare.WebAPI.Controllers;
 [ApiController]
 public class UserShareSubscriptionController : ExtendedControllerBase
 {
-    [HttpGet("Snippets/Id/{userId}/{shareId}/{page}/{pageSize}")]
+    [HttpGet("Snippets/Id/{userId}/{shareId}")]
     public async Task<ActionResult<PaginatedList<SubscriptionSnippetDto>>> GetSubscriptionSnippetsAsync([FromRoute] long userId, [FromRoute] long shareId,
-        [FromRoute] ushort page, [FromRoute] ushort pageSize,
+        [FromQuery] ushort page, [FromQuery] ushort pageSize,
         CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new GetUserShareSubscriptionSnippetsPaginated

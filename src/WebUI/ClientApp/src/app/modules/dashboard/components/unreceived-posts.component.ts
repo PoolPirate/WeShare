@@ -18,7 +18,7 @@ export class UnreceivedPostsComponent {
     }
 
     dashboardService.subscriptionInfos.forEach(subscriptionSnippet => {
-      weShareClient.getUnsentPosts(subscriptionSnippet.id)
+      weShareClient.getUnsentPosts(subscriptionSnippet.id, 0, 10)
         .subscribe(response => {
           const compound = new Compound(subscriptionSnippet, response.items);
 

@@ -9,9 +9,9 @@ namespace WeShare.WebAPI.Controllers;
 [ApiController]
 public class SubscriptionPostsController : ExtendedControllerBase
 {
-    [HttpGet("Unsent/Id/{subscriptionId}/{page}/{pageSize}")]
+    [HttpGet("Unsent/Id/{subscriptionId}")]
     public async Task<ActionResult<PaginatedList<PostSendInfoDto>>> GetUnsentPostSnippetsAsync([FromRoute] long subscriptionId,
-        [FromRoute] ushort page, [FromRoute] ushort pageSize,
+        [FromQuery] ushort page, [FromQuery] ushort pageSize,
         CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new GetSubscriptionUnsentPostSnippetsPaginated
@@ -25,9 +25,9 @@ public class SubscriptionPostsController : ExtendedControllerBase
         };
     }
 
-    [HttpGet("Pending/Id/{subscriptionId}/{page}/{pageSize}")]
+    [HttpGet("Pending/Id/{subscriptionId}")]
     public async Task<ActionResult<object>> GetPendingPostSnippetsAsync([FromRoute] long subscriptionId,
-    [FromRoute] ushort page, [FromRoute] ushort pageSize,
+    [FromQuery] ushort page, [FromQuery] ushort pageSize,
     CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new GetSubscriptionPendingPostSnippetsPaginated
@@ -42,9 +42,9 @@ public class SubscriptionPostsController : ExtendedControllerBase
         };
     }
 
-    [HttpGet("Received/Id/{subscriptionId}/{page}/{pageSize}")]
+    [HttpGet("Received/Id/{subscriptionId}")]
     public async Task<ActionResult<PaginatedList<PostSendInfoDto>>> GetReceivedPostSnippetsAsync([FromRoute] long subscriptionId,
-    [FromRoute] ushort page, [FromRoute] ushort pageSize,
+    [FromQuery] ushort page, [FromQuery] ushort pageSize,
     CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new GetSubscriptionReceivedPostSnippetsPaginated

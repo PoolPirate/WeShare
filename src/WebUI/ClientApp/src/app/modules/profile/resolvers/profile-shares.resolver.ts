@@ -13,7 +13,7 @@ export class ProfileSharesResolver implements Resolve<Resolved<PaginatedResponse
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Resolved<PaginatedResponse<ShareSnippet>> | Observable<Resolved<PaginatedResponse<ShareSnippet>>> | Promise<Resolved<PaginatedResponse<ShareSnippet>>> {
       var username = route.parent!.params['username'];
-    return this.weShareClient.getShareSnippets(username, 0)
+    return this.weShareClient.getShareSnippets(username, 0, 10)
       .pipe(
         map(value => (Resolved.success(value))),
         catchError(error => of(Resolved.error<PaginatedResponse<ShareSnippet>>(error))),
