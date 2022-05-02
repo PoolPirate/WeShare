@@ -5,12 +5,11 @@ using WeShare.Domain.Entities;
 using WeShare.WebAPI.Forms;
 
 namespace WeShare.WebAPI.Controllers;
-[Route("Api/Share")]
+[Route("Api")]
 [ApiController]
 public class ShareManageController : ExtendedControllerBase
 {
-    [HttpPost("{userId}/Create")]
-    [Authorize]
+    [HttpPost("Users/{userId}/Shares")]
     public async Task<ActionResult<long>> CreateShareAsync([FromRoute] long userId, [FromBody] ShareCreateForm createForm,
         CancellationToken cancellationToken)
     {
@@ -26,7 +25,7 @@ public class ShareManageController : ExtendedControllerBase
         };
     }
 
-    [HttpPost("Update/{shareId}")]
+    [HttpPatch("Shares/{shareId}")]
     public async Task<ActionResult> UpdateShareAsync([FromRoute] long shareId, [FromBody] ShareUpdateForm updateForm,
         CancellationToken cancellationToken)
     {
@@ -43,7 +42,7 @@ public class ShareManageController : ExtendedControllerBase
         };
     }
 
-    [HttpPost("UpdateVisibility/{shareId}")]
+    [HttpPatch("Shares/{shareId}/Visibility")]
     public async Task<ActionResult> UpdateShareVisibilityAsync([FromRoute] long shareId, [FromBody] ShareUpdateVisibilityForm updateForm,
         CancellationToken cancellationToken)
     {
@@ -59,7 +58,7 @@ public class ShareManageController : ExtendedControllerBase
         };
     }
 
-    [HttpDelete("Delete/{shareId}")]
+    [HttpDelete("Shares/{shareId}")]
     public async Task<ActionResult> DeleteShareAsync([FromRoute] long shareId,
         CancellationToken cancellationToken)
     {

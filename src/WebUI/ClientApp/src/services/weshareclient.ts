@@ -29,12 +29,12 @@ export class WeShareClient {
   //User
 
   createUser(username: string, email: string, password: string) {
-    return this.client.post("Api/User/Create", { username, email, password })
+    return this.client.post("Api/Users", { username, email, password })
       .pipe(shareReplay(1));
   }
 
   getUserSnippet(username: string) {
-    return this.client.get<UserSnippet>("Api/User/Snippet/Name/" + username)
+    return this.client.get<UserSnippet>("Api/Users/ByUsername/" + username + "/Snippet")
       .pipe(shareReplay(1));
   }
 
@@ -42,35 +42,35 @@ export class WeShareClient {
 
   updateProfile(nickname: string | null, likesPublished: boolean | null) {
     const userId = this.authService.getUserId();
-    return this.client.post("Api/Profile/" + userId + "/Update/", { nickname, likesPublished: this.boolToStr(likesPublished) }, { headers: this.getHeaders() })
+    return this.client.patch("Api/Profiles/" + userId, { nickname, likesPublished: this.boolToStr(likesPublished) }, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getProfileInfoByUsername(username: string) {
-    return this.client.get<ProfileInfo>("Api/Profile/Name/" + username)
+    return this.client.get<ProfileInfo>("Api/Profiles/ByUsername/" + username + "/Info")
       .pipe(shareReplay(1));
   }
 
   getProfileInfoById(userId: number) {
-    return this.client.get<ProfileInfo>("Api/Profile/Id/" + userId)
+    return this.client.get<ProfileInfo>("Api/Profiles/" + userId + "/Info")
       .pipe(shareReplay(1));
   }
 
   //Account
 
   getAccountInfo(userId: number) {
-    return this.client.get<AccountInfo>("Api/Account/Info/Id/" + userId, { headers: this.getHeaders() })
+    return this.client.get<AccountInfo>("Api/Accounts/" + userId + "/Info", { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   updateAccount(username: string | null, email: string | null) {
     const userId = this.authService.getUserId();
-    return this.client.post("Api/Account/" + userId + "/Update", { username, email }, { headers: this.getHeaders() })
+    return this.client.patch("Api/Accounts/" + userId, { username, email }, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   requestPasswordReset(email: string) {
-    return this.client.post("Api/Account/RequestPasswordReset", { email })
+    return this.client.post("Api/Account-Management/RequestPasswordReset", { email })
       .pipe(shareReplay(1));
   }
 
@@ -78,95 +78,95 @@ export class WeShareClient {
 
   createShare(name: string, description: string, readme: string) {
     const userId = this.authService.getUserId();
-    return this.client.post<number>("Api/Share/" + userId + "/Create", { name, description, readme }, { headers: this.getHeaders() })
+    return this.client.post<number>("Api/Users/" + userId + "/Shares", { name, description, readme }, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   updateShare(shareId: number, name: string | null, description: string | null, readme: string | null) {
-    return this.client.post("Api/Share/Update/" + shareId, { name, description, readme }, { headers: this.getHeaders() })
+    return this.client.patch("Api/Shares/" + shareId, { name, description, readme }, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   updateShareVisibility(shareId: number, isPrivate: boolean) {
-    return this.client.post("Api/Share/UpdateVisibility/" + shareId, { isPrivate }, { headers: this.getHeaders() })
+    return this.client.patch("Api/Shares/" + shareId + "/Visibility/", { isPrivate }, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   deleteShare(shareId: number) {
-    return this.client.delete("Api/Share/Delete/" + shareId, { headers: this.getHeaders() })
+    return this.client.delete("Api/Shares/" + shareId, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getShareSnippet(shareId: number) {
-    return this.client.get<ShareSnippet>("Api/Share/Snippet/Id/" + shareId, { headers: this.getHeaders() })
+    return this.client.get<ShareSnippet>("Api/Shares/" + shareId + "/Snippet", { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getShareInfo(shareId: number) {
-    return this.client.get<ShareData>("Api/Share/Data/Id/" + shareId, { headers: this.getHeaders() })
+    return this.client.get<ShareData>("Api/Shares/" + shareId + "/Data", { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getShareUserData(shareId: number) {
     const userId = this.authService.getUserId();
-    return this.client.get<ShareUserData>("Api/Share/UserData/" + userId + "/Id/" + shareId, { headers: this.getHeaders() })
+    return this.client.get<ShareUserData>("Api/Shares/" + userId + "/UserData/" + userId, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getShareSnippets(username: string, page: number, pageSize: number) {
-    return this.client.get<PaginatedResponse<ShareSnippet>>("Api/User/Shares/Name/" + username,
+    return this.client.get<PaginatedResponse<ShareSnippet>>("Api/Users/ByUsername/" + username + "/Share-Snippets",
       { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getPopularShareSnippets(username: string, page: number, pageSize: number) {
-    return this.client.get<ShareSnippet[]>("Api/User/Shares/Name/" + username + "?ordering=SubscriberCount",
-      { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
+    return this.client.get<ShareSnippet[]>("Api/Users/ByUsername/" + username + "/Share-Snippets",
+      { params: { page: page, pageSize: pageSize, ordering: "SubscriberCount" }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getLikedShareSnippets(username: string, page: number, pageSize: number) {
-    return this.client.get<PaginatedResponse<ShareSnippet>>("Api/User/Shares/Liked/Name/" + username,
+    return this.client.get<PaginatedResponse<ShareSnippet>>("Api/Users/ByUsername/" + username + "/Liked-Share-Snippets",
       { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getShareSecrets(shareId: number) {
-    return this.client.get<ShareSecrets>("Api/Share/Secrets/Id/" + shareId, { headers: this.getHeaders() })
+    return this.client.get<ShareSecrets>("Api/Shares/" + shareId + "/Secrets", { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   //Subscriptions
 
   getSubscriptionInfo(subscriptionId: number) {
-    return this.client.get<SubscriptionInfo>("Api/Subscription/Info/Id/" + subscriptionId, { headers: this.getHeaders() })
+    return this.client.get<SubscriptionInfo>("Api/Subscriptions/" + subscriptionId + "/Info", { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getSubscriptionSnippets(userId: number, type: SubscriptionType | null, page: number, pageSize: number) {
-    return this.client.get<PaginatedResponse<SubscriptionSnippet>>("Api/User/Subscription/Snippets/Id/" + userId,
+    return this.client.get<PaginatedResponse<SubscriptionSnippet>>("Api/Users/" + userId + "/Subscription-Snippets",
       { params: { page: page, pageSize: pageSize, type: (type == null ? "" : type) }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getShareSubscriptionSnippets(userId: number, shareId: number, page: number, pageSize: number) {
-    return this.client.get<PaginatedResponse<SubscriptionSnippet>>("Api/User/Share/Subscription/Snippets/Id/" + userId + "/" + shareId,
+    return this.client.get<PaginatedResponse<SubscriptionSnippet>>("Api/Users/" + userId + "/Shares/" + shareId + "/Subscription-Snippets",
       { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getUnsentPosts(subscriptionId: number, page: number, pageSize: number) {
-    return this.client.get<PaginatedResponse<PostSnippet>>("Api/Subscription/Posts/Unsent/Id/" + subscriptionId,
+    return this.client.get<PaginatedResponse<PostSnippet>>("Api/Subscriptions/" + subscriptionId + "/Posts/Unsent",
       { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
   getPendingPosts(subscriptionId: number, page: number, pageSize: number) {
-    return this.client.get<PaginatedResponse<PostSendInfo>>("Api/Subscription/Posts/Pending/Id/" + subscriptionId,
+    return this.client.get<PaginatedResponse<PostSendInfo>>("Api/Subscriptions/" + subscriptionId + "/Posts/Pending",
       { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
   getReceivedPosts(subscriptionId: number, page: number, pageSize: number) {
-    return this.client.get<PaginatedResponse<PostSendInfo>>("Api/Subscription/Posts/Received/Id/" + subscriptionId,
+    return this.client.get<PaginatedResponse<PostSendInfo>>("Api/Subscriptions/" + subscriptionId + "/Posts/Received",
       { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
@@ -180,39 +180,39 @@ export class WeShareClient {
 
   private createSubscription(shareId: number, type: SubscriptionType, name: string, targetUrl: string | null) {
     const userId = this.authService.getUserId();
-    return this.client.post<number>("Api/Subscription/Create/", { shareId, userId, type, name, targetUrl }, { headers: this.getHeaders() })
+    return this.client.post<number>("Api/Subscriptions", { shareId, userId, type, name, targetUrl }, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   markPostAsSent(subscriptionId: number, postId: number) {
-    return this.client.post("Api/Subscription/" + subscriptionId + "/MarkAsSent/" + postId, {}, { headers: this.getHeaders() })
+    return this.client.post("Api/Subscriptions/" + subscriptionId + "/Posts/" + postId + "/Receive", {}, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   removeSubscription(subscriptionId: number) {
-    return this.client.delete("Api/Subscription/Remove/" + subscriptionId, { headers: this.getHeaders() })
+    return this.client.delete("Api/Subscriptions/" + subscriptionId, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   //Posts
 
   submitPost(shareSecret: string, postHeaders: [string, string][], payload: Uint8Array) {
-    return this.client.post("Api/Post/Submit/" + shareSecret, payload.buffer, { headers: Object.fromEntries(postHeaders) });
+    return this.client.post("Api/Post-Management/" + shareSecret, payload.buffer, { headers: Object.fromEntries(postHeaders) });
   }
 
   getPosts(shareId: number, page: number, pageSize: number) {
-    return this.client.get<PaginatedResponse<PostSnippet>>("Api/Share/Posts/Metadata/" + shareId,
+    return this.client.get<PaginatedResponse<PostSnippet>>("Api/Shares/" + shareId + "/Post-Snippets",
       { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getPostSnippet(postId: number) {
-    return this.client.get<PostSnippet>("Api/Post/Snippet/Id/" + postId, { headers: this.getHeaders() })
+    return this.client.get<PostSnippet>("Api/Posts/" + postId + "/Snippet", { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getPostContent(postId: number) {
-    return this.client.get<ParsedPostContent>("Api/Post/Content/" + postId, { headers: this.getHeaders() })
+    return this.client.get<ParsedPostContent>("Api/Posts/" + postId + "/Content", { headers: this.getHeaders() })
       .pipe(shareReplay(1))
       .pipe(
         map(parsedContent => {
@@ -232,13 +232,13 @@ export class WeShareClient {
 
   addLike(shareId: number) {
     const userId = this.authService.getUserId();
-    return this.client.post("Api/Like/Add/" + shareId + "/" + userId, {}, { headers: this.getHeaders() })
+    return this.client.put("Api/Shares/" + shareId + "/Likes/" + userId, {}, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   removeLike(shareId: number) {
     const userId = this.authService.getUserId();
-    return this.client.post("Api/Like/Remove/" + shareId + "/" + userId, {}, { headers: this.getHeaders() })
+    return this.client.delete("Api/Shares/" + shareId + "/Likes/" + userId, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
@@ -250,12 +250,12 @@ export class WeShareClient {
   }
 
   handleVerifyEmailCallback(callbackSecret: string) {
-    return this.client.post("Api/Callback/Handle/VerifyEmail", { callbackSecret })
+    return this.client.post("Api/Callback-Management/VerifyEmail", { callbackSecret })
       .pipe(shareReplay(1));
   }
 
   resetPassword(callbackSecret: string, password: string) {
-    return this.client.post("Api/Callback/Handle/PasswordReset", { callbackSecret, password })
+    return this.client.post("Api/Callback-Management/PasswordReset", { callbackSecret, password })
       .pipe(shareReplay(1));
   }
 }

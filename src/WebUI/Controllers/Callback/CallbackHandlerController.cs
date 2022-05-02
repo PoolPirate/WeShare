@@ -4,11 +4,11 @@ using WeShare.Domain.Entities;
 using WeShare.WebAPI.Forms;
 
 namespace WeShare.WebAPI.Controllers;
-[Route("Api/Callback/Handle")]
+[Route("Api")]
 [ApiController]
 public class CallbackHandlerController : ExtendedControllerBase
 {
-    [HttpPost("VerifyEmail")]
+    [HttpPost("Callback-Management/VerifyEmail")]
     public async Task<ActionResult> HandleEmailVerifyCallbackAsync([FromBody] VerifyEmailForm verifyForm,
         CancellationToken cancellationToken)
     {
@@ -25,7 +25,7 @@ public class CallbackHandlerController : ExtendedControllerBase
         };
     }
 
-    [HttpPost("PasswordReset")]
+    [HttpPost("Callback-Management/PasswordReset")]
     public async Task<ActionResult> HandleEmailVerifyCallbackAsync([FromBody] PasswordResetForm resetForm,
     CancellationToken cancellationToken)
     {

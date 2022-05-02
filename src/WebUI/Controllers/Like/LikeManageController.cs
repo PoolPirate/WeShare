@@ -3,11 +3,11 @@ using WeShare.Application.Actions.Commands;
 using WeShare.Domain.Entities;
 
 namespace WeShare.WebAPI.Controllers;
-[Route("Api/Like")]
+[Route("Api")]
 [ApiController]
 public class LikeManageController : ExtendedControllerBase
 {
-    [HttpPost("Add/{shareId}/{userId}")]
+    [HttpPut("Shares/{shareId}/Likes/{userId}")]
     public async Task<ActionResult> AddLikeAsync([FromRoute] long shareId, [FromRoute] long userId,
         CancellationToken cancellationToken)
     {
@@ -22,7 +22,7 @@ public class LikeManageController : ExtendedControllerBase
         };
     }
 
-    [HttpPost("Remove/{shareId}/{userId}")]
+    [HttpDelete("Shares/{shareId}/Likes/{userId}")]
     public async Task<ActionResult> RemoveLikeAsync([FromRoute] long shareId, [FromRoute] long userId,
         CancellationToken cancellationToken)
     {

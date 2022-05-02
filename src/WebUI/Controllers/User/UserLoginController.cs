@@ -6,11 +6,11 @@ using WeShare.WebAPI.Forms;
 
 namespace WeShare.WebAPI.Controllers;
 
-[Route("Api/User")]
+[Route("Api")]
 [ApiController]
 public class UserLoginController : ExtendedControllerBase
 {
-    [HttpPost("Login")]
+    [HttpPost("User-Management/Login")]
     public async Task<ActionResult<UserLoginDto>> LoginAsync([FromBody] UserLoginForm loginForm,
         CancellationToken cancellationToken)
     {

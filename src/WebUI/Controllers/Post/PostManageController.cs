@@ -3,11 +3,11 @@ using WeShare.Application.Actions.Commands;
 using WeShare.Domain.Entities;
 
 namespace WeShare.WebAPI.Controllers;
-[Route("Api/Post")]
+[Route("Api")]
 [ApiController]
 public class PostManageController : ExtendedControllerBase
 {
-    [HttpPost("Submit/{shareSecret}")]
+    [HttpPost("Post-Management/{shareSecret}")]
     public async Task<ActionResult> SubmitPostAsync([FromRoute] string shareSecret)
     {
         var result = await Mediator.Send(new PostSubmitAction

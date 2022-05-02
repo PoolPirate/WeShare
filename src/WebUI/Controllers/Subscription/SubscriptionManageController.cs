@@ -4,11 +4,11 @@ using WeShare.Domain.Entities;
 using WeShare.WebAPI.Forms;
 
 namespace WeShare.WebAPI.Controllers;
-[Route("Api/Subscription")]
+[Route("Api")]
 [ApiController]
 public class SubscriptionManageController : ExtendedControllerBase
 {
-    [HttpPost("Create")]
+    [HttpPost("Subscriptions")]
     public async Task<ActionResult<long>> CreateSubscriptionAsync([FromBody] SubscriptionCreateForm createForm,
         CancellationToken cancellationToken)
     {
@@ -34,7 +34,7 @@ public class SubscriptionManageController : ExtendedControllerBase
         };
     }
 
-    [HttpPost("{subscriptionId}/MarkAsSent/{postId}")]
+    [HttpPost("Subscriptions/{subscriptionId}/Posts/{postId}/Receive")]
     public async Task<ActionResult> MarkPostAsSentAsync([FromRoute] long subscriptionId, [FromRoute] long postId,
         CancellationToken cancellationToken)
     {
@@ -53,7 +53,7 @@ public class SubscriptionManageController : ExtendedControllerBase
         };
     }
 
-    [HttpDelete("Remove/{subscriptionId}")]
+    [HttpDelete("Subscriptions/{subscriptionId}")]
     public async Task<ActionResult> RemoveSubscriptionAsync([FromRoute] long subscriptionId,
         CancellationToken cancellationToken)
     {

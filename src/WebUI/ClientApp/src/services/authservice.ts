@@ -10,7 +10,7 @@ export class AuthService {
   }
 
   login(username: string, password: string) {
-    var request = this.http.post<UserLogin>('/Api/User/Login', { username, password }, { observe: "response" })
+    var request = this.http.post<UserLogin>('/Api/User-Management/Login', { username, password }, { observe: "response" })
       .pipe(shareReplay(1));
 
     request.subscribe(s => {

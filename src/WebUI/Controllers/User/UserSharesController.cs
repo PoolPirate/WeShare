@@ -5,11 +5,11 @@ using WeShare.Application.DTOs;
 using WeShare.Domain.Entities;
 
 namespace WeShare.WebAPI.Controllers;
-[Route("Api/User/Shares")]
+[Route("Api")]
 [ApiController]
 public class UserSharesController : ExtendedControllerBase
 {
-    [HttpGet("Liked/Id/{userId}")]
+    [HttpGet("Users/{userId}/Liked-Share-Snippets")]
     public async Task<ActionResult<PaginatedList<ShareSnippetDto>>> GetLikedShareSnippetsAsync([FromRoute] long userId, 
         [FromQuery] ushort page, [FromQuery] ushort pageSize,
         CancellationToken cancellationToken)
@@ -25,7 +25,7 @@ public class UserSharesController : ExtendedControllerBase
         };
     }
 
-    [HttpGet("Liked/Name/{username}")]
+    [HttpGet("Users/ByUsername/{username}/Liked-Share-Snippets")]
     public async Task<ActionResult<PaginatedList<ShareSnippetDto>>> GetLikedShareSnippetsAsync([FromRoute] string username, 
         [FromQuery] ushort page, [FromQuery] ushort pageSize,
         CancellationToken cancellationToken)
@@ -43,7 +43,7 @@ public class UserSharesController : ExtendedControllerBase
         return await GetLikedShareSnippetsAsync(userId, page, pageSize, cancellationToken);
     }
 
-    [HttpGet("Name/{username}")]
+    [HttpGet("Users/ByUsername/{username}/Share-Snippets")]
     public async Task<ActionResult<PaginatedList<ShareSnippetDto>>> GetShareSnippetsAsync([FromRoute] string username,
         [FromQuery] ushort page, [FromQuery] ushort pageSize,
         [FromQuery] ShareOrdering ordering,
@@ -62,7 +62,7 @@ public class UserSharesController : ExtendedControllerBase
         return await GetShareSnippetsAsync(userId, page, pageSize, ordering, cancellationToken);
     }
 
-    [HttpGet("Id/{userId}")]
+    [HttpGet("Users/{userId}/Share-Snippets")]
     public async Task<ActionResult<PaginatedList<ShareSnippetDto>>> GetShareSnippetsAsync([FromRoute] long userId,
         [FromQuery] ushort page, [FromQuery] ushort pageSize,
         [FromQuery] ShareOrdering ordering,

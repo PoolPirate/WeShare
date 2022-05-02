@@ -4,11 +4,11 @@ using WeShare.Application.DTOs;
 using WeShare.Domain.Entities;
 
 namespace WeShare.WebAPI.Controllers;
-[Route("Api/Post")]
+[Route("Api")]
 [ApiController]
 public class PostInfoController : ExtendedControllerBase
 {
-    [HttpGet("Snippet/Id/{postId}")]
+    [HttpGet("Posts/{postId}/Snippet")]
     public async Task<ActionResult<PostSnippetDto>> GetPostSnippetAsync([FromRoute] long postId,
         CancellationToken cancellationToken)
     {

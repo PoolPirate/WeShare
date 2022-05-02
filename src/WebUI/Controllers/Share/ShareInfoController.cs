@@ -4,11 +4,11 @@ using WeShare.Application.DTOs;
 using WeShare.Domain.Entities;
 
 namespace WeShare.WebAPI.Controllers;
-[Route("Api/Share")]
+[Route("Api/Shares")]
 [ApiController]
 public class ShareInfoController : ExtendedControllerBase
 {
-    [HttpGet("Snippet/Id/{shareId}")]
+    [HttpGet("{shareId}/Snippet")]
     public async Task<ActionResult<ShareSnippetDto>> GetShareSnippetAsync([FromRoute] long shareId,
         CancellationToken cancellationToken)
     {
@@ -23,7 +23,7 @@ public class ShareInfoController : ExtendedControllerBase
         };
     }
 
-    [HttpGet("Data/Id/{shareId}")]
+    [HttpGet("{shareId}/Data")]
     public async Task<ActionResult<ShareDataDto>> GetShareDataAsync([FromRoute] long shareId,
         CancellationToken cancellationToken)
     {
@@ -39,7 +39,7 @@ public class ShareInfoController : ExtendedControllerBase
         };
     }
 
-    [HttpGet("UserData/{userId}/Id/{shareId}")]
+    [HttpGet("{shareId}/UserData/{userId}")]
     public async Task<ActionResult<ShareUserDataDto>> GetShareUserDataAsync([FromRoute] long shareId, [FromRoute] long userId,
         CancellationToken cancellationToken)
     {
@@ -55,7 +55,7 @@ public class ShareInfoController : ExtendedControllerBase
         };
     }
 
-    [HttpGet("Secrets/Id/{shareId}")]
+    [HttpGet("{shareId}/Secrets")]
     public async Task<ActionResult<ShareSecretsDto>> GetShareSecretsAsync([FromRoute] long shareId,
         CancellationToken cancellationToken)
     {

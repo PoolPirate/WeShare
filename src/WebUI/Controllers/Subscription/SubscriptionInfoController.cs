@@ -4,11 +4,11 @@ using WeShare.Application.DTOs;
 using WeShare.Domain.Entities;
 
 namespace WeShare.WebAPI.Controllers;
-[Route("Api/Subscription")]
+[Route("Api")]
 [ApiController]
 public class SubscriptionInfoController : ExtendedControllerBase
 {
-    [HttpGet("Info/Id/{subscriptionId}")]
+    [HttpGet("Subscriptions/{subscriptionId}/Info")]
     public async Task<ActionResult<SubscriptionInfoDto>> GetSubscriptionInfoAsync([FromRoute] long subscriptionId,
         CancellationToken cancellationToken)
     {

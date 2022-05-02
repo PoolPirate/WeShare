@@ -3,11 +3,11 @@ using WeShare.Application.Actions.Queries;
 using WeShare.Domain.Entities;
 
 namespace WeShare.WebAPI.Controllers;
-[Route("Api/Post")]
+[Route("Api")]
 [ApiController]
 public class PostContentInfoController : ExtendedControllerBase
 {
-    [HttpGet("Content/{postId}")]
+    [HttpGet("Posts/{postId}/Content")]
     public async Task<ActionResult<PostContent>> GetPostContentAsync([FromRoute] long postId,
         CancellationToken cancellationToken)
     {

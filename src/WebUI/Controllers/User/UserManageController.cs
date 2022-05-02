@@ -6,7 +6,7 @@ using WeShare.WebAPI.Options;
 
 namespace WeShare.WebAPI.Controllers;
 
-[Route("Api/User")]
+[Route("Api")]
 [ApiController]
 public class UserManageController : ExtendedControllerBase
 {
@@ -17,7 +17,7 @@ public class UserManageController : ExtendedControllerBase
         LimitingOptions = limitingOptions;
     }
 
-    [HttpPost("Create")]
+    [HttpPost("Users")]
     public async Task<IActionResult> CreateAsync([FromBody] UserCreateForm registerForm,
         CancellationToken cancellationToken)
     {

@@ -4,11 +4,11 @@ using WeShare.Application.DTOs;
 using WeShare.Domain.Entities;
 
 namespace WeShare.WebAPI.Controllers;
-[Route("Api/Profile")]
+[Route("Api")]
 [ApiController]
 public class ProfileInfoController : ExtendedControllerBase
 {
-    [HttpGet("Id/{userId}")]
+    [HttpGet("Profiles/{userId}/Info")]
     public async Task<ActionResult<ProfileInfoDto>> GetProfileInfoAsync([FromRoute] long userId,
         CancellationToken cancellationToken)
     {
@@ -23,7 +23,7 @@ public class ProfileInfoController : ExtendedControllerBase
         };
     }
 
-    [HttpGet("Name/{username}")]
+    [HttpGet("Profiles/ByUsername/{username}/Info")]
     public async Task<ActionResult<ProfileInfoDto>> GetProfileInfoAsync([FromRoute] string username,
         CancellationToken cancellationToken)
     {

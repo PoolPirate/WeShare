@@ -5,11 +5,11 @@ using WeShare.Application.DTOs;
 using WeShare.Domain.Entities;
 
 namespace WeShare.WebAPI.Controllers;
-[Route("Api/User/Share/Subscription")]
+[Route("Api")]
 [ApiController]
 public class UserShareSubscriptionController : ExtendedControllerBase
 {
-    [HttpGet("Snippets/Id/{userId}/{shareId}")]
+    [HttpGet("Users/{userId}/Shares/{shareId}/Subscription-Snippets")]
     public async Task<ActionResult<PaginatedList<SubscriptionSnippetDto>>> GetSubscriptionSnippetsAsync([FromRoute] long userId, [FromRoute] long shareId,
         [FromQuery] ushort page, [FromQuery] ushort pageSize,
         CancellationToken cancellationToken)

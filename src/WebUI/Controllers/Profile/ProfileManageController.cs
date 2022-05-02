@@ -4,11 +4,11 @@ using WeShare.Domain.Entities;
 using WeShare.WebAPI.Forms;
 
 namespace WeShare.WebAPI.Controllers;
-[Route("Api/Profile")]
+[Route("Api")]
 [ApiController]
 public class ProfileManageController : ExtendedControllerBase
 {
-    [HttpPost("{userId}/Update")]
+    [HttpPatch("Profiles/{userId}")]
     public async Task<ActionResult> UpdateProfileAsync([FromRoute] long userId, [FromBody] ProfileUpdateForm profileUpdateForm,
         CancellationToken cancellationToken)
     {

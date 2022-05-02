@@ -5,11 +5,11 @@ using WeShare.Application.DTOs;
 using WeShare.Domain.Entities;
 
 namespace WeShare.WebAPI.Controllers;
-[Route("Api/Subscription/Posts")]
+[Route("Api")]
 [ApiController]
 public class SubscriptionPostsController : ExtendedControllerBase
 {
-    [HttpGet("Unsent/Id/{subscriptionId}")]
+    [HttpGet("Subscriptions/{subscriptionId}/Posts/Unsent")]
     public async Task<ActionResult<PaginatedList<PostSendInfoDto>>> GetUnsentPostSnippetsAsync([FromRoute] long subscriptionId,
         [FromQuery] ushort page, [FromQuery] ushort pageSize,
         CancellationToken cancellationToken)
@@ -25,8 +25,8 @@ public class SubscriptionPostsController : ExtendedControllerBase
         };
     }
 
-    [HttpGet("Pending/Id/{subscriptionId}")]
-    public async Task<ActionResult<object>> GetPendingPostSnippetsAsync([FromRoute] long subscriptionId,
+    [HttpGet("Subscriptions/{subscriptionId}/Posts/Pending")]
+    public async Task<ActionResult<PaginatedList<PostSendInfoDto>>> GetPendingPostSnippetsAsync([FromRoute] long subscriptionId,
     [FromQuery] ushort page, [FromQuery] ushort pageSize,
     CancellationToken cancellationToken)
     {
@@ -42,7 +42,7 @@ public class SubscriptionPostsController : ExtendedControllerBase
         };
     }
 
-    [HttpGet("Received/Id/{subscriptionId}")]
+    [HttpGet("Subscriptions/{subscriptionId}/Posts/Received")]
     public async Task<ActionResult<PaginatedList<PostSendInfoDto>>> GetReceivedPostSnippetsAsync([FromRoute] long subscriptionId,
     [FromQuery] ushort page, [FromQuery] ushort pageSize,
     CancellationToken cancellationToken)

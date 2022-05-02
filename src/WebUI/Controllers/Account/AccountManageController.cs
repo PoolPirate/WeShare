@@ -4,11 +4,11 @@ using WeShare.Domain.Entities;
 using WeShare.WebAPI.Forms;
 
 namespace WeShare.WebAPI.Controllers;
-[Route("Api/Account")]
+[Route("Api")]
 [ApiController]
 public class AccountManageController : ExtendedControllerBase
 {
-    [HttpPost("{userId}/Update")]
+    [HttpPatch("Accounts/{userId}")]
     public async Task<ActionResult> UpdateAccountAsync([FromRoute] long userId, [FromBody] AccountUpdateForm updateForm)
     {
         var result = await Mediator.Send(new AccountUpdateAction
@@ -23,7 +23,7 @@ public class AccountManageController : ExtendedControllerBase
         };
     }
 
-    [HttpPost("RequestPasswordReset")]
+    [HttpPost("Account-Management/RequestPasswordReset")]
     public async Task<ActionResult> RequestPasswordResetAsync([FromBody] AccountRequestPassswordResetForm resetForm)
     {
         var result = await Mediator.Send(new UserRequestPasswordResetAction
