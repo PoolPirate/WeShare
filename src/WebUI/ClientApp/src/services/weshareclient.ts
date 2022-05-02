@@ -109,7 +109,7 @@ export class WeShareClient {
 
   getShareUserData(shareId: number) {
     const userId = this.authService.getUserId();
-    return this.client.get<ShareUserData>("Api/Shares/" + userId + "/UserData/" + userId, { headers: this.getHeaders() })
+    return this.client.get<ShareUserData>("Api/Shares/" + shareId + "/UserData/" + userId, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
