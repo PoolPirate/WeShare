@@ -1,4 +1,5 @@
 ﻿using Common.Services;
+using Microsoft.EntityFrameworkCore;
 using WeShare.Application.Common.Security;
 using WeShare.Application.Services;
 using WeShare.Domain.Entities;
@@ -8,22 +9,25 @@ namespace WeShare.Application.Actions.Commands;
 public class LikeCommandAuthorizationHandler : AuthorizationHandler<Like, LikeCommandOperation>
 {
     [Inject]
-    private readonly ICurrentUserService CurrentUserService = null!;
+    private readonly IShareContext DbContext = null!;
 
-    public override ValueTask<bool> HandleAuthorizationRequestAsync(Like entity, LikeCommandOperation operation, CancellationToken cancellationToken)
-    {
-        var optionalUserId = CurrentUserService.GetUserId();
-        if (!optionalUserId.HasValue)
+    public override async ValueTask<bool> HandleAuthenticatedRequestAsync(UserId authenticatedUser, Like entity, LikeCommandOperation operation,
+        CancellationToken cancellationToken = default)
+        => operation switch
         {
-            return ValueTask.FromResult(false);
-        }
-        var userId = optionalUserId.Value;
+            LikeCommandOperation.Add
+                => entity.OwnerId == authenticatedUser &&
+                   await DbContext.Shares
+                    .Where(x => x.Id == entity.ShareId)
+                    .AllAsync(x => !x.IsPrivate || x.OwnerId == authenticatedUser, cancellationToken),
 
-        return operation switch
-        {
-            LikeCommandOperation.Add or
-            LikeCommandOperation.Remove => ValueTask.FromResult(entity.OwnerId == userId),
-            _ => throw new NotImplementedException(nameof(operation)),
+            LikeCommandOperation.Remove
+                => entity.OwnerId == authenticatedUser,
+
+            _ => throw new InvalidOperationException(),
         };
-    }
+
+    public override ValueTask<bool> HandleUnauthenticatedRequestAsync(Like entity, LikeCommandOperation operation,
+        CancellationToken cancellationToken = default)
+        => ValueTask.FromResult(false);
 }

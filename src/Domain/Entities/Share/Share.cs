@@ -32,6 +32,11 @@ public sealed class Share : AuditableEntity
     public Sharename Name { get; set; }
 
     /// <summary>
+    /// Whether or not you need permissions to view this share.
+    /// </summary>
+    public bool IsPrivate { get; set; }
+
+    /// <summary>
     /// The description of the share.
     /// </summary>
     [MaxLength(DomainConstraints.ShareDescriptionLengthMaximum)]
@@ -73,13 +78,14 @@ public sealed class Share : AuditableEntity
     /// </summary>
     public List<Post>? Posts { get; init; } //Navigation Property
 
-    public static Share Create(UserId ownerId, Sharename name, string description, string readme, ShareSecret secret)
-        => new Share(ownerId, name, description, readme, secret);
+    public static Share Create(UserId ownerId, Sharename name, bool isPrivate, string description, string readme, ShareSecret secret)
+        => new Share(ownerId, name, isPrivate, description, readme, secret);
 
-    private Share(UserId ownerId, Sharename name, string description, string readme, ShareSecret secret)
+    private Share(UserId ownerId, Sharename name, bool isPrivate, string description, string readme, ShareSecret secret)
     {
         OwnerId = ownerId;
         Name = name;
+        IsPrivate = isPrivate;
         Description = description;
         Readme = readme;
         Secret = secret;

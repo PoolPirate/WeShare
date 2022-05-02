@@ -11,33 +11,40 @@ public class ShareQueryAuthorizationHandler : AuthorizationHandler<ShareId, Shar
     [Inject]
     private readonly IShareContext DbContext = null!;
 
-    [Inject]
-    private readonly ICurrentUserService CurrentUserService = null!;
+    public override async ValueTask<bool> HandleAuthenticatedRequestAsync(UserId authenticatedUser, ShareId entity, ShareQueryOperation operation, 
+        CancellationToken cancellationToken = default) 
+        => operation switch
+        {
+            ShareQueryOperation.ReadSnippet or
+            ShareQueryOperation.ReadData or
+            ShareQueryOperation.ReadSecrets or
+            ShareQueryOperation.ReadPosts
+                => await DbContext.Shares
+                    .Where(x => x.Id == entity)
+                    .AllAsync(x => x.OwnerId == authenticatedUser, cancellationToken),
+            _ => throw new InvalidOperationException(),
+        };
 
-    public override async ValueTask<bool> HandleAuthorizationRequestAsync(ShareId shareId, ShareQueryOperation operation, CancellationToken cancellationToken)
+    public override async ValueTask<bool> HandleUnauthenticatedRequestAsync(ShareId shareId, ShareQueryOperation operation, 
+        CancellationToken cancellationToken = default)
     {
         switch (operation)
         {
-            case ShareQueryOperation.ReadSnippet:
-            case ShareQueryOperation.ReadData:
-            case ShareQueryOperation.ReadPosts:
-                return true;
+            case ShareQueryOperation.ReadSecrets:
+                return false;
         }
 
-        var optionalUserId = CurrentUserService.GetUserId();
-        if (!optionalUserId.HasValue)
-        {
-            return false;
-        }
-        var userId = optionalUserId.Value;
+        bool isPublic = await DbContext.Shares
+            .Where(x => x.Id == shareId)
+            .AllAsync(x => !x.IsPrivate, cancellationToken);
 
         return operation switch
         {
-            ShareQueryOperation.ReadSecrets =>
-                await DbContext.Shares
-                 .Where(x => x.Id == shareId)
-                 .AllAsync(x => x.OwnerId == userId, cancellationToken),
-            _ => throw new NotImplementedException(nameof(operation)),
+            ShareQueryOperation.ReadSnippet or
+            ShareQueryOperation.ReadData or
+            ShareQueryOperation.ReadPosts
+                => isPublic,
+            _ => throw new InvalidOperationException(),
         };
     }
 }

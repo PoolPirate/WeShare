@@ -10,40 +10,49 @@ public class UserQueryAuthorizationHandler : AuthorizationHandler<UserId, UserQu
 {
     [Inject]
     private readonly IShareContext DbContext = null!;
-    [Inject]
-    private readonly ICurrentUserService CurrentUserService = null!;
 
-    public override async ValueTask<bool> HandleAuthorizationRequestAsync(UserId entity, UserQueryOperation operation, CancellationToken cancellationToken)
-    {
-        switch (operation)
+    public override async ValueTask<bool> HandleAuthenticatedRequestAsync(UserId authenticatedUser, UserId entity, UserQueryOperation operation,
+        CancellationToken cancellationToken = default)
+        => operation switch
         {
-            case UserQueryOperation.ReadSnippet:
-            case UserQueryOperation.ReadProfile:
-            case UserQueryOperation.ReadPopularShares:
-                return true;
-        }
+            UserQueryOperation.ReadSnippet or
+            UserQueryOperation.ReadPublicPopularShares or
+            UserQueryOperation.ReadProfile
+                => true,
 
-        var optionalUserId = CurrentUserService.GetUserId();
-        if (!optionalUserId.HasValue)
-        {
-            return operation switch
-            {
-                UserQueryOperation.ReadLikedShares => await DbContext.Users
-                                    .Where(x => x.Id == entity)
-                                    .AllAsync(x => x.LikesPublished, cancellationToken),
-                _ => false,
-            };
-        }
-        var userId = optionalUserId.Value;
+            UserQueryOperation.ReadLikedShares
+                => authenticatedUser == entity ||
+                   await DbContext.Users
+                    .Where(x => x.Id == entity)
+                    .AllAsync(x => x.LikesPublished, cancellationToken),
 
-        return operation switch
-        {
-            UserQueryOperation.ReadLikedShares or
-            UserQueryOperation.ReadAccount or
             UserQueryOperation.ReadSubscriptions or
+            UserQueryOperation.ReadAccount or
             UserQueryOperation.ReadShareUserdata
-                => userId == entity,
-            _ => throw new NotImplementedException(nameof(operation)),
+                => authenticatedUser == entity,
+
+            _ => throw new InvalidOperationException(),
         };
-    }
+
+    public override async ValueTask<bool> HandleUnauthenticatedRequestAsync(UserId entity, UserQueryOperation operation,
+        CancellationToken cancellationToken = default)
+        => operation switch
+        {
+            UserQueryOperation.ReadSnippet or
+            UserQueryOperation.ReadPublicPopularShares or
+            UserQueryOperation.ReadProfile
+               => true,
+
+            UserQueryOperation.ReadLikedShares
+                => await DbContext.Users
+                    .Where(x => x.Id == entity)
+                    .AllAsync(x => x.LikesPublished, cancellationToken),
+
+            UserQueryOperation.ReadSubscriptions or
+            UserQueryOperation.ReadAccount or
+            UserQueryOperation.ReadShareUserdata
+                => false,
+
+            _ => throw new InvalidOperationException(),
+        };
 }

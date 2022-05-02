@@ -16,16 +16,19 @@ public class ShareCreateAction
 
         public Sharename Name { get; }
 
+        public bool IsPrivate { get; }
+
         [MaxLength(DomainConstraints.ShareDescriptionLengthMaximum)]
         public string Description { get; }
 
         [MaxLength(DomainConstraints.ShareReadmeLengthMaximum)]
         public string Readme { get; }
 
-        public Command(UserId ownerId, Sharename name, string description, string readme)
+        public Command(UserId ownerId, Sharename name, bool isPrivate, string description, string readme)
         {
             OwnerId = ownerId;
             Name = name;
+            IsPrivate = isPrivate;
             Description = description;
             Readme = readme;
         }
@@ -57,7 +60,7 @@ public class ShareCreateAction
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
             var shareSecret = SecretService.GenerateShareSecret();
-            var share = Share.Create(request.OwnerId, request.Name, request.Description, request.Readme, shareSecret);
+            var share = Share.Create(request.OwnerId, request.Name, request.IsPrivate, request.Description, request.Readme, shareSecret);
 
             await Authorizer.EnsureAuthorizationAsync(share, ShareCommandOperation.Create, cancellationToken);
 

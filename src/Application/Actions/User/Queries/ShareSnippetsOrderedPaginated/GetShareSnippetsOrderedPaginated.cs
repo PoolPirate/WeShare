@@ -58,7 +58,7 @@ public class GetShareSnippetsOrderedPaginated
 
         public async Task<Result> Handle(Query request, CancellationToken cancellationToken)
         {
-            await Authorizer.EnsureAuthorizationAsync(request.UserId, UserQueryOperation.ReadPopularShares, cancellationToken);
+            await Authorizer.EnsureAuthorizationAsync(request.UserId, UserQueryOperation.ReadPublicPopularShares, cancellationToken);
 
             var popularShares = await DbContext.Shares
                 .Where(x => x.OwnerId == request.UserId)

@@ -1,4 +1,5 @@
 ﻿using Common.Services;
+using Microsoft.EntityFrameworkCore;
 using WeShare.Application.Common.Security;
 using WeShare.Application.Services;
 using WeShare.Domain.Entities;
@@ -8,24 +9,25 @@ namespace WeShare.Application.Actions.Commands;
 public class SubscriptionCommandAuthorizationHandler : AuthorizationHandler<Subscription, SubscriptionCommandOperation>
 {
     [Inject]
-    private readonly ICurrentUserService CurrentUserService = null!;
+    private readonly IShareContext DbContext = null!;
 
-    public override ValueTask<bool> HandleAuthorizationRequestAsync(Subscription entity, SubscriptionCommandOperation operation, CancellationToken cancellationToken)
-    {
-        var optionalUserId = CurrentUserService.GetUserId();
-        if (!optionalUserId.HasValue)
+    public override async ValueTask<bool> HandleAuthenticatedRequestAsync(UserId authenticatedUser, Subscription entity, SubscriptionCommandOperation operation,
+        CancellationToken cancellationToken = default)
+        => operation switch
         {
-            return ValueTask.FromResult(false);
-        }
-        var userId = optionalUserId.Value;
-
-        return operation switch
-        {
-            SubscriptionCommandOperation.Create or
             SubscriptionCommandOperation.Remove or
             SubscriptionCommandOperation.MarkPostAsReceived
-                => ValueTask.FromResult(userId == entity.UserId),
-            _ => throw new NotImplementedException(nameof(operation)),
+                => authenticatedUser == entity.UserId,
+
+            SubscriptionCommandOperation.Create
+                => authenticatedUser == entity.UserId &&
+                   await DbContext.Shares
+                    .Where(x => x.Id == entity.ShareId)
+                    .AllAsync(x => !x.IsPrivate || x.OwnerId == authenticatedUser, cancellationToken),
+            _ => throw new InvalidOperationException(),
         };
-    }
+
+    public override ValueTask<bool> HandleUnauthenticatedRequestAsync(Subscription entity, SubscriptionCommandOperation operation,
+        CancellationToken cancellationToken = default)
+        => ValueTask.FromResult(false);
 }

@@ -15,7 +15,7 @@ public class ShareManageController : ExtendedControllerBase
         CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new ShareCreateAction
-            .Command(new UserId(userId), Sharename.From(createForm.Name),
+            .Command(new UserId(userId), Sharename.From(createForm.Name), createForm.IsPrivate,
                      createForm.Description, createForm.Readme), cancellationToken);
 
         return result.Status switch

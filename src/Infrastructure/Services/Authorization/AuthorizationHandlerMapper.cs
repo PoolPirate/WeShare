@@ -1,15 +1,17 @@
 ﻿using Common.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using WeShare.Application.Common.Security;
+using WeShare.Domain.Entities;
 
 namespace WeShare.Infrastructure.Services.Authorization;
 public class AuthorizationHandlerMapper : Singleton
 {
-    private readonly Dictionary<(Type, Type), (Type, Func<object, object, Enum, CancellationToken, ValueTask<bool>>)> AuthorizationHandlerMap;
+    private readonly Dictionary<(Type, Type), AuthenticationHandlerDelegates> AuthorizationHandlerMap;
 
     public AuthorizationHandlerMapper()
     {
-        AuthorizationHandlerMap = new Dictionary<(Type, Type), (Type, Func<object, object, Enum, CancellationToken, ValueTask<bool>>)>();
+        AuthorizationHandlerMap = new Dictionary<(Type, Type), AuthenticationHandlerDelegates>();
     }
 
     protected override ValueTask InitializeAsync()
@@ -29,19 +31,42 @@ public class AuthorizationHandlerMapper : Singleton
             var entityType = handlerType.BaseType!.GenericTypeArguments[0];
             var operationType = handlerType.BaseType!.GenericTypeArguments[1];
 
-            string? handlerMethodName = nameof(AuthorizationHandler<object, Enum>.HandleAuthorizationRequestAsync);
-            var handlerMethod = handlerType.GetMethod(handlerMethodName);
+            string? authenticatedHandlerMethodName = nameof(AuthorizationHandler<object, Enum>.HandleAuthenticatedRequestAsync);
+            var authenticatedHandlerMethod = handlerType.GetMethod(authenticatedHandlerMethodName);
 
-            if (handlerMethod is null)
+            if (authenticatedHandlerMethod is null)
             {
-                throw new MissingMethodException(handlerType.FullName, handlerMethodName);
+                throw new MissingMethodException(handlerType.FullName, authenticatedHandlerMethodName);
             }
 
-            AuthorizationHandlerMap.Add((entityType, operationType), (handlerType, HandlerMethodCall));
+            string? unauthenticatedHandlerMethodName = nameof(AuthorizationHandler<object, Enum>.HandleUnauthenticatedRequestAsync);
+            var unauthenticatedHandlerMethod = handlerType.GetMethod(unauthenticatedHandlerMethodName);
 
-            ValueTask<bool> HandlerMethodCall(object handler, object entity, Enum operation, CancellationToken cancellationToken)
+            if (unauthenticatedHandlerMethod is null)
             {
-                return (ValueTask<bool>)handlerMethod!.Invoke(handler,
+                throw new MissingMethodException(handlerType.FullName, unauthenticatedHandlerMethodName);
+            }
+
+            var handlerDelegates = new AuthenticationHandlerDelegates(handlerType,
+                (handler, userId, entity, operation, cancellationToken) => AuthenticatedHandlerMethodCall(handler, userId, entity, operation, cancellationToken),
+                (handler, entity, operation, cancellationToken) => UnauthenticatedHandlerMethodCall(handler, entity, operation, cancellationToken));
+
+            AuthorizationHandlerMap.Add((entityType, operationType), handlerDelegates);
+
+            ValueTask<bool> AuthenticatedHandlerMethodCall(object handler, UserId userId, object entity, Enum operation, CancellationToken cancellationToken)
+            {
+                return (ValueTask<bool>)authenticatedHandlerMethod!.Invoke(handler,
+                    new object[]
+                    {
+                        userId,
+                        entity,
+                        operation,
+                        cancellationToken
+                    })!;
+            }
+            ValueTask<bool> UnauthenticatedHandlerMethodCall(object handler, object entity, Enum operation, CancellationToken cancellationToken)
+            {
+                return (ValueTask<bool>)unauthenticatedHandlerMethod!.Invoke(handler,
                     new object[]
                     {
                         entity,
@@ -54,7 +79,7 @@ public class AuthorizationHandlerMapper : Singleton
         return base.InitializeAsync();
     }
 
-    public (Type, Func<object, object, Enum, CancellationToken, ValueTask<bool>>) GetAuthorizationHandlerType(Type entityType, Type operationType)
+    public AuthenticationHandlerDelegates GetAuthorizationHandlerType(Type entityType, Type operationType)
         => AuthorizationHandlerMap.TryGetValue((entityType, operationType), out var handlerType)
             ? handlerType
             : entityType.BaseType is not null &&

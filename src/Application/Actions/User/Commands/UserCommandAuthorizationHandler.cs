@@ -7,29 +7,21 @@ namespace WeShare.Application.Actions.Commands;
 [ServiceLevel(1)]
 public class UserCommandAuthorizationHandler : AuthorizationHandler<UserId, UserCommandOperation>
 {
-    [Inject]
-    private readonly ICurrentUserService CurrentUserService = null!;
-
-    public override ValueTask<bool> HandleAuthorizationRequestAsync(UserId entity, UserCommandOperation operation, CancellationToken cancellationToken)
-    {
-        switch (operation)
+    public override ValueTask<bool> HandleAuthenticatedRequestAsync(UserId authenticatedUser, UserId entity, UserCommandOperation operation,
+        CancellationToken cancellationToken = default)
+        => operation switch
         {
-            case UserCommandOperation.UpdateProfile:
-            case UserCommandOperation.RequestPasswordReset:
-                return ValueTask.FromResult(true);
-        }
+            UserCommandOperation.UpdateProfile or
+            UserCommandOperation.RequestPasswordReset
+                => ValueTask.FromResult(true),
 
-        var optionalUserId = CurrentUserService.GetUserId();
-        if (!optionalUserId.HasValue)
-        {
-            return ValueTask.FromResult(false);
-        }
-        var userId = optionalUserId.Value;
+            UserCommandOperation.UpdateAccount
+                => ValueTask.FromResult(authenticatedUser == entity),
 
-        return operation switch
-        {
-            UserCommandOperation.UpdateAccount => ValueTask.FromResult(userId == entity),
-            _ => throw new NotImplementedException(nameof(operation)),
+            _ => throw new InvalidOperationException(),
         };
-    }
+
+    public override ValueTask<bool> HandleUnauthenticatedRequestAsync(UserId entity, UserCommandOperation operation,
+        CancellationToken cancellationToken = default)
+        => ValueTask.FromResult(false);
 }
