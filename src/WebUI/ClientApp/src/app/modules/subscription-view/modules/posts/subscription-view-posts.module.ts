@@ -12,6 +12,7 @@ import { SubscriptionViewPostsComponent } from './subscription-view-posts.compon
 import { SubscriptionViewPostsUnsentResolver } from './services/resolvers/subscription-view-posts-unsent.resolver';
 import { SubscriptionViewPostsPendingResolver } from './services/resolvers/subscription-view-posts-pending.resolver';
 import { SubscriptionViewPostsReceivedResolver } from './services/resolvers/subscription-view-posts-received.resolver';
+import { PostSendFailureSnippetComponent } from './components/post-send-failure-snippet/post-send-failure-snippet.component';
 
 
 const routes: Routes = [
@@ -38,7 +39,9 @@ const routes: Routes = [
     SubscriptionViewPostsPendingPage,
     SubscriptionViewPostsReceivedPage,
 
-    SubscriptionViewPostsNavMenuComponent
+    SubscriptionViewPostsNavMenuComponent,
+
+    PostSendFailureSnippetComponent,
   ],
   imports: [
     MaterialModule,

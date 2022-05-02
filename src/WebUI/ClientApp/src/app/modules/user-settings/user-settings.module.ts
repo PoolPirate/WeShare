@@ -8,6 +8,7 @@ import { UserProfileSettingsComponent } from './pages/profile/user-profile-setti
 import { UserSettingsAccountInfoResolver } from './resolvers/user-settings-accountinfo.resolver';
 import { UserSettingsProfileInfoResolver } from './resolvers/user-settings-profileinfo.resolver';
 import { UserSettingsComponent } from './user-settings.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 const routes: Routes = [
@@ -32,7 +33,8 @@ const routes: Routes = [
   imports: [
     MaterialModule,
     SharedModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ReactiveFormsModule,
   ],
   providers: [
     UserSettingsProfileInfoResolver,

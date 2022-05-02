@@ -2,8 +2,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../../services/authservice';
-import { WeShareClient } from '../../../../services/weshareclient';
+import { AuthService } from '../../../../../services/authservice';
+import { WeShareClient } from '../../../../../services/weshareclient';
 
 @Component({
   selector: 'app-request-reset-component',

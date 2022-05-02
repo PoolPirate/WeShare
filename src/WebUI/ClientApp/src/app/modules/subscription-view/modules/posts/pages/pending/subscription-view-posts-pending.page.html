@@ -6,9 +6,9 @@
 
     <shared-post-snippet [postSnippet]="post.postSnippet"></shared-post-snippet>
     <h1>Errors</h1>
-    <shared-post-send-failure-snippet *ngFor="let postSendFailure of post.postSendFailures"
+    <post-send-failure-snippet *ngFor="let postSendFailure of post.postSendFailures"
                                       [subscriptionType]="subscriptionType"
-                                      [postSendFailure]="postSendFailure"></shared-post-send-failure-snippet>
+                                      [postSendFailure]="postSendFailure"></post-send-failure-snippet>
   </mat-card>
 
 </div>

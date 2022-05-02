@@ -1,15 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { WeShareClient } from '../../services/weshareclient';
 import { ShareSnippetComponent } from './components/share-snippet/share-snippet.component';
-import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { MatIconModule } from '@angular/material/icon';
 import { LikeButtonComponent } from './components/like-button/like-button.component';
 import { MatButtonModule } from '@angular/material/button';
-import { NotFoundComponent } from './pages/notfound/notfound.component';
-import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
 import { SubscriptionSnippetComponent } from './components/subscription-snippet/subscription-snippet.component';
 import { PostSnippetComponent } from './components/post-snippet/post-snippet.component';
 import { MatCardModule } from '@angular/material/card';
@@ -21,16 +16,13 @@ import { HeaderPairComponent } from './components/header-pair/header-pair.compon
 import { SharedLoadingDialog } from './dialogs/loading/loading.dialog.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SharedConfirmDialog } from './dialogs/confirm/confirm.dialog';
-import { DialogService } from '../../services/dialogservice';
-import { AuthService } from '../../services/authservice';
 import { MatMenuModule } from '@angular/material/menu';
-import { PostSendFailureSnippetComponent } from './components/post-send-failure-snippet/post-send-failure-snippet.component';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DialogService } from '../../services/dialogservice';
 
 @NgModule({
   declarations: [
-    NotFoundComponent,
-    ForbiddenComponent,
     ShareSnippetComponent,
     LikeButtonComponent,
     SubscriptionSnippetComponent,
@@ -38,7 +30,6 @@ import { MatChipsModule } from '@angular/material/chips';
     CreateButtonComponent,
     PagedListHeaderComponent,
     HeaderPairComponent,
-    PostSendFailureSnippetComponent,
 
     SharedLoadingDialog,
     SharedConfirmDialog
@@ -47,24 +38,16 @@ import { MatChipsModule } from '@angular/material/chips';
     CommonModule,
     RouterModule.forChild([]),
 
-    LoadingBarRouterModule,
-
-    FormsModule,
-    ReactiveFormsModule,
-
-    MatIconModule,
+    MatExpansionModule,
     MatButtonModule,
     MatCardModule,
-    MatExpansionModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
-    MatMenuModule,
     MatChipsModule,
+    MatIconModule,
+    MatDialogModule,
   ],
-  exports: [ 
-    NotFoundComponent,
-    ForbiddenComponent,
-
+  exports: [
     LikeButtonComponent,
     CreateButtonComponent,
 
@@ -74,7 +57,6 @@ import { MatChipsModule } from '@angular/material/chips';
     ShareSnippetComponent,
     SubscriptionSnippetComponent,
     PostSnippetComponent,
-    PostSendFailureSnippetComponent,
 
     HeaderPairComponent,
 
@@ -82,24 +64,18 @@ import { MatChipsModule } from '@angular/material/chips';
 
     CommonModule,
 
-    LoadingBarRouterModule,
-
-    FormsModule,
-    ReactiveFormsModule,
-
+    MatExpansionModule,
     MatIconModule,
     MatButtonModule,
     MatCardModule,
-    MatExpansionModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatMenuModule,
     MatChipsModule,
+    MatDialogModule,
   ],
   providers: [
-    AuthService,
-    WeShareClient,
-    DialogService
+    DialogService,
   ]
 })
 export class SharedModule { }

@@ -9,6 +9,7 @@ import { SubscriptionViewNavMenuComponent } from './components/nav-menu/subscrip
 import { SubscriptionViewComponent } from './subscription-view.component';
 import { SubscriptionViewOverviewComponent } from './pages/overview/subscription-view-overview.component';
 import { SubscriptionViewPostsComponent } from './modules/posts/subscription-view-posts.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 const routes: Routes = [
   { path: '', redirectTo: 'overview' },
