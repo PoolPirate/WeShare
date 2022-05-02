@@ -16,7 +16,7 @@ public class UserQueryAuthorizationHandler : AuthorizationHandler<UserId, UserQu
         => operation switch
         {
             UserQueryOperation.ReadSnippet or
-            UserQueryOperation.ReadPublicPopularShares or
+            UserQueryOperation.ReadPublicShareSnippets or
             UserQueryOperation.ReadProfile
                 => true,
 
@@ -27,8 +27,7 @@ public class UserQueryAuthorizationHandler : AuthorizationHandler<UserId, UserQu
                     .AllAsync(x => x.LikesPublished, cancellationToken),
 
             UserQueryOperation.ReadSubscriptions or
-            UserQueryOperation.ReadAccount or
-            UserQueryOperation.ReadShareUserdata
+            UserQueryOperation.ReadAccount
                 => authenticatedUser == entity,
 
             _ => throw new InvalidOperationException(),
@@ -39,7 +38,7 @@ public class UserQueryAuthorizationHandler : AuthorizationHandler<UserId, UserQu
         => operation switch
         {
             UserQueryOperation.ReadSnippet or
-            UserQueryOperation.ReadPublicPopularShares or
+            UserQueryOperation.ReadPublicShareSnippets or
             UserQueryOperation.ReadProfile
                => true,
 
@@ -49,8 +48,7 @@ public class UserQueryAuthorizationHandler : AuthorizationHandler<UserId, UserQu
                     .AllAsync(x => x.LikesPublished, cancellationToken),
 
             UserQueryOperation.ReadSubscriptions or
-            UserQueryOperation.ReadAccount or
-            UserQueryOperation.ReadShareUserdata
+            UserQueryOperation.ReadAccount
                 => false,
 
             _ => throw new InvalidOperationException(),

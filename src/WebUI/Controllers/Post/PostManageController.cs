@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WeShare.Application.Actions.Command;
+using WeShare.Application.Actions.Commands;
 using WeShare.Domain.Entities;
 
 namespace WeShare.WebAPI.Controllers;

@@ -8,6 +8,7 @@ public class ShareSnippetDto : IMapFrom<Share>
 {
     public long Id { get; private set; }
     public string Name { get; private set; } = null!;
+    public bool IsPrivate { get; private set; }
     public string Description { get; private set; } = null!;
 
     public string OwnerUsername { get; private set; } = null!;

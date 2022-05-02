@@ -5,7 +5,7 @@ using WeShare.Application.Common.Security;
 using WeShare.Application.Services;
 using WeShare.Domain.Entities;
 
-namespace WeShare.Application.Actions.Command;
+namespace WeShare.Application.Actions.Commands;
 
 public class ShareDeleteAction
 {

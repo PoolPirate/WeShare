@@ -10,12 +10,21 @@ public class CurrentUserService : Scoped, ICurrentUserService
     [Inject]
     private readonly IHttpContextAccessor HttpContextAccessor;
 
+    public UserId GetOrThrow()
+    {
+        string? idStr = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        return idStr is null 
+            ? throw new UnauthorizedAccessException() 
+            : new UserId(Int64.Parse(idStr));
+    }
+
     public UserId? GetUserId()
     {
         string? idStr = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         return idStr is null
             ? null
-            : new UserId(global::System.Int64.Parse(idStr));
+            : new UserId(Int64.Parse(idStr));
     }
 }

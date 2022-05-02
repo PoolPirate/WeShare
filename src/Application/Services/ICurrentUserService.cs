@@ -5,5 +5,6 @@ namespace WeShare.Application.Services;
 
 public interface ICurrentUserService : IService
 {
+    public UserId GetOrThrow();
     public UserId? GetUserId();
 }

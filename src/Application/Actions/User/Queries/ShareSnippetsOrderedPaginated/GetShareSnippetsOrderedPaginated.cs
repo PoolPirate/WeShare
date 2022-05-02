@@ -48,31 +48,36 @@ public class GetShareSnippetsOrderedPaginated
         private readonly IShareContext DbContext;
         private readonly IAuthorizer Authorizer;
         private readonly IMapper Mapper;
+        private readonly ICurrentUserService CurrentUserService;
 
-        public Handler(IShareContext dbContext, IAuthorizer authorizer, IMapper mapper)
+        public Handler(IShareContext dbContext, IAuthorizer authorizer, IMapper mapper, ICurrentUserService currentUserService)
         {
             DbContext = dbContext;
             Authorizer = authorizer;
             Mapper = mapper;
+            CurrentUserService = currentUserService;
         }
 
         public async Task<Result> Handle(Query request, CancellationToken cancellationToken)
         {
-            await Authorizer.EnsureAuthorizationAsync(request.UserId, UserQueryOperation.ReadPublicPopularShares, cancellationToken);
+            await Authorizer.EnsureAuthorizationAsync(request.UserId, UserQueryOperation.ReadPublicShareSnippets, cancellationToken);
 
-            var popularShares = await DbContext.Shares
+            var authenticatedUserId = CurrentUserService.GetOrThrow();
+
+            var shareSnippets = await DbContext.Shares
                 .Where(x => x.OwnerId == request.UserId)
+                .Where(x => !x.IsPrivate || x.OwnerId == authenticatedUserId)
                 .OrderByDescending(request.ShareOrdering)
                 .ProjectTo<ShareSnippetDto>(Mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.Page, request.PageSize, cancellationToken);
 
-            if (popularShares.TotalCount == 0 &&
+            if (shareSnippets.TotalCount == 0 &&
                 !await DbContext.Users.AnyAsync(x => x.Id == request.UserId, cancellationToken))
             {
                 return new Result(Status.UserNotFound);
             }
             //
-            return new Result(Status.Success, popularShares);
+            return new Result(Status.Success, shareSnippets);
         }
     }
 }

@@ -47,9 +47,16 @@ public class LikeAddAction
             using var transaction = await DbContext.BeginTransactionAsync(cancellationToken);
 
             DbContext.Likes.Add(like);
-            await DbContext.Shares
+            int updateCount = await DbContext.Shares
                 .Where(x => x.Id == like.ShareId)
+                .Where(x => !x.IsPrivate || x.OwnerId == request.UserId)
                 .UpdateFromQueryAsync(x => new Share() { LikeCount = x.LikeCount + 1 }, cancellationToken: cancellationToken);
+
+            if (updateCount == 0) //Share is private and liker is not owner
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw new ForbiddenAccessException();
+            }
 
             var saveResult = await DbContext.SaveChangesAsync(DbStatus.DuplicateIndex, transaction: transaction, cancellationToken: cancellationToken);
 

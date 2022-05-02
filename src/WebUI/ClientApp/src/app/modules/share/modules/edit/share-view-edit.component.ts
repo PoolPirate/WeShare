@@ -12,7 +12,7 @@ export class ShareViewEditComponent {
   {
     route.url.subscribe(url => {
       if (authService.isLoggedOut()) {
-        router.navigateByUrl("../");
+        router.navigate(["login"]);
       }
     });
   }

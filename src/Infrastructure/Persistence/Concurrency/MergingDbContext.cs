@@ -99,6 +99,11 @@ public abstract class MergingDbContext : DbContext
                 object? proposedValue = proposedValues[property];
                 object? databaseValue = databaseValues[property];
 
+                if (Equals(originalValue, databaseValue))
+                {
+                    continue;
+                }
+
                 Trace.Assert(originalValue != null, "Original value null");
                 Trace.Assert(proposedValue != null, "Proposed value null");
                 Trace.Assert(databaseValue != null, "Database value null");

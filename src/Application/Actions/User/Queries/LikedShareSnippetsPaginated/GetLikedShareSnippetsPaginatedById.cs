@@ -43,12 +43,14 @@ public partial class GetLikedShareSnippetsPaginated
         private readonly IShareContext DbContext;
         private readonly IAuthorizer Authorizer;
         private readonly IMapper Mapper;
+        private readonly ICurrentUserService CurrentUserService;
 
-        public Handler(IShareContext dbContext, IAuthorizer authorizer, IMapper mapper)
+        public Handler(IShareContext dbContext, IAuthorizer authorizer, IMapper mapper, ICurrentUserService currentUserService)
         {
             DbContext = dbContext;
             Authorizer = authorizer;
             Mapper = mapper;
+            CurrentUserService = currentUserService;
         }
 
         public async Task<Result> Handle(Query request, CancellationToken cancellationToken)
@@ -60,9 +62,12 @@ public partial class GetLikedShareSnippetsPaginated
                 return new Result(Status.UserNotFound);
             }
 
+            var authenticatedUserId = CurrentUserService.GetOrThrow();
+
             var likedShareSnippets = await DbContext.Likes
                 .Where(x => x.OwnerId == request.UserId)
                 .Select(x => x.Share)
+                .Where(x => !x.IsPrivate || x.OwnerId == authenticatedUserId)
                 .ProjectTo<ShareSnippetDto>(Mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.Page, request.PageSize, cancellationToken);
 

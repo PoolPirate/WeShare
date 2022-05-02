@@ -12,6 +12,7 @@ public class ShareInfoDto : IMapFrom<Share>
     public int SubscriberCount { get; private set; }
 
     public string Name { get; private set; } = null!;
+    public bool IsPrivate { get; private set; }
     public string Description { get; private set; } = null!;
     public string Readme { get; private set; } = null!;
 

@@ -4,8 +4,7 @@ public enum UserQueryOperation : byte
     ReadSnippet,
     ReadLikedShares,
     ReadSubscriptions,
-    ReadPublicPopularShares,
+    ReadPublicShareSnippets,
     ReadProfile,
     ReadAccount,
-    ReadShareUserdata,
 }

@@ -3,6 +3,7 @@ import { UserSnippet } from "./user-types";
 export class ShareSnippet {
   id: number;
   name: string;
+  isPrivate: boolean;
   description: string;
   ownerUsername: string;
 }
@@ -29,6 +30,7 @@ export class ShareInfo {
   likeCount: number;
   subscriberCount: number;
   name: string;
+  isPrivate: boolean;
   description: string;
   readme: string;
   ownerId: number;

@@ -47,21 +47,26 @@ public class GetUserShareSubscriptionSnippetsPaginated
         private readonly IShareContext DbContext;
         private readonly IAuthorizer Authorizer;
         private readonly IMapper Mapper;
+        private readonly ICurrentUserService CurrentUserService;
 
-        public Handler(IShareContext dbContext, IAuthorizer authorizer, IMapper mapper)
+        public Handler(IShareContext dbContext, IAuthorizer authorizer, IMapper mapper, ICurrentUserService currentUserService)
         {
             DbContext = dbContext;
             Authorizer = authorizer;
             Mapper = mapper;
+            CurrentUserService = currentUserService;
         }
 
         public async Task<Result> Handle(Query request, CancellationToken cancellationToken)
         {
             await Authorizer.EnsureAuthorizationAsync(request.UserId, UserQueryOperation.ReadSubscriptions, cancellationToken);
 
+            var authenticatedUserId = CurrentUserService.GetOrThrow();
+
             var subscriptionInfos = await DbContext.Subscriptions
                 .Where(x => x.UserId == request.UserId)
                 .Where(x => x.ShareId == request.ShareId)
+                .Where(x => !x.Share!.IsPrivate || x.Share!.OwnerId == authenticatedUserId)
                 .ProjectTo<SubscriptionSnippetDto>(Mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.Page, request.PageSize, cancellationToken);
 

@@ -87,6 +87,11 @@ export class WeShareClient {
       .pipe(shareReplay(1));
   }
 
+  updateShareVisibility(shareId: number, isPrivate: boolean) {
+    return this.client.post("Api/Share/UpdateVisibility/" + shareId, { isPrivate }, { headers: this.getHeaders() })
+      .pipe(shareReplay(1));
+  }
+
   deleteShare(shareId: number) {
     return this.client.delete("Api/Share/Delete/" + shareId, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
@@ -98,7 +103,7 @@ export class WeShareClient {
   }
 
   getShareInfo(shareId: number) {
-    return this.client.get<ShareData>("Api/Share/Data/Id/" + shareId)
+    return this.client.get<ShareData>("Api/Share/Data/Id/" + shareId, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
@@ -109,12 +114,12 @@ export class WeShareClient {
   }
 
   getShareSnippets(username: string, page: number) {
-    return this.client.get<PaginatedResponse<ShareSnippet>>("Api/User/Shares/Name/" + username + "/" + page + "/" + 10)
+    return this.client.get<PaginatedResponse<ShareSnippet>>("Api/User/Shares/Name/" + username + "/" + page + "/" + 10, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getPopularShareSnippets(username: string) {
-    return this.client.get<ShareSnippet[]>("Api/User/Shares/Name/" + username + "/" + 0 + "/" + 4 + "?ordering=SubscriberCount")
+    return this.client.get<ShareSnippet[]>("Api/User/Shares/Name/" + username + "/" + 0 + "/" + 4 + "?ordering=SubscriberCount", { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
@@ -189,17 +194,17 @@ export class WeShareClient {
   }
 
   getPosts(shareId: number, page: number, pageSize: number) {
-    return this.client.get<PaginatedResponse<PostSnippet>>("Api/Share/Posts/Metadata/" + shareId + "/" + page + "/" + pageSize)
+    return this.client.get<PaginatedResponse<PostSnippet>>("Api/Share/Posts/Metadata/" + shareId + "/" + page + "/" + pageSize, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getPostSnippet(postId: number) {
-    return this.client.get<PostSnippet>("Api/Post/Snippet/Id/" + postId)
+    return this.client.get<PostSnippet>("Api/Post/Snippet/Id/" + postId, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 
   getPostContent(postId: number) {
-    return this.client.get<ParsedPostContent>("Api/Post/Content/" + postId)
+    return this.client.get<ParsedPostContent>("Api/Post/Content/" + postId, { headers: this.getHeaders() })
       .pipe(shareReplay(1))
       .pipe(
         map(parsedContent => {

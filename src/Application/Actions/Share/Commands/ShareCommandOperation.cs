@@ -1,8 +1,9 @@
-﻿namespace WeShare.Application.Actions.Command;
+﻿namespace WeShare.Application.Actions.Commands;
 public enum ShareCommandOperation
 {
     Create,
     Update,
     Delete,
+    UpdateVisibility,
 }
 

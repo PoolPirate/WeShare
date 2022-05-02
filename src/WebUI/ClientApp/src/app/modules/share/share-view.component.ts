@@ -30,11 +30,11 @@ export class ShareViewComponent {
         shareService.shareData = this.shareData;
       } else {
         if (shareInfoResponse.status == 404) {
-          router.navigateByUrl("/notfound");
+          router.navigate(["notfound"]);
           return;
         }
         if (shareInfoResponse.status == 403) {
-          router.navigateByUrl("/forbidden");
+          router.navigate(["forbidden"]);
           return;
         }
 
@@ -53,11 +53,11 @@ export class ShareViewComponent {
         shareService.shareUserData = this.shareUserData;
       } else {
         if (shareInfoResponse.status == 404) {
-          router.navigateByUrl("/notfound");
+          router.navigate(["notfound"]);
           return;
         }
         if (shareInfoResponse.status == 403) {
-          router.navigateByUrl("/forbidden");
+          router.navigate(["forbidden"]);
           return;
         }
 

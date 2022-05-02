@@ -6,7 +6,7 @@ using WeShare.Application.Entities;
 using WeShare.Application.Services;
 using WeShare.Domain.Entities;
 
-namespace WeShare.Application.Actions.Command;
+namespace WeShare.Application.Actions.Commands;
 public class PostSubmitAction
 {
     public class Command : IRequest<Result>

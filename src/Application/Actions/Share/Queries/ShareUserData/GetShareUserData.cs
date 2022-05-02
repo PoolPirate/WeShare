@@ -41,7 +41,7 @@ public class GetShareUserData
 
         public async Task<Result> Handle(Query request, CancellationToken cancellationToken)
         {
-            await Authorizer.EnsureAuthorizationAsync(request.UserId, UserQueryOperation.ReadShareUserdata, cancellationToken);
+            await Authorizer.EnsureAuthorizationAsync(request.ShareId, ShareQueryOperation.ReadUserData, cancellationToken);
 
             bool liked = await DbContext.Likes
                 .Where(x => x.ShareId == request.ShareId && x.OwnerId == request.UserId)

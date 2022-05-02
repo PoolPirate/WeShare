@@ -17,6 +17,7 @@ export class ShareViewSettingsCriticalComponent {
   shareData: ShareData;
 
   deleteRan: boolean = false;
+  visibilityChangeRan: boolean = false;
 
   errorCode: number = 0;
 
@@ -25,7 +26,7 @@ export class ShareViewSettingsCriticalComponent {
     this.shareSecrets = shareSecretsService.shareSecrets;
     this.shareData = shareService.shareData;
   }
-
+  
   async delete() {
     if (this.deleteRan) {
       return;
@@ -49,6 +50,31 @@ export class ShareViewSettingsCriticalComponent {
         }
         this.errorCode = error.status;
         this.deleteRan = false;
+      });
+  }
+
+  async updateVisibility() {
+    if (this.visibilityChangeRan) {
+      return;
+    }
+    if (!await this.dialogService.confirm("Change Share Visibility?", "Private Shares cant have subs & likes")) {
+      return;
+    }
+
+    this.weShareClient.updateShareVisibility(this.shareData.shareInfo.id, !this.shareData.shareInfo.isPrivate)
+      .subscribe(response => {
+        this.errorCode = 200;
+      }, (error: HttpErrorResponse) => {
+        if (error.status == 404) {
+          this.router.navigate(['profile', this.shareData.ownerSnippet.username, 'shares']);
+          return;
+        }
+        if (error.status == 403) {
+          this.router.navigate(['login']);
+          return;
+        }
+        this.errorCode = error.status;
+        this.visibilityChangeRan = false;
       });
   }
 }

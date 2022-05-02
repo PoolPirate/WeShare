@@ -82,9 +82,16 @@ public class SubscriptionCreateAction
             var transaction = await DbContext.BeginTransactionAsync(cancellationToken);
 
             DbContext.Subscriptions.Add(subscription);
-            await DbContext.Shares
+            int updateCount = await DbContext.Shares
                 .Where(x => x.Id == request.ShareId)
+                .Where(x => !x.IsPrivate || x.OwnerId == request.UserId)
                 .UpdateFromQueryAsync(x => new Share() { SubscriberCount = x.SubscriberCount + 1 }, cancellationToken: cancellationToken);
+
+            if (updateCount == 0) //Share is private and liker is not owner
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw new ForbiddenAccessException();
+            }
 
             var saveResult = await DbContext.SaveChangesAsync(transaction: transaction, cancellationToken: cancellationToken);
 

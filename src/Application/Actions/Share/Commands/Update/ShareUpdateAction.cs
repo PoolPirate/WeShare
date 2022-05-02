@@ -8,7 +8,7 @@ using WeShare.Application.Services;
 using WeShare.Domain;
 using WeShare.Domain.Entities;
 
-namespace WeShare.Application.Actions.Command;
+namespace WeShare.Application.Actions.Commands;
 public class ShareUpdateAction
 {
     public class Command : IRequest<Result>

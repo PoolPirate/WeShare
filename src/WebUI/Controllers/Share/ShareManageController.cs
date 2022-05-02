@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WeShare.Application.Actions.Command;
+using WeShare.Application.Actions.Commands;
 using WeShare.Domain.Entities;
 using WeShare.WebAPI.Forms;
 
@@ -40,6 +40,22 @@ public class ShareManageController : ExtendedControllerBase
             ShareUpdateAction.Status.ShareNotFound => NotFound(),
             ShareUpdateAction.Status.ShareNameTaken => Conflict(),
             _ => throw new InvalidOperationException(),
+        };
+    }
+
+    [HttpPost("UpdateVisibility/{shareId}")]
+    public async Task<ActionResult> UpdateShareVisibilityAsync([FromRoute] long shareId, [FromBody] ShareUpdateVisibilityForm updateForm,
+        CancellationToken cancellationToken)
+    {
+        var result = await Mediator.Send(new ShareUpdateVisibilityAction
+            .Command(new ShareId(shareId), updateForm.IsPrivate), cancellationToken);
+
+        return result.Status switch
+        {
+            ShareUpdateVisibilityAction.Status.Success => Ok(),
+            ShareUpdateVisibilityAction.Status.ShareNotFound => NotFound(),
+            ShareUpdateVisibilityAction.Status.ShareAlreadyHasTargetVisibility => Conflict(),
+            _ => throw new NotImplementedException(),
         };
     }
 

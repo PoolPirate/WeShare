@@ -3,7 +3,7 @@ using WeShare.Application.Common.Security;
 using WeShare.Application.Services;
 using WeShare.Domain.Entities;
 
-namespace WeShare.Application.Actions.Command;
+namespace WeShare.Application.Actions.Commands;
 [ServiceLevel(1)]
 public class ShareCommandAuthorizationHandler : AuthorizationHandler<Share, ShareCommandOperation>
 {
@@ -13,7 +13,9 @@ public class ShareCommandAuthorizationHandler : AuthorizationHandler<Share, Shar
     {
         ShareCommandOperation.Create or
         ShareCommandOperation.Update or
-        ShareCommandOperation.Delete => ValueTask.FromResult(authenticatedUser == entity.OwnerId),
+        ShareCommandOperation.Delete or
+        ShareCommandOperation.UpdateVisibility
+            => ValueTask.FromResult(authenticatedUser == entity.OwnerId),
         _ => throw new NotImplementedException(),
     };
 

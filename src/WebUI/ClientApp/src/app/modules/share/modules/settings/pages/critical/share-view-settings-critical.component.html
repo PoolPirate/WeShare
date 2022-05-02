@@ -1,10 +1,24 @@
 <div class="criticalcenter">
+  <mat-card>
+    <button mat-fab color="accent" (click)="delete()" class="criticalbutton">
+      <mat-icon>delete</mat-icon><br /><div class="darkcriticaltext">DELETE</div>
+    </button>
+    <br />
+    WARNING: You are about to delete this share. <br />
+    Only click the button if you are sure you want to delete it! <br />
+    Deleting a share cannot be undone!
+  </mat-card>
 
-<button mat-fab color="accent" (click)="delete()" class="criticalbutton">
-  <mat-icon>delete</mat-icon><br /><div class="darkcriticaltext">DELETE</div>
-</button>
-  <br />
-  WARNING: You are about to delete this share. <br />
-  Only click the button if you are sure you want to delete it! <br />
-  Deleting a share cannot be undone!
+  <mat-card>
+    <button mat-fab color="primary" (click)="updateVisibility()" class="criticalbutton">
+      <mat-icon>
+      eye
+      </mat-icon>
+      <br />
+      <div class="darkcriticaltext">
+        Make {{ shareData.shareInfo.isPrivate ? "Public" : "Private" }}
+      </div>
+    </button>
+    <br />
+  </mat-card>
 </div>
