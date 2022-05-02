@@ -66,7 +66,7 @@ public partial class GetLikedShareSnippetsPaginated
 
             var likedShareSnippets = await DbContext.Likes
                 .Where(x => x.OwnerId == request.UserId)
-                .Select(x => x.Share)
+                .Select(x => x.Share!)
                 .Where(x => !x.IsPrivate || x.OwnerId == authenticatedUserId)
                 .ProjectTo<ShareSnippetDto>(Mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.Page, request.PageSize, cancellationToken);
