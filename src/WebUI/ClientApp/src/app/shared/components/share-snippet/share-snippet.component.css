@@ -1,3 +1,11 @@
 mat-card {
     margin: 10px;
 }
+
+mat-panel-title {
+    display: inline-flex;
+    font-size: 1.2rem;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+}

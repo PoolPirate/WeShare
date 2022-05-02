@@ -25,6 +25,7 @@ import { DialogService } from '../../services/dialogservice';
 import { AuthService } from '../../services/authservice';
 import { MatMenuModule } from '@angular/material/menu';
 import { PostSendFailureSnippetComponent } from './components/post-send-failure-snippet/post-send-failure-snippet.component';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { PostSendFailureSnippetComponent } from './components/post-send-failure-
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatMenuModule,
+    MatChipsModule,
   ],
   exports: [ 
     NotFoundComponent,
@@ -90,7 +92,9 @@ import { PostSendFailureSnippetComponent } from './components/post-send-failure-
     MatCardModule,
     MatExpansionModule,
     MatPaginatorModule,
+    MatProgressSpinnerModule,
     MatMenuModule,
+    MatChipsModule,
   ],
   providers: [
     AuthService,

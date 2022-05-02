@@ -1,16 +1,24 @@
 <mat-card class="flex">
   <mat-panel-title>
-    <a [routerLink]="['/profile', shareSnippet.ownerUsername]">
-      @{{ shareSnippet.ownerUsername }}
-    </a>
-    /
-    <a [routerLink]="['/share/view', shareSnippet.id]">
-      {{ shareSnippet.name }}
-    </a>
+    <div>
+      <a [routerLink]="['/profile', shareSnippet.ownerUsername]">
+        @{{ shareSnippet.ownerUsername }}
+      </a>
+      /
+      <a [routerLink]="['/share/view', shareSnippet.id]">
+        {{ shareSnippet.name }}
+      </a>
+    </div>
+    <mat-chip-list>
+      <mat-chip class="push-right" selected [color]="shareSnippet.isPrivate ? 'accent' : 'primary'">
+        {{ shareSnippet.isPrivate ? "Private" : "Public" }}
+      </mat-chip>
+    </mat-chip-list>
   </mat-panel-title>
   <mat-panel-description>
 
+
+    <p>{{ shareSnippet.description }}</p>
+    <!--<button class="push-right" [routerLink]="['/share/view', shareSnippet.id]" mat-raised-button color="primary">View</button>-->
   </mat-panel-description>
-  <p>{{ shareSnippet.description }}</p>
-  <!--<button class="push-right" [routerLink]="['/share/view', shareSnippet.id]" mat-raised-button color="primary">View</button>-->
 </mat-card>
