@@ -1,0 +1,31 @@
+.push-right {
+  margin-left: auto !important;
+}
+
+.flex {
+  display: flex;
+}
+
+mat-expansion-panel {
+  margin: 12px;
+}
+
+mat-panel-description {
+  display: flex;
+  justify-content: right;
+}
+
+mat-stepper {
+  width: 60vw;
+}
+
+.fill-space {
+  width: 100%;
+}
+.inputs-box {
+    margin: 10px;
+}
+
+textarea {
+    font-size: 16px;
+}

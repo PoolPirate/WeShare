@@ -1,0 +1,82 @@
+<h1 mat-dialog-title>Create a Share</h1>
+
+<mat-stepper #stepper>
+  <mat-step [stepControl]="name">
+    <ng-template matStepLabel>Name</ng-template>
+
+    <div class="inputs-box">
+      <mat-form-field appearance="fill">
+        <input matInput [formControl]="name"
+               placeholder="MyShare" autocomplete="off">
+        <button *ngIf="name.value" matSuffix mat-icon-button (click)="name.reset()" class="borderless">
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-error *ngIf="name.invalid">
+          {{ name.hasError('required') ? "Name is required" : "" }}
+          {{ name.hasError('minlength') ? "Name must have at least 3 characters" : "" }}
+          {{ name.hasError('maxlength') ? "Name must have at most 32 characters" : "" }}
+          {{ name.hasError('pattern') ? "Name can only contains letters and numbers" : "" }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="flex">
+      <button mat-dialog-close mat-button color="error">Cancel</button>
+      <button matStepperNext mat-raised-button class="push-right" color="primary">Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step [stepControl]="description">
+    <ng-template matStepLabel>Description</ng-template>
+
+    <div class="inputs-box">
+      <mat-form-field appearance="fill" class="fill-space">
+        <textarea matInput [formControl]="description"
+                  placeholder="Get notified about my cool information"
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="3"
+                  cdkAutosizeMaxRows="6"></textarea>
+        <button *ngIf="description.value" matSuffix mat-icon-button (click)="description.reset()" class="borderless">
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-error *ngIf="description.invalid">
+          {{ description.hasError('required') ? "Description is required" : "" }}
+          {{ description.hasError('maxlength') ? "Description must have at most 256 characters" : "" }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="flex">
+      <button matStepperPrevious mat-raised-button color="accent">Back</button>
+      <button mat-dialog-close mat-button color="error">Cancel</button>
+      <button matStepperNext mat-raised-button class="push-right" color="primary">Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step [stepControl]="readme">
+    <ng-template matStepLabel>Readme</ng-template>
+
+    <div class="inputs-box">
+      <mat-form-field appearance="fill" class="fill-space">
+        <textarea matInput [formControl]="readme" placeholder="I support **Markdown**"
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="8"
+                  cdkAutosizeMaxRows="20"></textarea>
+        <button *ngIf="readme.value" matSuffix mat-icon-button (click)="readme.reset()" class="borderless">
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-error *ngIf="readme.invalid">
+          {{ readme.hasError('maxlength') ? "Readme must have at most 4096 characters" : "" }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="flex">
+      <button matStepperPrevious mat-raised-button color="accent">Back</button>
+      <button mat-dialog-close mat-button color="error">Cancel</button>
+      <button mat-raised-button class="push-right" color="primary"
+              (click)="submit()">
+        Submit
+      </button>
+    </div>
+  </mat-step>
+</mat-stepper>

@@ -1,9 +1,11 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../../../services/authservice';
 import { PaginatedResponse, Resolved } from '../../../../../types/general-types';
 import { ShareSnippet } from '../../../../../types/share-types';
+import { ShareCreateDialog } from '../../dialogs/share-create/share-create.dialog';
 import { ProfileStore } from '../../services/profile-store';
 
 @Component({
@@ -17,7 +19,7 @@ export class ProfileSharesComponent {
 
   errorCode: number = 0;
 
-  constructor(private profileStore: ProfileStore, private authService: AuthService,
+  constructor(private profileStore: ProfileStore, private authService: AuthService, private matDialog: MatDialog,
     route: ActivatedRoute, router: Router) {
     route.data.subscribe(data => {
       var sharesResponse: Resolved<PaginatedResponse<ShareSnippet>> = data.sharesResponse;
@@ -33,6 +35,10 @@ export class ProfileSharesComponent {
         return;
       }
     });
+  }
+
+  openShareCreateDialog() {
+    this.matDialog.open(ShareCreateDialog);
   }
 
   get userSnippet() {

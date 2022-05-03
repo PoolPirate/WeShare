@@ -76,9 +76,9 @@ export class WeShareClient {
 
   //Shares
 
-  createShare(name: string, description: string, readme: string) {
+  createShare(name: string, description: string, readme: string, isPrivate: boolean) {
     const userId = this.authService.getUserId();
-    return this.client.post<number>("Api/Users/" + userId + "/Shares", { name, description, readme }, { headers: this.getHeaders() })
+    return this.client.post<number>("Api/Users/" + userId + "/Shares", { name, description, readme, isPrivate }, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 

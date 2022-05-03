@@ -20,6 +20,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogService } from '../../services/dialogservice';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatStepperModule } from '@angular/material/stepper';
 
 @NgModule({
   declarations: [
@@ -37,6 +40,9 @@ import { DialogService } from '../../services/dialogservice';
   imports: [
     CommonModule,
     RouterModule.forChild([]),
+
+    FormsModule,
+    ReactiveFormsModule,
 
     MatExpansionModule,
     MatButtonModule,
@@ -61,6 +67,9 @@ import { DialogService } from '../../services/dialogservice';
     HeaderPairComponent,
 
     PagedListHeaderComponent,
+
+    FormsModule,
+    ReactiveFormsModule,
 
     CommonModule,
 

@@ -3,9 +3,9 @@ import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
 import { Observable, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
-import { WeShareClient } from "../../../../services/weshareclient";
-import { PaginatedResponse, Resolved } from "../../../../types/general-types";
-import { ShareSnippet } from "../../../../types/share-types";
+import { WeShareClient } from "../../../../../services/weshareclient";
+import { PaginatedResponse, Resolved } from "../../../../../types/general-types";
+import { ShareSnippet } from "../../../../../types/share-types";
 
 @Injectable()
 export class ProfileSharesResolver implements Resolve<Resolved<PaginatedResponse<ShareSnippet>>> {

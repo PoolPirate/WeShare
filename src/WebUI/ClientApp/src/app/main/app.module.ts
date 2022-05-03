@@ -8,8 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ProfileMenuComponent } from './components/profile-menu/profile-menu.component';
 import { DashboardComponent } from '../modules/dashboard/dashboard.component';
 import { ProfileComponent } from '../modules/profile/profile.component';
-import { ProfileUserSnippetResolver } from '../modules/profile/resolvers/profile-usersnippet.resolver';
-import { ProfileProfileInfoResolver } from '../modules/profile/resolvers/profile-profileinfo.resolver';
+import { ProfileUserSnippetResolver } from '../modules/profile/services/resolvers/profile-usersnippet.resolver';
+import { ProfileProfileInfoResolver } from '../modules/profile/services/resolvers/profile-profileinfo.resolver';
 import { ViewShareShareInfoResolver } from '../modules/share/services/resolvers/share-view-shareinfo.resolver';
 import { ViewShareShareUserDataResolver } from '../modules/share/services/resolvers/share-view-shareuserdata.resolver';
 import { ShareViewComponent } from '../modules/share/share-view.component';
@@ -28,7 +28,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { NotFoundComponent } from './pages/notfound/notfound.component';
 import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
-import { ShareCreateComponent } from '../modules/share-create/share-create.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -58,10 +58,6 @@ const routes: Routes = [
     resolve: { shareInfoResponse: ViewShareShareInfoResolver, shareUserDataResponse: ViewShareShareUserDataResolver }
   },
   {
-    path: 'share/create', component: ShareCreateComponent,
-    loadChildren: () => import('../modules/share-create/share-create.module').then(m => m.ShareCreateModule),
-  },
-  {
     path: 'user/settings', component: UserSettingsComponent,
     loadChildren: () => import('../modules/user-settings/user-settings.module').then(m => m.UserSettingsModule),
   },
@@ -89,7 +85,7 @@ const routes: Routes = [
   ],
   imports: [
     BrowserAnimationsModule,
-    //BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     RouterModule.forRoot(routes),
     LoadingBarRouterModule,

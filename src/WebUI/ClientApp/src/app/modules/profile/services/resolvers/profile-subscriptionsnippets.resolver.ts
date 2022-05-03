@@ -2,10 +2,10 @@ import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
 import { Observable, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
-import { AuthService } from "../../../../services/authservice";
-import { WeShareClient } from "../../../../services/weshareclient";
-import { PaginatedResponse, Resolved } from "../../../../types/general-types";
-import { SubscriptionSnippet } from "../../../../types/subscription-types";
+import { AuthService } from "../../../../../services/authservice";
+import { WeShareClient } from "../../../../../services/weshareclient";
+import { PaginatedResponse, Resolved } from "../../../../../types/general-types";
+import { SubscriptionSnippet } from "../../../../../types/subscription-types";
 
 @Injectable()
 export class ProfileSubscriptionSnippetsResolver implements Resolve<Resolved<PaginatedResponse<SubscriptionSnippet>>> {

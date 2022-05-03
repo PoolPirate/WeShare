@@ -6,6 +6,7 @@ import { AuthService } from '../../../../../services/authservice';
 import { WeShareClient } from '../../../../../services/weshareclient';
 import { ShareData, ShareUserData } from '../../../../../types/share-types';
 import { LikeButtonComponent } from '../../../../shared/components/like-button/like-button.component';
+import { ShareCreateDialog } from '../../../profile/dialogs/share-create/share-create.dialog';
 import { ShareViewSubscriptionTypeDialogComponent } from '../../dialogs/subscription-type/share-view-subscription-type-dialog.component';
 import { ShareService } from '../../services/shareservice';
 

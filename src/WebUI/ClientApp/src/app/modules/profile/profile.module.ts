@@ -6,13 +6,14 @@ import { ProfileOverviewComponent } from './pages/overview/profile-overview.comp
 import { SharedModule } from '../../shared/shared.module';
 import { ProfileSharesComponent } from './pages/shares/profile-shares.component';
 import { MaterialModule } from '../material/material.module';
-import { ProfilePopularSharesResolver } from './resolvers/profile-popular-shares.resolver';
-import { ProfileSharesResolver } from './resolvers/profile-shares.resolver';
+import { ProfilePopularSharesResolver } from './services/resolvers/profile-popular-shares.resolver';
+import { ProfileSharesResolver } from './services/resolvers/profile-shares.resolver';
 import { ProfileComponent } from './profile.component';
-import { ProfileLikesResolver } from './resolvers/profile-likes.resolver';
+import { ProfileLikesResolver } from './services/resolvers/profile-likes.resolver';
 import { ProfileLikesComponent } from './pages/likes/profile-likes.component';
 import { ProfileSubscriptionsComponent } from './pages/subscriptions/profile-subscriptions.component';
-import { ProfileSubscriptionSnippetsResolver } from './resolvers/profile-subscriptionsnippets.resolver';
+import { ProfileSubscriptionSnippetsResolver } from './services/resolvers/profile-subscriptionsnippets.resolver';
+import { ShareCreateDialog } from './dialogs/share-create/share-create.dialog';
 
 const routes: Routes = [
   { path: '', redirectTo: 'overview' },
@@ -42,6 +43,8 @@ const routes: Routes = [
     ProfileSharesComponent,
     ProfileLikesComponent,
     ProfileSubscriptionsComponent,
+
+    ShareCreateDialog,
   ],
   imports: [
     MaterialModule,
