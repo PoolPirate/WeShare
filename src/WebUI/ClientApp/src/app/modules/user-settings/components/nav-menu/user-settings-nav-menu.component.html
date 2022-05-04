@@ -4,10 +4,15 @@
      [active]="activeLink == 'profile'">
     Profile
   </a>
+  <a mat-tab-link [routerLink]="['./connections']"
+     (click)="activeLink = 'connections'"
+     [active]="activeLink == 'connections'"
+     class="push-right">
+    Service Connections
+  </a>
   <a mat-tab-link [routerLink]="['./personal']"
      (click)="activeLink = 'personal'"
-     [active]="activeLink == 'personal'"
-     class="push-right">
+     [active]="activeLink == 'personal'">
     Personal Data
   </a>
 </nav>

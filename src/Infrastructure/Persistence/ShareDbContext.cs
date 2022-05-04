@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Reflection;
 using System.Transactions;
@@ -24,6 +25,9 @@ public class ShareDbContext : MergingDbContext, IShareContext
     public DbSet<SentPost> SentPosts { get; set; }
     public DbSet<PostSendFailure> PostSendFailures { get; set; }
 
+    public DbSet<ServiceConnection> ServiceConnections { get; set; }
+    public DbSet<DiscordConnection> DiscordConnections { get; set; }
+
     public ShareDbContext(
         DbContextOptions<ShareDbContext> options,
         Random random,
@@ -43,6 +47,9 @@ public class ShareDbContext : MergingDbContext, IShareContext
         configurationBuilder.Properties<CallbackId>().HaveConversion<CallbackId.EfCoreValueConverter>();
         configurationBuilder.Properties<PostId>().HaveConversion<PostId.EfCoreValueConverter>();
         configurationBuilder.Properties<SubscriptionId>().HaveConversion<SubscriptionId.EfCoreValueConverter>();
+        configurationBuilder.Properties<ServiceConnectionId>().HaveConversion<ServiceConnectionId.EfCoreValueConverter>();
+        
+        configurationBuilder.Properties<DiscordId>().HaveConversion<DiscordId.EfCoreValueConverter>();
 
         configurationBuilder.Properties<Username>().HaveConversion<Username.EfCoreValueConverter>();
         configurationBuilder.Properties<Nickname>().HaveConversion<Nickname.EfCoreValueConverter>();

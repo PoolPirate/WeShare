@@ -69,7 +69,7 @@ public class GetSubscriptionReceivedPostSnippetsPaginated
                 }
             }
 
-            var postIds = postSendInfos.Items.Select(x => x.PostSnippet.Id).ToArray();
+            var postIds = postSendInfos.Items.Select(x => new PostId(x.PostSnippet.Id)).ToArray();
 
             var postSendfailures = await DbContext.PostSendFailures
                 .Where(x => postIds.Contains(x.PostId))
@@ -83,7 +83,7 @@ public class GetSubscriptionReceivedPostSnippetsPaginated
 
             foreach (var item in postSendInfos.Items)
             {
-                item.PostSendFailures = postSendfailureDtos.Single(x => x.Key == item.PostSnippet.Id).DTOs;
+                item.PostSendFailures = postSendfailureDtos.Single(x => x.Key.Value == item.PostSnippet.Id).DTOs;
             }
 
             return new Result(Status.Success, postSendInfos);

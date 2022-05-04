@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map, shareReplay } from "rxjs/operators";
-import { AccountInfo } from "../types/account-types";
+import { AccountInfo, ServiceConnectionSnippet, ServiceConnectionType } from "../types/account-types";
 import { CallbackInfo } from "../types/callback-types";
 import { PaginatedResponse } from "../types/general-types";
 import { ParsedPostContent, PostContent, PostSendInfo, PostSnippet } from "../types/post-types";
@@ -71,6 +71,25 @@ export class WeShareClient {
 
   requestPasswordReset(email: string) {
     return this.client.post("Api/Account-Management/RequestPasswordReset", { email })
+      .pipe(shareReplay(1));
+  }
+
+  createServiceConnection(type: ServiceConnectionType, code: string) {
+    const userId = this.authService.getUserId();
+    return this.client.post("Api/Accounts/" + userId + "/ServiceConnections", { type, code }, { headers: this.getHeaders() })
+      .pipe(shareReplay(1));
+  }
+
+  removeServiceConnection(serviceConnectionId: number) {
+    const userId = this.authService.getUserId();
+    return this.client.delete("Api/Accounts/" + userId + "/ServiceConnections/" + serviceConnectionId, { headers: this.getHeaders() })
+      .pipe(shareReplay(1));
+  }
+
+  getServiceConnections(page: number, pageSize: number) {
+    const userId = this.authService.getUserId();
+    return this.client.get<PaginatedResponse<ServiceConnectionSnippet>>("Api/Accounts/" + userId + "/ServiceConnection-Snippets",
+      { headers: this.getHeaders(), params: { "page": page, "pageSize": pageSize } })
       .pipe(shareReplay(1));
   }
 

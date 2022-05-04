@@ -17,6 +17,9 @@ public interface IShareContext
     DbSet<SentPost> SentPosts { get; }
     DbSet<PostSendFailure> PostSendFailures { get; }
 
+    DbSet<ServiceConnection> ServiceConnections { get; }
+    DbSet<DiscordConnection> DiscordConnections { get; }
+
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
     Task CloseConnectionAsync();
 

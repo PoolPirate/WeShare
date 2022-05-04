@@ -18,7 +18,6 @@ export class PostSendFailureSnippetComponent {
   postSendFailure: PostSendFailure;
 
   get webhook() {
-    console.log(this.postSendFailure);
     return this.postSendFailure as WebhookPostSendFailure;
   }
 }

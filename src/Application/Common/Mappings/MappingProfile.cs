@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using System.Reflection;
+using WeShare.Domain.Common;
 using WeShare.Domain.Entities;
 
 namespace WeShare.Application.Common.Mappings;
@@ -20,6 +21,18 @@ public class MappingProfile : Profile
             .ConvertUsing(x => x.Value);
 
         CreateMap<SubscriptionId, long>()
+            .ConvertUsing(x => x.Value);
+
+        CreateMap<ServiceConnectionId, long>()
+            .ConvertUsing(x => x.Value);
+
+        CreateMap<PostId, long>()
+            .ConvertUsing(x => x.Value);
+
+        CreateMap<DiscordId, ulong>()
+            .ConvertUsing(x => x.Value);
+
+        CreateMap<ByteCount, long>()
             .ConvertUsing(x => x.Value);
     }
 

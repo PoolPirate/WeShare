@@ -9,6 +9,9 @@ import { UserSettingsAccountInfoResolver } from './resolvers/user-settings-accou
 import { UserSettingsProfileInfoResolver } from './resolvers/user-settings-profileinfo.resolver';
 import { UserSettingsComponent } from './user-settings.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ServiceConnectionsPage } from './pages/service-connections/service-connections.page';
+import { UserSettingsServiceConnectionsResolver } from './resolvers/user-settings-service-connections.resolver';
+import { ServiceConnectionSnippetComponent } from './components/service-connection-snippet/service-connection-snippet.component';
 
 
 const routes: Routes = [
@@ -16,6 +19,10 @@ const routes: Routes = [
   {
     path: 'profile', component: UserProfileSettingsComponent,
     resolve: { profileInfoResponse: UserSettingsProfileInfoResolver }
+  },
+  {
+    path: 'connections', component: ServiceConnectionsPage,
+    resolve: { serviceConnectionsResponse: UserSettingsServiceConnectionsResolver }
   },
   {
     path: 'personal', component: UserAccountSettingsComponent,
@@ -29,6 +36,8 @@ const routes: Routes = [
     UserSettingsNavMenuComponent,
     UserAccountSettingsComponent,
     UserProfileSettingsComponent,
+    ServiceConnectionsPage,
+    ServiceConnectionSnippetComponent,
   ],
   imports: [
     MaterialModule,
@@ -38,7 +47,8 @@ const routes: Routes = [
   ],
   providers: [
     UserSettingsProfileInfoResolver,
-    UserSettingsAccountInfoResolver
+    UserSettingsAccountInfoResolver,
+    UserSettingsServiceConnectionsResolver
   ]
 })
 export class UserSettingsModule { }

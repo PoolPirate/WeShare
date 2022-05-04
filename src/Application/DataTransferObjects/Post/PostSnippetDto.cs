@@ -5,10 +5,10 @@ using WeShare.Domain.Entities;
 namespace WeShare.Application.DTOs;
 public class PostSnippetDto : IMapFrom<Post>
 {
-    public PostId Id { get; set; }
-    public ShareId ShareId { get; set; }
+    public long Id { get; set; }
+    public long ShareId { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
-    public ByteCount HeadersSize { get; set; }
-    public ByteCount PayloadSize { get; set; }
+    public long HeadersSize { get; set; }
+    public long PayloadSize { get; set; }
 }
 

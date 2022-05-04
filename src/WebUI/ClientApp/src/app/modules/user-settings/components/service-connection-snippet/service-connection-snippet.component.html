@@ -1,0 +1,14 @@
+<div *ngIf="isDiscord">
+  <mat-card>
+
+    <mat-card-title class="flex">
+      <mat-icon>discord</mat-icon>
+      <h2>{{ discord.discordId }}</h2>
+    </mat-card-title>
+    <button (click)="onDelete()"
+            class="push-right" mat-raised-button color="error">
+      Delete
+    </button>
+  </mat-card>
+
+</div>

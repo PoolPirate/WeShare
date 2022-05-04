@@ -1,0 +1,11 @@
+<service-connection-snippet *ngFor="let serviceConnection of serviceConnections"
+                            [serviceConnectionSnippet]="serviceConnection"
+                            (delete)="onDelete($event)"
+                            ></service-connection-snippet>
+
+<br />
+<br />
+
+<button mat-raised-button color="primary"
+        (click)="redirectToDiscord()"       
+        >Add Discord</button>

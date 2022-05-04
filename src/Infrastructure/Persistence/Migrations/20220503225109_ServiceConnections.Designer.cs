@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WeShare.Infrastructure.Persistence;
@@ -11,9 +12,10 @@ using WeShare.Infrastructure.Persistence;
 namespace WeShare.Infrastructure.Migrations
 {
     [DbContext(typeof(ShareDbContext))]
-    partial class ShareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220503225109_ServiceConnections")]
+    partial class ServiceConnections
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -326,9 +328,6 @@ namespace WeShare.Infrastructure.Migrations
                     b.Property<string>("DiscordId")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.HasIndex("DiscordId")
-                        .IsUnique();
 
                     b.HasDiscriminator().HasValue(1);
                 });
