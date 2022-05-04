@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace WeShare.Infrastructure.Services.OAuth2;
+namespace WeShare.Infrastructure.Services;
 public class DiscordUser
 {
     [JsonPropertyName("id")]

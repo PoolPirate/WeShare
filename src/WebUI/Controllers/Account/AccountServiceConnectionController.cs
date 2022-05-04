@@ -30,18 +30,29 @@ public class AccountServiceConnectionController : ExtendedControllerBase
     [HttpPost("Accounts/{userId}/ServiceConnections")]
     public async Task<ActionResult> CreateServiceConnectionAsync([FromRoute] long userId, [FromBody] CreateServiceConnectionForm serviceConnectionForm,
         CancellationToken cancellationToken)
+        => serviceConnectionForm.Type switch
+        {
+            ServiceConnectionType.None => NotFound(),
+            ServiceConnectionType.Discord => await CreateDiscordConectionAsync(new UserId(userId), serviceConnectionForm, cancellationToken),
+            _ => throw new InvalidOperationException(),
+        };
+
+    private async Task<ActionResult> CreateDiscordConectionAsync(UserId userId, CreateServiceConnectionForm serviceConnectionForm, 
+        CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new ServiceConnectionCreateAction
-            .Command(new UserId(userId), serviceConnectionForm.Type, serviceConnectionForm.Code), cancellationToken);
+        var result = await Mediator.Send(new DiscordConnectionCreateAction
+            .Command(userId, serviceConnectionForm.Code), cancellationToken);
 
         return result.Status switch
         {
-            ServiceConnectionCreateAction.Status.Success => Ok(),
-            ServiceConnectionCreateAction.Status.UserNotFound => NotFound(nameof(userId)),
-            ServiceConnectionCreateAction.Status.InvalidCode => UnprocessableEntity(),
-            ServiceConnectionCreateAction.Status.FailedRetrievingUserId => UnprocessableEntity(),
-            ServiceConnectionCreateAction.Status.TargetAlreadyLinked => Conflict(),
-            _ => throw new NotImplementedException(),
+            DiscordConnectionCreateAction.Status.Success => Ok(),
+            DiscordConnectionCreateAction.Status.UserNotFound => NotFound(nameof(userId)),
+            DiscordConnectionCreateAction.Status.InvalidCode => UnprocessableEntity(),
+            DiscordConnectionCreateAction.Status.MissingScope => UnprocessableEntity(),
+            DiscordConnectionCreateAction.Status.DiscordUserIdCouldNotBeLoaded => UnprocessableEntity(),
+            DiscordConnectionCreateAction.Status.FailedAddingToGuild => UnprocessableEntity(),
+            DiscordConnectionCreateAction.Status.TargetUserAlreadyLinked => Conflict(),
+            _ => throw new InvalidOperationException(),
         };
     }
 

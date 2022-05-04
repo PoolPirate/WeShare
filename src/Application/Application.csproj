@@ -21,6 +21,7 @@
 
     <ItemGroup>
       <Folder Include="Actions\User\Commands\VerifyEmail\" />
+      <Folder Include="Services\OAuth2Handlers\" />
     </ItemGroup>
 
 </Project>
