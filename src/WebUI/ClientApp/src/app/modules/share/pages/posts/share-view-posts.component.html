@@ -1,6 +1,7 @@
 <div *ngIf="posts">
   <shared-paged-list-header [count]="postsResponse.totalCount"
                             [showCreateButton]="isOwnShare"
+                            [showSortMenu] = "true" [sortOptionsEnum]="orderingOptions" [defaultOrdering]="orderingOptions.CreatedAtDesc"
                             (create)="createPost()" (page)="refreshList($event)"></shared-paged-list-header>
 
   <div *ngIf="posts.length != 0">

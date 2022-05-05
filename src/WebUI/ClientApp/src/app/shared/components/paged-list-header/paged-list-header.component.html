@@ -3,6 +3,16 @@
                         (onCreate)="onCreate()">
   </shared-create-button>
 
+  <div *ngIf="showSortMenu">
+    <button [matMenuTriggerFor]="menu">
+      {{ activeOrdering }}</button>
+    <mat-menu #menu="matMenu">
+      <button *ngFor="let ordering of orderingOptions" mat-menu-item
+              (click)="applyOrdering(ordering)">
+        {{ ordering }}
+      </button>
+    </mat-menu>
+  </div>
 
   <mat-paginator *ngIf="showPaginator"
                  [length]="count"

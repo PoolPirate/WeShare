@@ -12,15 +12,16 @@ public class SharePostsInfoController : ExtendedControllerBase
     [HttpGet("Shares/{shareId}/Post-Snippets")]
     public async Task<ActionResult<PaginatedList<PostSnippetDto>>> GetPostMetadatasAsync([FromRoute] long shareId,
         [FromQuery] ushort page, [FromQuery] ushort pageSize,
+        [FromQuery] PostOrdering ordering,
         CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new GetPostSnippetsPaginated
-            .Query(new ShareId(shareId), page, pageSize), cancellationToken);
+        var result = await Mediator.Send(new GetPostSnippetsOrderedPaginated
+            .Query(new ShareId(shareId), ordering, page, pageSize), cancellationToken);
 
         return result.Status switch
         {
-            GetPostSnippetsPaginated.Status.Success => Ok(result.Metadatas),
-            GetPostSnippetsPaginated.Status.ShareNotFound => NotFound(),
+            GetPostSnippetsOrderedPaginated.Status.Success => Ok(result.Metadatas),
+            GetPostSnippetsOrderedPaginated.Status.ShareNotFound => NotFound(),
             _ => throw new InvalidOperationException(),
         };
     }

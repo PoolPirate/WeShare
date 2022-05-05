@@ -8,13 +8,17 @@ using WeShare.Application.Common.Models;
 using WeShare.Application.DTOs;
 using WeShare.Application.Services;
 using WeShare.Domain.Entities;
+using WeShare.Application.Common.Extensions;
 
 namespace WeShare.Application.Actions.Queries;
-public class GetPostSnippetsPaginated
+public class GetPostSnippetsOrderedPaginated
 {
     public class Query : IRequest<Result>
     {
         public ShareId ShareId { get; }
+
+        [EnumDataType(typeof(PostOrdering))]
+        public PostOrdering Ordering { get; }
 
         [Range(0, UInt16.MaxValue)]
         public ushort Page { get; }
@@ -22,9 +26,10 @@ public class GetPostSnippetsPaginated
         [Range(3, 100)]
         public ushort PageSize { get; }
 
-        public Query(ShareId shareId, ushort page, ushort pageSize)
+        public Query(ShareId shareId, PostOrdering ordering, ushort page, ushort pageSize)
         {
             ShareId = shareId;
+            Ordering = ordering;
             Page = page;
             PageSize = pageSize;
         }
@@ -57,6 +62,7 @@ public class GetPostSnippetsPaginated
 
             var metaDatas = await DbContext.Posts
                 .Where(x => x.ShareId == request.ShareId)
+                .OrderBy(request.Ordering)
                 .ProjectTo<PostSnippetDto>(Mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.Page, request.PageSize, cancellationToken);
 

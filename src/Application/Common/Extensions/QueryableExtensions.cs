@@ -6,12 +6,6 @@ using WeShare.Domain.Enums;
 namespace WeShare.Application.Common.Extensions;
 public static class QueryableExtensions
 {
-    public static Task<Callback?> FindForUserAsync(this IQueryable<Callback> callbacks, UserId userId, CallbackType type)
-        => callbacks
-            .Where(x => x.OwnerId == userId)
-            .Where(x => x.Type == type)
-            .SingleOrDefaultAsync();
-
     public static IQueryable<Share> OrderBy(this IQueryable<Share> shares, ShareOrdering shareOrdering)
         => shareOrdering switch
         {
@@ -31,4 +25,16 @@ public static class QueryableExtensions
         .OrderByDescending(x => x.LikeCount),
         _ => throw new InvalidOperationException(),
     };
+
+    public static IQueryable<Post> OrderBy(this IQueryable<Post> posts, PostOrdering postOrdering)
+        => postOrdering switch
+        {
+            PostOrdering.CreatedAtDesc => posts
+            .OrderByDescending(x => x.CreatedAt),
+            PostOrdering.PayloadSize => posts
+            .OrderBy(x => x.PayloadSize),
+            PostOrdering.PayloadSizeDec => posts
+            .OrderByDescending(x => x.PayloadSize),
+            _ => throw new InvalidOperationException(),
+        };
 }

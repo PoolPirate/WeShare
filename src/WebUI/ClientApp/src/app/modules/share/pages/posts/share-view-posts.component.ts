@@ -5,8 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../../../services/authservice';
 import { WeShareClient } from '../../../../../services/weshareclient';
 import { PaginatedResponse, Resolved } from '../../../../../types/general-types';
-import { PostSnippet } from '../../../../../types/post-types';
+import { PostOrdering, PostSnippet } from '../../../../../types/post-types';
 import { ShareData } from '../../../../../types/share-types';
+import { PagedListHeaderEvent } from '../../../../shared/components/paged-list-header/paged-list-header.component';
 import { SharedLoadingDialog } from '../../../../shared/dialogs/loading/loading.dialog.component';
 import { ShareViewCreatePostDialogComponent } from '../../dialogs/post-create/share-view-create-post-dialog.component';
 import { ShareService } from '../../services/shareservice';
@@ -22,6 +23,8 @@ export class ShareViewPostsComponent {
   postsResponse: PaginatedResponse<PostSnippet>;
   posts: PostSnippet[];
   errorCode: number;
+
+  orderingOptions = PostOrdering;
 
   constructor(private weShareClient: WeShareClient, private matDialog: MatDialog, private authService: AuthService,
     private shareService: ShareService, router: Router, route: ActivatedRoute) {
@@ -46,8 +49,11 @@ export class ShareViewPostsComponent {
     });
   }
 
-  refreshList(pageEvent: PageEvent) {
-    this.weShareClient.getPosts(this.shareData.shareInfo.id, pageEvent.pageIndex, pageEvent.pageSize)
+  refreshList(pagedListHeaderEvent: PagedListHeaderEvent) {
+    const ordering = pagedListHeaderEvent.ordering;
+    const pageEvent = pagedListHeaderEvent.pageEvent ?? { pageIndex: 0, pageSize: 10 };
+
+    this.weShareClient.getPosts(this.shareData.shareInfo.id, ordering, pageEvent.pageIndex, pageEvent.pageSize)
       .subscribe(success => {
         this.postsResponse = success;
         this.posts = this.postsResponse.items;

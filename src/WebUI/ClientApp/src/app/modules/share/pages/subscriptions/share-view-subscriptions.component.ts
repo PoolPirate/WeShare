@@ -6,6 +6,7 @@ import { WeShareClient } from '../../../../../services/weshareclient';
 import { PaginatedResponse, Resolved } from '../../../../../types/general-types';
 import { ShareData } from '../../../../../types/share-types';
 import { SubscriptionSnippet } from '../../../../../types/subscription-types';
+import { PagedListHeaderEvent } from '../../../../shared/components/paged-list-header/paged-list-header.component';
 import { ShareService } from '../../services/shareservice';
 
 @Component({
@@ -53,6 +54,11 @@ export class ShareViewSubscriptionsComponent {
   }
 
 
+  onPagedListHeaderEvent(pagedListHeaderEvent: PagedListHeaderEvent) {
+    const pageEvent = pagedListHeaderEvent.pageEvent;
+    this.refreshList(pageEvent);
+  }
+
   refreshList(pageEvent: PageEvent | null) {
     this.lastPageEvent = pageEvent;
 
@@ -62,7 +68,6 @@ export class ShareViewSubscriptionsComponent {
     else {
       this.updateList(0, 10);
     }
-
   }
 
   updateList(pageIndex: number, pageSize: number) {

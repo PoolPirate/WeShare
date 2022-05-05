@@ -24,7 +24,6 @@ export class WebhookPostSendFailure extends PostSendFailure {
   responseLatency: number;
 }
 
-
 export class PostSendInfo {
   postSnippet: PostSnippet;
   postSendFailures: PostSendFailure[];
@@ -32,4 +31,10 @@ export class PostSendInfo {
   received: boolean;
   receivedAt: Date | null;
   attempts: number;
+}
+
+export enum PostOrdering {
+  CreatedAtDesc,
+  PayloadSize,
+  PayloadSizeDesc
 }

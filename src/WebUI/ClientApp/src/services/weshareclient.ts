@@ -5,7 +5,7 @@ import { map, shareReplay } from "rxjs/operators";
 import { AccountInfo, ServiceConnectionSnippet, ServiceConnectionType } from "../types/account-types";
 import { CallbackInfo } from "../types/callback-types";
 import { PaginatedResponse } from "../types/general-types";
-import { ParsedPostContent, PostContent, PostSendInfo, PostSnippet } from "../types/post-types";
+import { ParsedPostContent, PostContent, PostOrdering, PostSendInfo, PostSnippet } from "../types/post-types";
 import { ProfileInfo } from "../types/profile-types";
 import { ShareData, ShareInfo, ShareSecrets, ShareSnippet, ShareUserData } from "../types/share-types";
 import { SubscriptionInfo, SubscriptionSnippet, SubscriptionType } from "../types/subscription-types";
@@ -219,9 +219,9 @@ export class WeShareClient {
     return this.client.post("Api/Post-Management/" + shareSecret, payload.buffer, { headers: Object.fromEntries(postHeaders) });
   }
 
-  getPosts(shareId: number, page: number, pageSize: number) {
+  getPosts(shareId: number, ordering: PostOrdering, page: number, pageSize: number) {
     return this.client.get<PaginatedResponse<PostSnippet>>("Api/Shares/" + shareId + "/Post-Snippets",
-      { params: { page: page, pageSize: pageSize }, headers: this.getHeaders() })
+      { params: { ordering: ordering, page: page, pageSize: pageSize }, headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 

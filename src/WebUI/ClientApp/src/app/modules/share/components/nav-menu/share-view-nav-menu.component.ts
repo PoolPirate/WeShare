@@ -14,7 +14,7 @@ export class ShareViewNavMenuComponent {
 
   constructor(router: Router, authService: AuthService, shareService: ShareService, route: ActivatedRoute) {
     route.url.subscribe(url => {
-      this.activeLink = router.url.split('/')[4]!.toLowerCase();
+      this.activeLink = router.url.split('/')[4]!.toLowerCase().split('?')[0];
     });
     if (authService.isLoggedOut()) {
       return;

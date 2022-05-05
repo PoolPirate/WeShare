@@ -1,6 +1,7 @@
 <shared-paged-list-header [count]="subscriptionSnippetsResponse.totalCount"
                           [showCreateButton]="false"
-                          (page)="refreshList($event)"></shared-paged-list-header>
+                          [showSortMenu]="false"
+                          (page)="onPagedListHeaderEvent($event)"></shared-paged-list-header>
 
 <div *ngFor="let subscriptionSnippet of subscriptionSnippets">
   <shared-subscription-snippet [subscriptionSnippet]="subscriptionSnippet"

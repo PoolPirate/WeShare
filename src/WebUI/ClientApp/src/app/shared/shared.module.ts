@@ -52,6 +52,7 @@ import { MatStepperModule } from '@angular/material/stepper';
     MatChipsModule,
     MatIconModule,
     MatDialogModule,
+    MatMenuModule,
   ],
   exports: [
     LikeButtonComponent,

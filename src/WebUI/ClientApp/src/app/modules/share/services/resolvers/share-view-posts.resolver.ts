@@ -5,7 +5,7 @@ import { Observable, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { WeShareClient } from "../../../../../services/weshareclient";
 import { PaginatedResponse, Resolved } from "../../../../../types/general-types";
-import { PostSnippet } from "../../../../../types/post-types";
+import { PostOrdering, PostSnippet } from "../../../../../types/post-types";
 
 @Injectable()
 export class ViewSharePostsResolver implements Resolve<Resolved<PaginatedResponse<PostSnippet>>> {
@@ -14,7 +14,13 @@ export class ViewSharePostsResolver implements Resolve<Resolved<PaginatedRespons
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Resolved<PaginatedResponse<PostSnippet>> | Observable<Resolved<PaginatedResponse<PostSnippet>>> | Promise<Resolved<PaginatedResponse<PostSnippet>>> {
     var shareId = route.parent!.params['shareId'];
 
-    return this.weShareClient.getPosts(shareId, 0, 10)
+    var ordering = parseInt(route.queryParams['order']);
+
+    if (!Object.values(PostOrdering).includes(ordering)) {
+      ordering = PostOrdering.CreatedAtDesc;
+    }
+
+    return this.weShareClient.getPosts(shareId, ordering, 0, 10)
       .pipe(
         map(value => (Resolved.success(value))),
         catchError(error => of(Resolved.error<PaginatedResponse<PostSnippet>>(error))),
