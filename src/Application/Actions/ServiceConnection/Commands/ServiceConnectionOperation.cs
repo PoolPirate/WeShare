@@ -3,4 +3,5 @@ public enum ServiceConnectionCommandOperation : byte
 {
     Create,
     Remove,
+    UseForSubscription,
 }

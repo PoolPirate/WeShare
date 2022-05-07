@@ -1,11 +1,11 @@
-﻿using System;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using WeShare.Domain.Entities;
 
 namespace WeShare.Infrastructure.Services;
 public class DiscordUser
 {
     [JsonPropertyName("id")]
-    public ulong Id { get; set; }
+    public DiscordId Id { get; set; }
 
     [JsonConstructor]
     public DiscordUser()

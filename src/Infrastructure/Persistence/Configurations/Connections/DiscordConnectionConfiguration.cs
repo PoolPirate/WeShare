@@ -8,7 +8,7 @@ public class DiscordConnectionConfiguration : IEntityTypeConfiguration<DiscordCo
     public void Configure(EntityTypeBuilder<DiscordConnection> builder)
     {
         builder.Property(x => x.DiscordId);
-    
+
         builder.HasIndex(x => x.DiscordId)
             .IsUnique();
     }

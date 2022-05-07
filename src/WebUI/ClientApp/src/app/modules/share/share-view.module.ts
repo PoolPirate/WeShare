@@ -22,6 +22,7 @@ import { ShareViewCreateDashboardSubscriptionDialog } from './dialogs/subscripti
 import { ShareViewCreateWebhookSubscriptionDialog } from './dialogs/subscription-create/webhook/create-webhook-subscription.dialog';
 import { ReadmeComponent } from './components/readme/readme.component';
 import { MarkdownModule } from 'ngx-markdown';
+import { ShareViewCreateDiscordSubscriptionDialog } from './dialogs/subscription-create/discord/create-discord-subscription.dialog';
 
 const routes: Routes = [
   { path: '', redirectTo: 'overview' },
@@ -59,7 +60,8 @@ const routes: Routes = [
     ReadmeComponent,
 
     ShareViewCreateDashboardSubscriptionDialog,
-    ShareViewCreateWebhookSubscriptionDialog
+    ShareViewCreateWebhookSubscriptionDialog,
+    ShareViewCreateDiscordSubscriptionDialog,
   ],
   imports: [
     MaterialModule,

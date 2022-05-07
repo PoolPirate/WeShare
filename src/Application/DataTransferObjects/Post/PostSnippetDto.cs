@@ -1,5 +1,4 @@
 ﻿using WeShare.Application.Common.Mappings;
-using WeShare.Domain.Common;
 using WeShare.Domain.Entities;
 
 namespace WeShare.Application.DTOs;

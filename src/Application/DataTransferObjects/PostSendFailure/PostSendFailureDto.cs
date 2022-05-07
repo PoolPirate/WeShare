@@ -18,10 +18,10 @@ public class PostSendFailureDto : IMapFrom<PostSendFailure>
 
     void IMapFrom<PostSendFailure>.Mapping(Profile profile) => profile.CreateMap<PostSendFailure, PostSendFailureDto>()
             .ConstructUsing((postSendFailure, context)
-                => postSendFailure.SubscriptionType switch
+                => postSendFailure.Type switch
                 {
-                    SubscriptionType.Dashboard => context.Mapper.Map<PostSendFailureDto>(postSendFailure),
-                    SubscriptionType.Webhook => context.Mapper.Map<WebhookPostSendFailureDto>((WebhookPostSendFailure)postSendFailure),
+                    PostSendFailureType.InternalError => context.Mapper.Map<PostSendFailureDto>(postSendFailure),
+                    PostSendFailureType.Webhook => context.Mapper.Map<WebhookPostSendFailureDto>((WebhookPostSendFailure)postSendFailure),
                     _ => throw new NotImplementedException(),
                 });
 

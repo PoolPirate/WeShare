@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using WeShare.Application.Common.Mappings;
 using WeShare.Application.Common.Models;
-using WeShare.Application.Common.Security;
 using WeShare.Application.DTOs;
 using WeShare.Application.Services;
 using WeShare.Domain.Entities;
@@ -22,11 +21,15 @@ public class GetServiceConnectionSnippetsPaginated
         [Range(3, 100)]
         public ushort PageSize { get; }
 
-        public Query(UserId userId, ushort page, ushort pageSize)
+        [EnumDataType(typeof(ServiceConnectionType))]
+        public ServiceConnectionType? Type { get; }
+
+        public Query(UserId userId, ushort page, ushort pageSize, ServiceConnectionType? type)
         {
             UserId = userId;
             Page = page;
             PageSize = pageSize;
+            Type = type;
         }
     }
 
@@ -55,9 +58,14 @@ public class GetServiceConnectionSnippetsPaginated
         {
             await Authorizer.EnsureAuthorizationAsync(request.UserId, ServiceConnectionQueryOperation.ReadSnippets, cancellationToken);
 
-            var connections = await DbContext.ServiceConnections
-                .Where(x => x.UserId == request.UserId)
-                .PaginatedListAsync(request.Page, request.PageSize, cancellationToken);
+            var connections = request.Type.HasValue
+                ? await DbContext.ServiceConnections
+                    .Where(x => x.UserId == request.UserId)
+                    .Where(x => x.Type == request.Type.Value)
+                    .PaginatedListAsync(request.Page, request.PageSize, cancellationToken)
+                : await DbContext.ServiceConnections
+                    .Where(x => x.UserId == request.UserId)
+                    .PaginatedListAsync(request.Page, request.PageSize, cancellationToken);
 
             if (connections.TotalCount == 0)
             {
@@ -69,7 +77,7 @@ public class GetServiceConnectionSnippetsPaginated
 
             var snippets = new List<object>();
 
-            foreach(var connection in connections.Items)
+            foreach (var connection in connections.Items)
             {
                 snippets.Add(Mapper.Map<ServiceConnectionSnippetDto>(connection));
             }

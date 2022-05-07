@@ -13,11 +13,11 @@ public class AccountServiceConnectionController : ExtendedControllerBase
 {
     [HttpGet("Accounts/{userId}/ServiceConnection-Snippets")]
     public async Task<ActionResult<PaginatedList<ServiceConnectionSnippetDto>>> GetServiceConnectionSnippetsAsync([FromRoute] long userId,
-        [FromQuery] ushort page, [FromQuery] ushort pageSize,
+        [FromQuery] ushort page, [FromQuery] ushort pageSize, [FromQuery] ServiceConnectionType? connectionType,
         CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new GetServiceConnectionSnippetsPaginated
-            .Query(new UserId(userId), page, pageSize), cancellationToken);
+            .Query(new UserId(userId), page, pageSize, connectionType), cancellationToken);
 
         return result.Status switch
         {
@@ -37,7 +37,7 @@ public class AccountServiceConnectionController : ExtendedControllerBase
             _ => throw new InvalidOperationException(),
         };
 
-    private async Task<ActionResult> CreateDiscordConectionAsync(UserId userId, CreateServiceConnectionForm serviceConnectionForm, 
+    private async Task<ActionResult> CreateDiscordConectionAsync(UserId userId, CreateServiceConnectionForm serviceConnectionForm,
         CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new DiscordConnectionCreateAction

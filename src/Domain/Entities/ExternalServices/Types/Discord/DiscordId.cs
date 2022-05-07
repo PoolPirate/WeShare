@@ -1,5 +1,4 @@
-﻿using StronglyTypedIds;
-using Vogen;
+﻿using Vogen;
 
 namespace WeShare.Domain.Entities;
 

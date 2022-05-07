@@ -7,41 +7,19 @@ using WeShare.Application.Services;
 using WeShare.Domain.Entities;
 
 namespace WeShare.Application.Actions.Commands;
-public class SubscriptionCreateAction
+public class WebhookSubscriptionCreateAction
 {
-    public class Command : IRequest<Result>, IValidatableObject
+    public class Command : IRequest<Result>
     {
-        [EnumDataType(typeof(SubscriptionType))]
-        public SubscriptionType Type { get; }
         public SubscriptionName Name { get; }
         public ShareId ShareId { get; }
         public UserId UserId { get; }
 
-        public Uri? TargetUri { get; }
+        [Required]
+        public Uri TargetUri { get; }
 
-        public static Command ForDashboard(SubscriptionName name, ShareId shareId, UserId userId)
-            => new Command(SubscriptionType.Dashboard, name, shareId, userId, null);
-        public static Command ForWebhook(SubscriptionName name, ShareId shareId, UserId userId, Uri? targetUri)
-            => new Command(SubscriptionType.Webhook, name, shareId, userId, targetUri);
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public Command(SubscriptionName name, ShareId shareId, UserId userId, Uri targetUri)
         {
-            switch (Type)
-            {
-                case SubscriptionType.Dashboard:
-                    break;
-                case SubscriptionType.Webhook:
-                    if (TargetUri is null)
-                    {
-                        yield return new ValidationResult("TargetUri is required!");
-                    }
-                    break;
-            }
-        }
-
-        private Command(SubscriptionType type, SubscriptionName name, ShareId shareId, UserId userId, Uri? targetUri)
-        {
-            Type = type;
             Name = name;
             ShareId = shareId;
             UserId = userId;
@@ -70,7 +48,7 @@ public class SubscriptionCreateAction
 
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
-            var subscription = MakeSubscription(request);
+            var subscription = WebhookSubscription.Create(request.Name, request.UserId, request.ShareId, request.TargetUri);
 
             await Authorizer.EnsureAuthorizationAsync(subscription, SubscriptionCommandOperation.Create, cancellationToken);
 
@@ -101,17 +79,6 @@ public class SubscriptionCreateAction
                 _ => throw new UnhandledDbStatusException(saveResult),
             };
         }
-
-        private static Subscription MakeSubscription(Command request)
-            => request.Type switch
-            {
-                SubscriptionType.Dashboard => Subscription.Create(SubscriptionType.Dashboard, request.Name, request.UserId, request.ShareId),
-                SubscriptionType.AndroidPushNotification => throw new NotImplementedException(),
-                SubscriptionType.MessagerDiscord => throw new NotImplementedException(),
-                SubscriptionType.Email => throw new NotImplementedException(),
-                SubscriptionType.Webhook => WebhookSubscription.Create(SubscriptionType.Webhook, request.Name, request.UserId, request.ShareId, request.TargetUri!),
-                _ => throw new InvalidOperationException(),
-            };
     }
 }
 

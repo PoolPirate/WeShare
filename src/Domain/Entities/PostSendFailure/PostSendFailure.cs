@@ -19,20 +19,30 @@ public class PostSendFailure : AuditableEntity
     public SubscriptionId SubscriptionId { get; init; }
 
     /// <summary>
+    /// Whether or not this is a permanent error and no more retries will be done or not.
+    /// </summary>
+    public bool IsFinal { get; init; }
+
+    /// <summary>
     /// The type of the subscription of this failure.
     /// </summary>
-    public SubscriptionType SubscriptionType { get; init; }
+    public PostSendFailureType Type { get; init; }
 
     /// <summary>
     /// The sent post that this error belongs to.
     /// </summary>
     public SentPost? SentPost { get; init; } //Naviagtion Property
 
-    protected PostSendFailure(PostId postId, SubscriptionId subscriptionId)
+    public static PostSendFailure CreateInternalError(PostId postId, SubscriptionId subscriptionId)
+        => new PostSendFailure(postId, subscriptionId, false, PostSendFailureType.InternalError);
+
+    protected PostSendFailure(PostId postId, SubscriptionId subscriptionId, bool isFinal, PostSendFailureType type)
     {
         Id = Guid.NewGuid();
         PostId = postId;
         SubscriptionId = subscriptionId;
+        IsFinal = isFinal;
+        Type = type;
     }
     public PostSendFailure()
     {

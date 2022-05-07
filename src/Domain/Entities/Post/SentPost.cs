@@ -31,6 +31,11 @@ public class SentPost
     public DateTimeOffset? ReceivedAt { get; private set; } = null;
 
     /// <summary>
+    /// Whether or not there will be further attempts to publish this post.
+    /// </summary>
+    public bool IsFinal { get; private set; } = false;
+
+    /// <summary>
     /// The amount of attempts that have been executed to get to current state.
     /// </summary>
     public short Attempts { get; private set; } = 0;
@@ -44,7 +49,11 @@ public class SentPost
     {
         Received = true;
         ReceivedAt = DateTimeOffset.UtcNow;
+        IsFinal = true;
     }
+    public void SetFailed()
+        => IsFinal = true;
+
     public void IncrementAttempts()
         => Attempts++;
 

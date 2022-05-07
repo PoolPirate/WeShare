@@ -2,10 +2,8 @@
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using WeShare.Application.DTOs;
 using WeShare.Application.Services;
-using WeShare.Domain;
 using WeShare.Domain.Entities;
 
 namespace WeShare.Application.Actions.Queries;

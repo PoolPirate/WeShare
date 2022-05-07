@@ -30,10 +30,12 @@ public class DiscordConnectionCreateAction
         Success,
         UserNotFound,
         InvalidCode,
+        DiscordUnavailable,
         MissingScope,
         DiscordUserIdCouldNotBeLoaded,
         FailedAddingToGuild,
         TargetUserAlreadyLinked,
+        FailedSendingMessage,
     }
 
     public record Result(Status Status);
@@ -78,26 +80,40 @@ public class DiscordConnectionCreateAction
                 return new Result(Status.MissingScope);
             }
 
-            var discordUserId = await DiscordClient.LoadDiscordUserIdAsync(tokenResponse.AccessToken, cancellationToken);
+            var userIdResponse = await DiscordClient.LoadDiscordUserIdAsync(tokenResponse.AccessToken, cancellationToken);
 
-            if (!discordUserId.HasValue)
+            switch (userIdResponse.Status)
             {
-                Logger.LogWarning("Failed creating DiscordConnection, DiscordUserId could not be loaded");
-                return new Result(Status.DiscordUserIdCouldNotBeLoaded);
+                case DiscordStatus.Success:
+                    break;
+                case DiscordStatus.Forbidden:
+                    return new Result(Status.DiscordUserIdCouldNotBeLoaded);
+                case DiscordStatus.RateLimited:
+                case DiscordStatus.Unavailable:
+                    return new Result(Status.DiscordUnavailable);
+                default: throw new InvalidOperationException();
             }
 
-            if (!await DiscordClient.AddUserToWeShareGuild(tokenResponse.AccessToken, discordUserId.Value, cancellationToken))
+            var discordId = userIdResponse.Value;
+
+            var addToGuildResponse = await DiscordClient.AddUserToWeShareGuild(tokenResponse.AccessToken, discordId, cancellationToken);
+
+            switch (addToGuildResponse.Status)
             {
-                Logger.LogWarning("Failed creating DiscordConnection, failed adding to guild");
-                return new Result(Status.FailedAddingToGuild);
+                case DiscordStatus.Success:
+                    break;
+                case DiscordStatus.Forbidden:
+                    return new Result(Status.FailedAddingToGuild);
+                case DiscordStatus.RateLimited:
+                case DiscordStatus.Unavailable:
+                    return new Result(Status.DiscordUnavailable);
+                default: throw new InvalidOperationException();
             }
 
-            var discordConnection = DiscordConnection.Create(request.UserId, discordUserId.Value);
+            var discordConnection = DiscordConnection.Create(request.UserId, discordId);
             DbContext.DiscordConnections.Add(discordConnection);
 
             var saveResult = await DbContext.SaveChangesAsync(DbStatus.DuplicateIndex, cancellationToken: cancellationToken);
-
-            _ = DiscordClient.SendWelcomeMessage(discordUserId.Value);
 
             return saveResult.Status switch
             {

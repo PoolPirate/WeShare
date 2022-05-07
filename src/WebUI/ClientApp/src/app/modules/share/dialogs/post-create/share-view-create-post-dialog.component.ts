@@ -23,8 +23,6 @@ export class ShareViewCreatePostDialogComponent {
     this.key = new FormControl("", [Validators.required]);
     this.value = new FormControl("", [Validators.required]);
 
-    console.log(shareSecrets);
-
     this.payload = new FormControl("");
   }
 
@@ -51,7 +49,7 @@ export class ShareViewCreatePostDialogComponent {
     var payloadRaw = new TextEncoder().encode(this.payload.value);
     this.weShareClient.submitPost(this.shareSecrets.secret, this.headers, payloadRaw)
       .subscribe(success => {
-        alert("Submitted!");
+        alert("Success");
       }, error => {
         alert("Response was " + error.status);
       });

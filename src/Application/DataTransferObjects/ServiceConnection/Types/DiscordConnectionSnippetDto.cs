@@ -7,8 +7,7 @@ public class DiscordConnectionSnippetDto : ServiceConnectionSnippetDto, IMapFrom
 {
     public ulong DiscordId { get; set; }
 
-
-    void IMapFrom<ServiceConnection>.Mapping(Profile profile) 
+    void IMapFrom<ServiceConnection>.Mapping(Profile profile)
         => profile.CreateMap<DiscordConnection, DiscordConnectionSnippetDto>();
 }
 

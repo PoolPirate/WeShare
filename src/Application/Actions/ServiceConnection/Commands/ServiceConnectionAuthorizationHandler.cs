@@ -16,7 +16,8 @@ public class ServiceConnectionAuthorizationHandler : AuthorizationHandler<Servic
         CancellationToken cancellationToken = default)
         => operation switch
         {
-            ServiceConnectionCommandOperation.Remove 
+            ServiceConnectionCommandOperation.Remove or
+            ServiceConnectionCommandOperation.UseForSubscription
                 => await DbContext.ServiceConnections
                     .Where(x => x.Id == entity.Id)
                     .AllAsync(x => x.UserId == authenticatedUser, cancellationToken),

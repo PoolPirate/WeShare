@@ -28,7 +28,15 @@ public class SubscriptionCreateForm
     /// The target url of the webhook.
     /// </summary>
     /// <remarks>
-    /// Only for <see cref="SubscriptionType.Webhook"/>
+    /// Only for <see cref="SubscriptionType.Webhook"/>.
     /// </remarks>
     public Uri? TargetUrl { get; set; }
+
+    /// <summary>
+    /// The id of the service connection to use for the subscription.
+    /// </summary>
+    /// <remarks>
+    /// Only for <see cref="SubscriptionType.MessagerDiscord"/>.
+    /// </remarks>
+    public long? ServiceConnectionId { get; set; }
 }

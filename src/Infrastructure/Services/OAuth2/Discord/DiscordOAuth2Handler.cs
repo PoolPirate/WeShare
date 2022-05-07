@@ -1,7 +1,7 @@
 ﻿using Common.Services;
-using WeShare.Infrastructure.Options;
 using System.Net.Http.Json;
 using WeShare.Application.Actions.Commands;
+using WeShare.Infrastructure.Options;
 
 namespace WeShare.Infrastructure.Services.OAuth2;
 public class DiscordOAuth2Handler : Singleton

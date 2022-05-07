@@ -11,8 +11,8 @@ public class ShareQueryAuthorizationHandler : AuthorizationHandler<ShareId, Shar
     [Inject]
     private readonly IShareContext DbContext = null!;
 
-    public override async ValueTask<bool> HandleAuthenticatedRequestAsync(UserId authenticatedUser, ShareId entity, ShareQueryOperation operation, 
-        CancellationToken cancellationToken = default) 
+    public override async ValueTask<bool> HandleAuthenticatedRequestAsync(UserId authenticatedUser, ShareId entity, ShareQueryOperation operation,
+        CancellationToken cancellationToken = default)
         => operation switch
         {
             ShareQueryOperation.ReadSecrets

@@ -13,7 +13,9 @@ public class WebhookPostSendFailure : PostSendFailure
     }
 
     protected WebhookPostSendFailure(PostId postId, SubscriptionId subscriptionId, HttpStatusCode? statusCode, int responseLatency)
-        : base(postId, subscriptionId)
+        : base(postId, subscriptionId,
+            false,
+            PostSendFailureType.Webhook)
     {
         StatusCode = statusCode;
         ResponseLatency = responseLatency;

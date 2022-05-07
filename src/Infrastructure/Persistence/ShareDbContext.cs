@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.OAuth;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Reflection;
 using System.Transactions;
@@ -20,8 +19,11 @@ public class ShareDbContext : MergingDbContext, IShareContext
     public DbSet<Like> Likes { get; set; }
     public DbSet<Callback> Callbacks { get; set; }
     public DbSet<Post> Posts { get; set; }
+
     public DbSet<Subscription> Subscriptions { get; set; }
+    public DbSet<DiscordSubscription> DiscordSubscriptions { get; set; }
     public DbSet<WebhookSubscription> WebhookSubscriptions { get; set; }
+
     public DbSet<SentPost> SentPosts { get; set; }
     public DbSet<PostSendFailure> PostSendFailures { get; set; }
 
@@ -48,7 +50,7 @@ public class ShareDbContext : MergingDbContext, IShareContext
         configurationBuilder.Properties<PostId>().HaveConversion<PostId.EfCoreValueConverter>();
         configurationBuilder.Properties<SubscriptionId>().HaveConversion<SubscriptionId.EfCoreValueConverter>();
         configurationBuilder.Properties<ServiceConnectionId>().HaveConversion<ServiceConnectionId.EfCoreValueConverter>();
-        
+
         configurationBuilder.Properties<DiscordId>().HaveConversion<DiscordId.EfCoreValueConverter>();
 
         configurationBuilder.Properties<Username>().HaveConversion<Username.EfCoreValueConverter>();

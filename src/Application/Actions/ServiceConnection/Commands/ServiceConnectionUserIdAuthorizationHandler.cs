@@ -11,7 +11,7 @@ public class ServiceConnectionUserIdAuthorizationHandler : AuthorizationHandler<
         CancellationToken cancellationToken = default)
         => operation switch
         {
-            ServiceConnectionCommandOperation.Create 
+            ServiceConnectionCommandOperation.Create
                 => ValueTask.FromResult(authenticatedUser == entity),
             _ => throw new InvalidOperationException(),
         };

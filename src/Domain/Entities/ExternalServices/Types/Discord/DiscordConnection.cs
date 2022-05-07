@@ -6,7 +6,7 @@ public class DiscordConnection : ServiceConnection
     public static DiscordConnection Create(UserId userId, DiscordId discordId)
         => new DiscordConnection(userId, discordId);
 
-    protected DiscordConnection(UserId userId, DiscordId discordId) 
+    protected DiscordConnection(UserId userId, DiscordId discordId)
         : base(userId, ServiceConnectionType.Discord)
     {
         DiscordId = discordId;

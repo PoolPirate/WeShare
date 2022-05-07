@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WeShare.Application.Actions.Queries;
+﻿using WeShare.Application.Actions.Queries;
 using WeShare.Domain.Entities;
-using WeShare.Domain.Enums;
 
 namespace WeShare.Application.Common.Extensions;
 public static class QueryableExtensions

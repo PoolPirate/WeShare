@@ -12,7 +12,7 @@ public class SubscriptionQueryAuthorizationHandler : AuthorizationHandler<Subscr
     private readonly IShareContext DbContext = null!;
 
     public override async ValueTask<bool> HandleAuthenticatedRequestAsync(UserId authenticatedUser, SubscriptionId entity, SubscriptionQueryOperation operation,
-        CancellationToken cancellationToken = default) 
+        CancellationToken cancellationToken = default)
         => operation switch
         {
             SubscriptionQueryOperation.ReadUnreceivedPosts or

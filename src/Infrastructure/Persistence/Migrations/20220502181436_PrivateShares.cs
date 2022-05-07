@@ -6,7 +6,7 @@ namespace WeShare.Infrastructure.Migrations;
 
 public partial class PrivateShares : Migration
 {
-    protected override void Up(MigrationBuilder migrationBuilder) 
+    protected override void Up(MigrationBuilder migrationBuilder)
         => migrationBuilder.AddColumn<bool>(
             name: "IsPrivate",
             table: "Shares",
@@ -14,7 +14,7 @@ public partial class PrivateShares : Migration
             nullable: false,
             defaultValue: false);
 
-    protected override void Down(MigrationBuilder migrationBuilder) 
+    protected override void Down(MigrationBuilder migrationBuilder)
         => migrationBuilder.DropColumn(
             name: "IsPrivate",
             table: "Shares");

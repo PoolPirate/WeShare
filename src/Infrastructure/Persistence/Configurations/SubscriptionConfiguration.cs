@@ -10,6 +10,7 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
         builder.HasDiscriminator(x => x.Type)
             .HasValue(SubscriptionType.Dashboard)
             .HasValue<WebhookSubscription>(SubscriptionType.Webhook)
+            .HasValue<DiscordSubscription>(SubscriptionType.MessagerDiscord)
             .IsComplete();
 
         builder.Property(x => x.Id)

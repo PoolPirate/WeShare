@@ -36,14 +36,14 @@
           <mat-icon>close</mat-icon>
         </button>
         <mat-error *ngIf="targetUrl.invalid">
-          {{ name.hasError('required') ? "TargetUrl is required" : ""}}
+          {{ targetUrl.hasError('required') ? "TargetUrl is required" : ""}}
           {{ targetUrl.hasError('minlength') ? "TargetUrl must have at least 3 characters" : "" }}
           {{ targetUrl.hasError('maxlength') ? "TargetUrl must have at most 120 characters" : "" }}
         </mat-error>
       </mat-form-field>
 
       <div mat-dialog-actions class="flex">
-        <button mat-raised-button color="accent">Back</button>
+        <button matStepperPrevious mat-raised-button color="accent">Back</button>
         <button mat-button mat-dialog-close color="error">Cancel</button>
         <button matStepperNext mat-raised-button class="push-right" color="primary">Next</button>
       </div>

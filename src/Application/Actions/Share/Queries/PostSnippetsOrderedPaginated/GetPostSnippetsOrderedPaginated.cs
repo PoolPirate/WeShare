@@ -3,12 +3,12 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using WeShare.Application.Common.Extensions;
 using WeShare.Application.Common.Mappings;
 using WeShare.Application.Common.Models;
 using WeShare.Application.DTOs;
 using WeShare.Application.Services;
 using WeShare.Domain.Entities;
-using WeShare.Application.Common.Extensions;
 
 namespace WeShare.Application.Actions.Queries;
 public class GetPostSnippetsOrderedPaginated

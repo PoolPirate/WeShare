@@ -11,12 +11,12 @@ public class ServiceConnectionQueryAuthorizationHandler : AuthorizationHandler<U
         CancellationToken cancellationToken = default)
         => operation switch
         {
-            ServiceConnectionQueryOperation.ReadSnippets 
+            ServiceConnectionQueryOperation.ReadSnippets
                 => ValueTask.FromResult(authenticatedUser == entity),
             _ => throw new InvalidOperationException(),
         };
 
-    public override ValueTask<bool> HandleUnauthenticatedRequestAsync(UserId entity, ServiceConnectionQueryOperation operation, 
-        CancellationToken cancellationToken = default) 
+    public override ValueTask<bool> HandleUnauthenticatedRequestAsync(UserId entity, ServiceConnectionQueryOperation operation,
+        CancellationToken cancellationToken = default)
         => ValueTask.FromResult(false);
 }

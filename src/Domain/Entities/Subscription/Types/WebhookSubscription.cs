@@ -3,9 +3,9 @@ public class WebhookSubscription : Subscription
 {
     public Uri TargetUrl { get; set; }
 
-    public static WebhookSubscription Create(SubscriptionType type, SubscriptionName name, UserId userId, ShareId shareId, Uri targetUrl)
+    public static WebhookSubscription Create(SubscriptionName name, UserId userId, ShareId shareId, Uri targetUrl)
     {
-        var subscription = new WebhookSubscription(type, name, userId, shareId, targetUrl);
+        var subscription = new WebhookSubscription(SubscriptionType.Webhook, name, userId, shareId, targetUrl);
         return subscription;
     }
 

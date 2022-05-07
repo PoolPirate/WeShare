@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WeShare.Application.Actions.Commands;
 using WeShare.Domain.Entities;
 using WeShare.WebAPI.Forms;

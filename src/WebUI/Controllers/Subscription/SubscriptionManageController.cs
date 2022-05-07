@@ -10,27 +10,67 @@ public class SubscriptionManageController : ExtendedControllerBase
 {
     [HttpPost("Subscriptions")]
     public async Task<ActionResult<long>> CreateSubscriptionAsync([FromBody] SubscriptionCreateForm createForm,
-        CancellationToken cancellationToken)
-    {
-        var request = createForm.Type switch
+        CancellationToken cancellationToken) 
+        => createForm.Type switch
         {
-            SubscriptionType.Dashboard => SubscriptionCreateAction.Command
-                .ForDashboard(SubscriptionName.From(createForm.Name), new ShareId(createForm.ShareId), new UserId(createForm.UserId)),
+            SubscriptionType.Dashboard => await CreateDashboardSubscriptionAsync(createForm, cancellationToken),
             SubscriptionType.AndroidPushNotification => throw new NotImplementedException(),
-            SubscriptionType.MessagerDiscord => throw new NotImplementedException(),
+            SubscriptionType.MessagerDiscord => await CreateDiscordSubscriptionAsync(createForm, cancellationToken),
             SubscriptionType.Email => throw new NotImplementedException(),
-            SubscriptionType.Webhook => SubscriptionCreateAction.Command
-                .ForWebhook(SubscriptionName.From(createForm.Name), new ShareId(createForm.ShareId), new UserId(createForm.UserId), createForm.TargetUrl),
-            _ => throw new InvalidOperationException(),
+            SubscriptionType.Webhook => await CreateWebhookSubscriptionAsync(createForm, cancellationToken),
+            _ => BadRequest(nameof(createForm.Type)),
         };
 
-        var result = await Mediator.Send(request, cancellationToken);
+    private async Task<ActionResult<long>> CreateDashboardSubscriptionAsync(SubscriptionCreateForm createForm, CancellationToken cancellationToken)
+    {
+        var result = await Mediator.Send(new DashboardSubscriptionCreateAction
+            .Command(SubscriptionName.From(createForm.Name), new ShareId(createForm.ShareId), new UserId(createForm.UserId)), cancellationToken);
 
         return result.Status switch
         {
-            SubscriptionCreateAction.Status.Success => Ok(result.Subscription!.Id),
-            SubscriptionCreateAction.Status.ShareNotFound => NotFound(),
-            _ => throw new InvalidOperationException(),
+            DashboardSubscriptionCreateAction.Status.Success => Ok(result.Subscription!.Id),
+            DashboardSubscriptionCreateAction.Status.ShareNotFound => NotFound(nameof(createForm.ShareId)),
+            _ => throw new NotImplementedException(),
+        };
+    }
+
+    private async Task<ActionResult<long>> CreateWebhookSubscriptionAsync(SubscriptionCreateForm createForm, CancellationToken cancellationToken)
+    {
+        if (createForm.TargetUrl is null || !createForm.TargetUrl.IsAbsoluteUri)
+        {
+            return BadRequest(nameof(createForm.TargetUrl));
+        }
+
+        var result = await Mediator.Send(new WebhookSubscriptionCreateAction
+            .Command(SubscriptionName.From(createForm.Name), new ShareId(createForm.ShareId), new UserId(createForm.UserId), createForm.TargetUrl), 
+                     cancellationToken);
+
+        return result.Status switch
+        {
+            WebhookSubscriptionCreateAction.Status.Success => Ok(result.Subscription!.Id),
+            WebhookSubscriptionCreateAction.Status.ShareNotFound => NotFound(nameof(createForm.ShareId)),
+            _ => throw new NotImplementedException(),
+        };
+    }
+
+    private async Task<ActionResult<long>> CreateDiscordSubscriptionAsync(SubscriptionCreateForm createForm, CancellationToken cancellationToken)
+    {
+        if (!createForm.ServiceConnectionId.HasValue)
+        {
+            return BadRequest(nameof(createForm.ServiceConnectionId));
+        }
+
+        var result = await Mediator.Send(new DiscordSubscriptionCreateAction
+            .Command(SubscriptionName.From(createForm.Name), new ShareId(createForm.ShareId), new UserId(createForm.UserId), 
+                     new ServiceConnectionId(createForm.ServiceConnectionId.Value)), cancellationToken);
+
+        return result.Status switch
+        {
+            DiscordSubscriptionCreateAction.Status.Success => Ok(result.Subscription!.Id),
+            DiscordSubscriptionCreateAction.Status.ShareNotFound => NotFound(nameof(createForm.ShareId)),
+            DiscordSubscriptionCreateAction.Status.ServiceConnectionNotFound => NotFound(nameof(createForm.ServiceConnectionId)),
+            DiscordSubscriptionCreateAction.Status.DiscordUnavailable => StatusCode(500),
+            _ => throw new NotImplementedException(),
         };
     }
 

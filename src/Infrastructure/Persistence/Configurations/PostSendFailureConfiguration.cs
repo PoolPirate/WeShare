@@ -7,9 +7,10 @@ public class PostSendFailureConfiguration : IEntityTypeConfiguration<PostSendFai
 {
     public void Configure(EntityTypeBuilder<PostSendFailure> builder)
     {
-        builder.HasDiscriminator(x => x.SubscriptionType)
-            .HasValue(SubscriptionType.Dashboard)
-            .HasValue<WebhookPostSendFailure>(SubscriptionType.Webhook);
+        builder.HasDiscriminator(x => x.Type)
+            .HasValue(PostSendFailureType.InternalError)
+            .HasValue<WebhookPostSendFailure>(PostSendFailureType.Webhook)
+            .HasValue<DiscordPostSendFailure>(PostSendFailureType.MessagerDiscord);
 
         builder.Property(x => x.Id);
         builder.HasKey(x => x.Id);
@@ -19,7 +20,7 @@ public class PostSendFailureConfiguration : IEntityTypeConfiguration<PostSendFai
         builder.Property(x => x.PostId);
         builder.Property(x => x.SubscriptionId);
 
-        builder.Property(x => x.SubscriptionType);
+        builder.Property(x => x.Type);
 
         builder.ToTable("PostSendFailures");
     }

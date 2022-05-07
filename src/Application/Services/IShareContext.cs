@@ -14,6 +14,7 @@ public interface IShareContext
     DbSet<Post> Posts { get; }
     DbSet<Subscription> Subscriptions { get; }
     DbSet<WebhookSubscription> WebhookSubscriptions { get; }
+    DbSet<DiscordSubscription> DiscordSubscriptions { get; }
     DbSet<SentPost> SentPosts { get; }
     DbSet<PostSendFailure> PostSendFailures { get; }
 

@@ -10,7 +10,7 @@ namespace WeShare.WebAPI.Controllers;
 public class UserSharesController : ExtendedControllerBase
 {
     [HttpGet("Users/{userId}/Liked-Share-Snippets")]
-    public async Task<ActionResult<PaginatedList<ShareSnippetDto>>> GetLikedShareSnippetsAsync([FromRoute] long userId, 
+    public async Task<ActionResult<PaginatedList<ShareSnippetDto>>> GetLikedShareSnippetsAsync([FromRoute] long userId,
         [FromQuery] ushort page, [FromQuery] ushort pageSize,
         CancellationToken cancellationToken)
     {
@@ -26,7 +26,7 @@ public class UserSharesController : ExtendedControllerBase
     }
 
     [HttpGet("Users/ByUsername/{username}/Liked-Share-Snippets")]
-    public async Task<ActionResult<PaginatedList<ShareSnippetDto>>> GetLikedShareSnippetsAsync([FromRoute] string username, 
+    public async Task<ActionResult<PaginatedList<ShareSnippetDto>>> GetLikedShareSnippetsAsync([FromRoute] string username,
         [FromQuery] ushort page, [FromQuery] ushort pageSize,
         CancellationToken cancellationToken)
     {

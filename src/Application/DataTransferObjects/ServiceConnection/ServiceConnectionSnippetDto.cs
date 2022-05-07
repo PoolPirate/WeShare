@@ -9,7 +9,7 @@ public class ServiceConnectionSnippetDto : IMapFrom<ServiceConnection>
     public DateTimeOffset CreatedAt { get; set; }
     public ServiceConnectionType Type { get; set; }
 
-    void IMapFrom<ServiceConnection>.Mapping(Profile profile) 
+    void IMapFrom<ServiceConnection>.Mapping(Profile profile)
         => profile.CreateMap<ServiceConnection, ServiceConnectionSnippetDto>()
             .ConstructUsing((serviceConnection, context)
                 => serviceConnection.Type switch

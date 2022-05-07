@@ -115,13 +115,16 @@ namespace WeShare.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("IsFinal")
+                        .HasColumnType("boolean");
+
                     b.Property<long>("PostId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("SubscriptionId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("SubscriptionType")
+                    b.Property<int>("Type")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -130,7 +133,7 @@ namespace WeShare.Infrastructure.Migrations
 
                     b.ToTable("PostSendFailures", (string)null);
 
-                    b.HasDiscriminator<int>("SubscriptionType").HasValue(0);
+                    b.HasDiscriminator<int>("Type").HasValue(1000);
                 });
 
             modelBuilder.Entity("WeShare.Domain.Entities.SentPost", b =>
@@ -143,6 +146,9 @@ namespace WeShare.Infrastructure.Migrations
 
                     b.Property<short>("Attempts")
                         .HasColumnType("smallint");
+
+                    b.Property<bool>("IsFinal")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("Received")
                         .HasColumnType("boolean");
@@ -331,6 +337,27 @@ namespace WeShare.Infrastructure.Migrations
                         .IsUnique();
 
                     b.HasDiscriminator().HasValue(1);
+                });
+
+            modelBuilder.Entity("WeShare.Domain.Entities.DiscordPostSendFailure", b =>
+                {
+                    b.HasBaseType("WeShare.Domain.Entities.PostSendFailure");
+
+                    b.Property<int>("PublishError")
+                        .HasColumnType("integer");
+
+                    b.HasDiscriminator().HasValue(200);
+                });
+
+            modelBuilder.Entity("WeShare.Domain.Entities.DiscordSubscription", b =>
+                {
+                    b.HasBaseType("WeShare.Domain.Entities.Subscription");
+
+                    b.Property<string>("ChannelId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasDiscriminator().HasValue(200);
                 });
 
             modelBuilder.Entity("WeShare.Domain.Entities.WebhookPostSendFailure", b =>

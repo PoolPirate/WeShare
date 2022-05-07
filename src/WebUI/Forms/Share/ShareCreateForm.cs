@@ -12,7 +12,7 @@ public class ShareCreateForm
     [MaxLength(DomainConstraints.ShareNameLengthMaximum)]
     [Required]
     public string Name { get; set; }
-    
+
     /// <summary>
     /// Whether or not the share is private.
     /// </summary>

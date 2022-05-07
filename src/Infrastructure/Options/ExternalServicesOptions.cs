@@ -1,7 +1,5 @@
 ﻿using Common.Configuration;
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 
 namespace WeShare.Infrastructure.Options;
 public class ExternalServicesOptions : Option

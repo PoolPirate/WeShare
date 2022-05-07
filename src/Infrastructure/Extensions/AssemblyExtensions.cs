@@ -2,7 +2,7 @@
 using WeShare.Application.Common.Security;
 
 namespace WeShare.Infrastructure.Extensions;
-public static class AssemblyExtensions
+public static partial class Extensions
 {
     public static IEnumerable<Type> GetAuthorizationHandlerTypes(this Assembly assembly)
         => assembly.GetTypes()

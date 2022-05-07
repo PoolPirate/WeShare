@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using WeShare.Application.Services;
 using WeShare.Domain.Entities;
+using WeShare.Infrastructure.Extensions;
 using WeShare.Infrastructure.Options;
 
 namespace WeShare.Infrastructure.Services;
@@ -10,11 +11,10 @@ public class DiscordClient : Singleton, IDiscordClient
 {
     [Inject]
     private readonly HttpClient HttpClient;
-
     [Inject]
     private readonly ExternalServicesOptions ExternalServicesOptions;
 
-    public async Task<bool> AddUserToWeShareGuild(string accessToken, DiscordId userId, CancellationToken cancellationToken)
+    public async Task<DiscordResponse> AddUserToWeShareGuild(string accessToken, DiscordId userId, CancellationToken cancellationToken)
     {
         var request = new HttpRequestMessage(HttpMethod.Put, DiscordRoutes.AddUserToGuildEndpoint(
             DiscordId.From(ExternalServicesOptions.WeShareDiscordServerId), userId));
@@ -27,37 +27,58 @@ public class DiscordClient : Singleton, IDiscordClient
             ["access_token"] = accessToken,
         });
 
-        var response = await HttpClient.SendAsync(request, cancellationToken);
-        return response.IsSuccessStatusCode;
+        var (received, response) = await HttpClient.SendSafeAsync(request, cancellationToken);
+
+        return received
+            ? DiscordResponse.FromHttpResponse(response!)
+            : DiscordResponse.FromTimeout();
     }
 
-    public async Task<DiscordId?> LoadDiscordUserIdAsync(string accessToken, CancellationToken cancellationToken)
+    public async Task<DiscordResponse<DiscordId>> LoadDiscordUserIdAsync(string accessToken, CancellationToken cancellationToken)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, DiscordRoutes.UserInformationEndpoint);
+        var request = new HttpRequestMessage(HttpMethod.Get, DiscordRoutes.CurrentUserInformationEndpoint);
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-        var response = await HttpClient.SendAsync(request, cancellationToken);
+        var (received, response) = await HttpClient.SendSafeAsync(request, cancellationToken);
 
-        if (!response.IsSuccessStatusCode)
-        {
-            return null;
-        }
-
-        var user = await response.Content.ReadFromJsonAsync<DiscordUser>(cancellationToken: cancellationToken);
-
-        return user is null
-            ? null
-            : DiscordId.From(user.Id);
+        return received
+            ? await DiscordResponse<DiscordId>.FromHttpResponseAsync<DiscordUser>(response!, x => x.Id)
+            : DiscordResponse<DiscordId>.FromTimeout();
     }
 
-    public async Task SendWelcomeMessage(DiscordId userId)
+    public async Task<DiscordResponse<IList<DiscordId>>> GetDMChannelRecipientsAsync(DiscordId channelId, CancellationToken cancellationToken)
     {
-        var channelId = await GetDMChannelIdAsync(userId);
-        await SendMessageAsync(channelId, "Welcome!");
+        var request = new HttpRequestMessage(HttpMethod.Get, DiscordRoutes.GetChannel(channelId));
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bot", ExternalServicesOptions.WeShareDiscordBotToken);
+        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        var (received, response) = await HttpClient.SendSafeAsync(request, cancellationToken);
+
+        return received
+            ? await DiscordResponse<IList<DiscordId>>.FromHttpResponseAsync<DiscordChannel>(response!, x => x.Recipients?.Select(x => x.Id)?.ToList() ?? throw new Exception("Wrong channel type!"))
+            : DiscordResponse<IList<DiscordId>>.FromTimeout();
     }
 
-    private async Task<DiscordId> GetDMChannelIdAsync(DiscordId userId)
+    public async Task<DiscordResponse> SendMessageAsync(DiscordId channelId, string message, CancellationToken cancellationToken)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, DiscordRoutes.CreateMessage(channelId));
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bot", ExternalServicesOptions.WeShareDiscordBotToken);
+        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        request.Content = JsonContent.Create(new Dictionary<string, string>()
+        {
+            ["content"] = message,
+        });
+
+        var (received, response) = await HttpClient.SendSafeAsync(request, cancellationToken);
+
+        return received
+            ? DiscordResponse.FromHttpResponse(response!)
+            : DiscordResponse.FromTimeout();
+    }
+
+    public async Task<DiscordResponse<DiscordId>> GetDMChannelId(DiscordId userId, CancellationToken cancellationToken)
     {
         var request = new HttpRequestMessage(HttpMethod.Post, DiscordRoutes.CreateDMChannel);
         request.Headers.Authorization = new AuthenticationHeaderValue("Bot", ExternalServicesOptions.WeShareDiscordBotToken);
@@ -68,30 +89,10 @@ public class DiscordClient : Singleton, IDiscordClient
             ["recipient_id"] = userId.ToString(),
         });
 
-        var response = await HttpClient.SendAsync(request);
+        var (received, response) = await HttpClient.SendSafeAsync(request, cancellationToken);
 
-        response.EnsureSuccessStatusCode();
-
-        var channel = await response.Content.ReadFromJsonAsync<DiscordChannel>();
-
-        return channel is null 
-            ? throw new HttpRequestException("Missing channel response") 
-            : channel.Id;
-    }
-
-    private async Task SendMessageAsync(DiscordId channelId, string content)
-    {
-        var request = new HttpRequestMessage(HttpMethod.Post, DiscordRoutes.CreateMessage(channelId));
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bot", ExternalServicesOptions.WeShareDiscordBotToken);
-        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-        request.Content = JsonContent.Create(new Dictionary<string, string>()
-        {
-            ["content"] = content,
-        });
-
-        var response = await HttpClient.SendAsync(request);
-        response.EnsureSuccessStatusCode();
+        return received
+            ? await DiscordResponse<DiscordId>.FromHttpResponseAsync<DiscordChannel>(response!, x => x.Id)
+            : DiscordResponse<DiscordId>.FromTimeout();
     }
 }
-

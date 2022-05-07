@@ -18,7 +18,7 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
     {
         var parentType = request.GetType().DeclaringType ?? throw new Exception("Requests must be nested class declarations!");
         var handlerType = parentType.GetNestedTypes()
-            .Where(x => x.GetInterfaces().Any(x => x == typeof(IRequestHandler<TRequest, TResponse>)))
+            .Where(x => x.GetInterfaces().Any(x => x.Name.Contains(nameof(IRequestHandler<TRequest, TResponse>))))
             .SingleOrDefault() ?? throw new Exception("Requests must be declared in a class that also contains the handler!");
         var authorizeAttributes = handlerType.GetCustomAttributes<AuthorizeAttribute>();
 

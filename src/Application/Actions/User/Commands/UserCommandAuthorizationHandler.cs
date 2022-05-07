@@ -1,6 +1,5 @@
 ﻿using Common.Services;
 using WeShare.Application.Common.Security;
-using WeShare.Application.Services;
 using WeShare.Domain.Entities;
 
 namespace WeShare.Application.Actions.Commands;

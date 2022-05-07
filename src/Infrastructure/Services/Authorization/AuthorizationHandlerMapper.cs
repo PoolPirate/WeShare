@@ -1,5 +1,4 @@
 ﻿using Common.Services;
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using WeShare.Application.Common.Security;
 using WeShare.Domain.Entities;

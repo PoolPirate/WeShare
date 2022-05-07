@@ -1,7 +1,5 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Threading.Tasks;
 using WeShare.Application.Common;
 using WeShare.Application.Common.Exceptions;
 using WeShare.Application.Services;

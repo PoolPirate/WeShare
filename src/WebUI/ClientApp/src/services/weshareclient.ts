@@ -93,6 +93,16 @@ export class WeShareClient {
       .pipe(shareReplay(1));
   }
 
+  getDiscordServiceConnections() {
+    const userId = this.authService.getUserId();
+    return this.client.get<PaginatedResponse<ServiceConnectionSnippet>>("Api/Accounts/" + userId + "/ServiceConnection-Snippets",
+      { headers: this.getHeaders(), params: { "type": ServiceConnectionType.Discord, "pageSize": 50 } })
+      .pipe(shareReplay(1))
+      .pipe(
+        map(val => val.items)
+      );
+  }
+
   //Shares
 
   createShare(name: string, description: string, readme: string, isPrivate: boolean) {
@@ -191,15 +201,18 @@ export class WeShareClient {
   }
 
   createDashboardSubscription(shareId: number, name: string) {
-    return this.createSubscription(shareId, SubscriptionType.Dashboard, name, null);
+    return this.createSubscription(shareId, SubscriptionType.Dashboard, name, null, null);
   }
   createWebhookSubscription(shareId: number, name: string, targetUrl: string) {
-    return this.createSubscription(shareId, SubscriptionType.Webhook, name, targetUrl);
+    return this.createSubscription(shareId, SubscriptionType.Webhook, name, targetUrl, null);
+  }
+  createDiscordSubscription(shareId: number, name: string, serviceConnectionId: number) {
+    return this.createSubscription(shareId, SubscriptionType.MessagerDiscord, name, null, serviceConnectionId);
   }
 
-  private createSubscription(shareId: number, type: SubscriptionType, name: string, targetUrl: string | null) {
+  private createSubscription(shareId: number, type: SubscriptionType, name: string, targetUrl: string | null, serviceConnectionId: number | null) {
     const userId = this.authService.getUserId();
-    return this.client.post<number>("Api/Subscriptions", { shareId, userId, type, name, targetUrl }, { headers: this.getHeaders() })
+    return this.client.post<number>("Api/Subscriptions", { shareId, userId, type, name, targetUrl, serviceConnectionId }, { headers: this.getHeaders() })
       .pipe(shareReplay(1));
   }
 

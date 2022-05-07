@@ -5,7 +5,7 @@ using WeShare.Domain.Entities;
 using WeShare.Infrastructure.Services.OAuth2;
 
 namespace WeShare.Infrastructure.Services;
-public class OAuth2ExchangeService : Singleton,  IOAuth2ExchangeService
+public class OAuth2ExchangeService : Singleton, IOAuth2ExchangeService
 {
     [Inject]
     private readonly DiscordOAuth2Handler DiscordOAuth2Handler;
