@@ -24,7 +24,13 @@ public class PostQueryAuthorizationHandler : AuthorizationHandler<PostId, PostQu
             _ => throw new InvalidOperationException(),
         };
 
-    public override ValueTask<bool> HandleUnauthenticatedRequestAsync(PostId entity, PostQueryOperation operation,
+    public override async ValueTask<bool> HandleUnauthenticatedRequestAsync(PostId entity, PostQueryOperation operation,
         CancellationToken cancellationToken = default)
-        => ValueTask.FromResult(false);
+        => operation switch
+        {
+            PostQueryOperation.ReadContent 
+                => await DbContext.Posts.Where(x => x.Id == entity).AllAsync(x => !x.Share!.IsPrivate, cancellationToken),
+
+            _ => throw new InvalidOperationException(),
+        };
 }
