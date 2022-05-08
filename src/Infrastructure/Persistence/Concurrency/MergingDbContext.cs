@@ -17,8 +17,8 @@ public abstract class MergingDbContext : DbContext
         PropertyMerger = propertyMerger;
     }
 
-    public virtual async Task<DbSaveResult> SaveChangesAsync(DbStatus allowedStatuses = DbStatus.Success, bool discardConcurrentDeletedEntries = false,
-        IDbContextTransaction? transaction = null, CancellationToken cancellationToken = default)
+    protected async Task<DbSaveResult> SaveChangesAsync(DbStatus allowedStatuses = DbStatus.Success, bool discardConcurrentDeletedEntries = false,
+         CancellationToken cancellationToken = default)
     {
         try
         {

@@ -67,10 +67,11 @@ public class ShareDbContext : MergingDbContext, IShareContext
         base.ConfigureConventions(configurationBuilder);
     }
 
-    public override async Task<DbSaveResult> SaveChangesAsync(DbStatus allowedStatuses = DbStatus.Success, bool discardConcurrentDeletedEntries = false,
-        IDbContextTransaction? transaction = null, CancellationToken cancellationToken = new CancellationToken())
+    public async Task<DbSaveResult> SaveChangesAsync(DbStatus allowedStatuses = DbStatus.Success, bool discardConcurrentDeletedEntries = false,
+        IDbContextTransaction? transaction = null, TransactionScope? transactionScope = null, CancellationToken cancellationToken = new CancellationToken())
     {
         EnsureTransactionIsUsed(transaction);
+        EnsureNoNestedTransactions(transaction, transactionScope);
 
         foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
         {
@@ -93,27 +94,32 @@ public class ShareDbContext : MergingDbContext, IShareContext
         {
             var result = await base.SaveChangesAsync(allowedStatuses, discardConcurrentDeletedEntries, cancellationToken: cancellationToken);
 
-            if (result.Status == DbStatus.Success && transaction is not null)
+            if (result.Status == DbStatus.Success && 
+                (transaction is not null || transactionScope is not null))
             {
                 await DispatchEvents(domainEvents);
-                await transaction.CommitAsync(cancellationToken);
+
+                if (transaction is not null)
+                {
+                    await transaction.CommitAsync(cancellationToken);
+                }
+                if (transactionScope is not null)
+                {
+                    transactionScope.Complete();
+                }
             }
 
             return result;
-        }
-        catch (Exception)
-        {
-            if (transaction is not null)
-            {
-                await transaction.RollbackAsync(cancellationToken);
-            }
-            throw;
         }
         finally
         {
             if (transaction is not null)
             {
                 await transaction.DisposeAsync();
+            }
+            if (transactionScope is not null)
+            {
+                transactionScope.Dispose();
             }
         }
     }
@@ -128,6 +134,15 @@ public class ShareDbContext : MergingDbContext, IShareContext
         {
             throw new InvalidOperationException("This context does not use the given transaction!");
         }
+    }
+    private void EnsureNoNestedTransactions(IDbContextTransaction? transaction, TransactionScope? transactionScope)
+    {
+        if (transaction is null || transactionScope is null)
+        {
+            return;
+        }
+
+        throw new InvalidOperationException("Dont combine DbContexTransactions and TransactionScopes");
     }
 
     private DomainEvent[] GetUnpublishedDomainEvents()

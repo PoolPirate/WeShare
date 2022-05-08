@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Transactions;
 using WeShare.Application.Common;
 using WeShare.Domain.Entities;
 
@@ -25,5 +26,6 @@ public interface IShareContext
     Task CloseConnectionAsync();
 
     Task<DbSaveResult> SaveChangesAsync(DbStatus allowedStatuses = DbStatus.Success, bool discardConcurrentDeletedEntries = false,
-        IDbContextTransaction? transaction = null, CancellationToken cancellationToken = default);
+            IDbContextTransaction? transaction = null, TransactionScope? transactionScope = null,
+            CancellationToken cancellationToken = new CancellationToken());
 }

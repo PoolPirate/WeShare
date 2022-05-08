@@ -62,12 +62,8 @@ public class UserCreateAction
                 new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
                 TransactionScopeAsyncFlowOption.Enabled);
 
-            var saveResult = await DbContext.SaveChangesAsync(allowedStatuses: DbStatus.DuplicateIndex, cancellationToken: cancellationToken);
-
-            if (saveResult.Status == DbStatus.Success)
-            {
-                transactionScope.Complete();
-            }
+            var saveResult = await DbContext.SaveChangesAsync(
+                allowedStatuses: DbStatus.DuplicateIndex, transactionScope: transactionScope, cancellationToken: cancellationToken);
 
             return saveResult.Status switch
             {
