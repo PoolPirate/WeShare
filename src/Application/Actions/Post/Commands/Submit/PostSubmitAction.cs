@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Transactions;
 using WeShare.Application.Entities;
 using WeShare.Application.Services;
 using WeShare.Domain.Entities;
@@ -61,7 +62,9 @@ public class PostSubmitAction
 
             var (processedHeaders, processedPayload) = await PostProcessor.PreProcessAsync(request.Headers, request.Payload, context);
 
-            using var transaction = await DbContext.BeginTransactionAsync(cancellationToken);
+            using var transactionScope = new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                TransactionScopeAsyncFlowOption.Enabled);
 
             var post = Post.Create(context.ShareId);
             DbContext.Posts.Add(post);
@@ -73,8 +76,8 @@ public class PostSubmitAction
             try
             {
                 post.SetMetadata(metadata.HeadersSize, metadata.PayloadSize);
-
-                await DbContext.SaveChangesAsync(transaction: transaction, cancellationToken: cancellationToken);
+                await DbContext.SaveChangesAsync(cancellationToken: cancellationToken);
+                transactionScope.Complete();
             }
             catch
             {
