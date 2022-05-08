@@ -7,6 +7,7 @@ public class WebhookPublisher : Scoped, ISusbcriptionPostPublisher<WebhookSubscr
     public SubscriptionType Type => SubscriptionType.Webhook;
     public int ChunkSize => 20;
     public int DegreeOfParallelism => 4;
+    public int MaxAttempts => 3;
 
     [Inject]
     private readonly IShareContext DbContext = null!;
@@ -16,6 +17,12 @@ public class WebhookPublisher : Scoped, ISusbcriptionPostPublisher<WebhookSubscr
     public async Task<bool> TryPublishPostToSubscriberAsync(Post post, PostContent content, WebhookSubscription subscription, SentPost sentPost, 
         CancellationToken cancellationToken)
     {
+        if (sentPost.Attempts > MaxAttempts)
+        {
+            sentPost.SetFailed();
+            return true;
+        }
+
         var (success, statusCode, latency) = await WebhookClient.TrySendPostAsync(subscription.TargetUrl, post, content, cancellationToken);
 
         if (success)

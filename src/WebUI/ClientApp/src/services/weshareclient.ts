@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map, shareReplay } from "rxjs/operators";
+import { PostViewPayloadPage } from "../app/modules/post-view/pages/payload/post-view-payload.page";
 import { AccountInfo, ServiceConnectionSnippet, ServiceConnectionType } from "../types/account-types";
 import { CallbackInfo } from "../types/callback-types";
 import { PaginatedResponse } from "../types/general-types";
@@ -228,8 +229,10 @@ export class WeShareClient {
 
   //Posts
 
-  submitPost(shareSecret: string, postHeaders: [string, string][], payload: Uint8Array) {
-    return this.client.post("Api/Post-Management/" + shareSecret, payload.buffer, { headers: Object.fromEntries(postHeaders) });
+  submitPost(shareSecret: string, postHeaders: [string, string[]][], payload: Uint8Array) {
+    var decoder = new TextDecoder('utf8');
+    var b64encoded = btoa(decoder.decode(payload));
+    return this.client.put("Api/Post-Management/" + shareSecret, { headers: Object.fromEntries(postHeaders), payload: b64encoded });
   }
 
   getPosts(shareId: number, ordering: PostOrdering, page: number, pageSize: number) {
@@ -290,4 +293,6 @@ export class WeShareClient {
     return this.client.post("Api/Callback-Management/PasswordReset", { callbackSecret, password })
       .pipe(shareReplay(1));
   }
+
+
 }

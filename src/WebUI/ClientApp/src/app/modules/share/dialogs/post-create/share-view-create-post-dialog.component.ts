@@ -11,7 +11,7 @@ import { ShareService } from "../../services/shareservice";
   styleUrls: ['./share-view-create-post-dialog.component.scss']
 })
 export class ShareViewCreatePostDialogComponent {
-  headers: [string, string][] = [];
+  headers: [string, string[]][] = [];
 
   key: FormControl;
   value: FormControl;
@@ -38,7 +38,7 @@ export class ShareViewCreatePostDialogComponent {
       return;
     }
 
-    this.headers.push([this.key.value, this.value.value]);
+    this.headers.push([this.key.value, [this.value.value]]);
   }
 
   headerInputsValid() {

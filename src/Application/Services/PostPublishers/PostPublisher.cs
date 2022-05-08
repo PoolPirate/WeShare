@@ -25,7 +25,7 @@ public sealed class PostPublisher<TSubsbcription> : Scoped
     [Inject]
     private readonly IServiceProvider Provider = null!;
 
-    private bool AllDelivered = true;
+    private bool RequiresRetry = false;
 
     public async Task PublishToSubscribersAsync(PostId postId, CancellationToken cancellationToken)
     {
@@ -56,7 +56,7 @@ public sealed class PostPublisher<TSubsbcription> : Scoped
         await Parallel.ForEachAsync(await GetTargetSubscriptionChunks(postId, post.CreatedAt, post.ShareId, cancellationToken), options,
             (subscribers, cancellationToken) => PublishToSubscriberChunkAsync(post, content, subscribers, cancellationToken));
 
-        if (!AllDelivered)
+        if (RequiresRetry)
         {
             var retryTask = new PostPublishTask.Command<TSubsbcription>(postId);
             Dispatcher.Schedule(retryTask, $"Retry Publish Post To {Publisher.Type}: {postId}", TimeSpan.FromSeconds(30));
@@ -82,7 +82,7 @@ public sealed class PostPublisher<TSubsbcription> : Scoped
         {
             try
             {
-                var sentPost = await DbContext.SentPosts
+                var sentPost = await dbContext.SentPosts
                     .Where(x => x.SubscriptionId == subscription.Id)
                     .Where(x => x.PostId == post.Id)
                     .SingleOrDefaultAsync(cancellationToken);
@@ -90,7 +90,7 @@ public sealed class PostPublisher<TSubsbcription> : Scoped
                 if (sentPost is null)
                 {
                     sentPost = SentPost.Create(post.Id, subscription.Id);
-                    DbContext.SentPosts.Add(sentPost);
+                    dbContext.SentPosts.Add(sentPost);
                 }
 
                 sentPost.IncrementAttempts();
@@ -99,14 +99,14 @@ public sealed class PostPublisher<TSubsbcription> : Scoped
 
                 if (!success)
                 {
-                    AllDelivered = false;
+                    RequiresRetry = true;
                 }
             }
             catch (Exception ex)
             {
                 dbContext.PostSendFailures.Add(PostSendFailure.CreateInternalError(post.Id, subscription.Id));
                 Logger.LogCritical(ex, "Unhandled exception while publishing post: PostId={postId} ; Type={type}", post.Id, subscription.Id);
-                AllDelivered = false;
+                RequiresRetry = true;
             }
         }
 

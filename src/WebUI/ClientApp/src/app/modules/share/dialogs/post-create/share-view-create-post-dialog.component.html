@@ -5,7 +5,7 @@
     <ng-template matStepLabel>Headers</ng-template>
 
     <shared-header-pair *ngFor="let header of headers"
-                        [key]="header[0]" [value]="header[1]"></shared-header-pair>
+                        [key]="header[0]" [value]="header[1][0]"></shared-header-pair>
 
     <div class="inputs-box">
       <mat-form-field appearance="fill">

@@ -19,9 +19,9 @@ public class DiscordPublisher : Scoped, ISusbcriptionPostPublisher<DiscordSubscr
     {
         var recipientsResponse = await DiscordClient.GetDMChannelRecipientsAsync(subscription.ChannelId, cancellationToken);
 
-        if (!HandleRecipientsResponse(recipientsResponse.Status, sentPost))
+        if (!HandleRecipientsResponse(recipientsResponse.Status, sentPost, out bool requiresRetry))
         {
-            return false;
+            return !requiresRetry;
         }
 
         bool hasRecipient = await DbContext.DiscordConnections
@@ -35,17 +35,19 @@ public class DiscordPublisher : Scoped, ISusbcriptionPostPublisher<DiscordSubscr
         }
 
         var sendResponse = await DiscordClient.SendMessageAsync(subscription.ChannelId, $"New Post: https://we-share-live.de/post/{post.Id}", cancellationToken);
-        if (!HandleMessageSendResponse(sendResponse.Status, sentPost))
+        if (!HandleMessageSendResponse(sendResponse.Status, sentPost, out requiresRetry))
         {
-            return false;
+            return !requiresRetry;
         }
 
         sentPost.SetReceived();
         return true;
     }
 
-    private bool HandleRecipientsResponse(DiscordStatus status, SentPost sentPost)
+    private bool HandleRecipientsResponse(DiscordStatus status, SentPost sentPost, out bool requiresRetry)
     {
+        requiresRetry = false;
+
         switch (status)
         {
             case DiscordStatus.Success:
@@ -56,17 +58,21 @@ public class DiscordPublisher : Scoped, ISusbcriptionPostPublisher<DiscordSubscr
                 return false;
             case DiscordStatus.RateLimited:
                 DbContext.PostSendFailures.Add(PostSendFailure.CreateInternalError(sentPost.PostId, sentPost.SubscriptionId));
+                requiresRetry = true;
                 return false;
             case DiscordStatus.Unavailable:
                 DbContext.PostSendFailures.Add(DiscordPostSendFailure.Create(sentPost.PostId, sentPost.SubscriptionId, DiscordPublishError.DiscordUnresponsive));
+                requiresRetry = true;
                 return false;
             default:
                 throw new InvalidOperationException();
         }
     }
 
-    private bool HandleMessageSendResponse(DiscordStatus status, SentPost sentPost)
+    private bool HandleMessageSendResponse(DiscordStatus status, SentPost sentPost, out bool requiresRetry)
     {
+        requiresRetry = false;
+
         switch (status)
         {
             case DiscordStatus.Success:
@@ -77,9 +83,11 @@ public class DiscordPublisher : Scoped, ISusbcriptionPostPublisher<DiscordSubscr
                 return false;
             case DiscordStatus.RateLimited:
                 DbContext.PostSendFailures.Add(PostSendFailure.CreateInternalError(sentPost.PostId, sentPost.SubscriptionId));
+                requiresRetry = true;
                 return false;
             case DiscordStatus.Unavailable:
                 DbContext.PostSendFailures.Add(DiscordPostSendFailure.Create(sentPost.PostId, sentPost.SubscriptionId, DiscordPublishError.DiscordUnresponsive));
+                requiresRetry = true;
                 return false;
             default:
                 throw new InvalidOperationException();
