@@ -9,7 +9,7 @@ using WeShare.Domain.Entities;
 namespace WeShare.Application.Actions.Commands;
 public class WebhookSubscriptionCreateAction
 {
-    public class Command : IRequest<Result>
+    public class Command : IRequest<Result>, IValidatableObject
     {
         public SubscriptionName Name { get; }
         public ShareId ShareId { get; }
@@ -24,6 +24,18 @@ public class WebhookSubscriptionCreateAction
             ShareId = shareId;
             UserId = userId;
             TargetUri = targetUri;
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (TargetUri.IsLoopback)
+            {
+                yield return new ValidationResult("TargetUri must not be local");
+            }
+            if (!TargetUri.IsAbsoluteUri)
+            {
+                yield return new ValidationResult("TargetUri must be absolute");
+            }
         }
     }
 
