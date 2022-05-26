@@ -31,7 +31,7 @@ export class PostViewPayloadPage {
     }
 
     const type = typeA[0];
-    return type == "application/json" ||
-           type == "text/plain";
+    return type.startsWith("application/json") ||
+           type.startsWith("text/plain");
   }
 }
