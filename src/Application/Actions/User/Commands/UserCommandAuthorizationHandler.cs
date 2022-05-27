@@ -22,5 +22,10 @@ public class UserCommandAuthorizationHandler : AuthorizationHandler<UserId, User
 
     public override ValueTask<bool> HandleUnauthenticatedRequestAsync(UserId entity, UserCommandOperation operation,
         CancellationToken cancellationToken = default)
-        => ValueTask.FromResult(false);
+        => operation switch
+        {
+            UserCommandOperation.RequestPasswordReset
+                => ValueTask.FromResult(true),
+            _ => ValueTask.FromResult(false),
+        };
 }
