@@ -10,10 +10,10 @@ public class UserCommandAuthorizationHandler : AuthorizationHandler<UserId, User
         CancellationToken cancellationToken = default)
         => operation switch
         {
-            UserCommandOperation.UpdateProfile or
             UserCommandOperation.RequestPasswordReset
                 => ValueTask.FromResult(true),
 
+            UserCommandOperation.UpdateProfile or
             UserCommandOperation.UpdateAccount
                 => ValueTask.FromResult(authenticatedUser == entity),
 
