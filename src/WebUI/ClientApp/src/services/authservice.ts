@@ -2,11 +2,16 @@ import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { UserLogin } from "../types/user-types";
 import { shareReplay } from "rxjs/operators"
+import { DialogService } from "./dialogservice";
 
 @Injectable()
 export class AuthService {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private dialogService: DialogService) {
+  }
+
+  async requestLogin() {
+    return await this.dialogService.login() && this.isLoggedIn();
   }
 
   login(username: string, password: string) {
@@ -15,6 +20,7 @@ export class AuthService {
 
     request.subscribe(s => {
       this.setSession(s.body!);
+      window.location.reload();
     });
 
     return request;

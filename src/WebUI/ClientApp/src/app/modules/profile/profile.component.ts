@@ -37,7 +37,6 @@ export class ProfileComponent {
       if (userSnippetResponse.ok) {
         this.userSnippet = userSnippetResponse.content!;
         profileStore.userSnippet = this.userSnippet;
-        console.info(profileStore);
       } else {
         if (userSnippetResponse.status == 404) {
           router.navigateByUrl("/notfound");

@@ -22,7 +22,7 @@ export class ShareViewSettingsComponent {
   {
     route.url.subscribe(url => {
       if (authService.isLoggedOut()) {
-        router.navigate(["login"]);
+        router.navigate(["forbidden"]);
       }
     });
 

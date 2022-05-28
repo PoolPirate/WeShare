@@ -22,3 +22,7 @@ html {
   place-self: center;
   margin: 0px 8px 0px 8px;
 }
+
+.pointer {
+  cursor: pointer;
+}

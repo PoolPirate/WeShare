@@ -29,12 +29,18 @@ import { MatMenuModule } from '@angular/material/menu';
 import { NotFoundComponent } from './pages/notfound/notfound.component';
 import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
 import { BrowserModule } from '@angular/platform-browser';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { LoginDialog } from './dialogs/login/login.dialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DialogService } from '../../services/dialogservice';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'notfound', component: NotFoundComponent },
   { path: 'forbidden', component: ForbiddenComponent },
-  { path: 'login', redirectTo: 'account/login' },
   {
     path: 'account',
     loadChildren: () => import('../modules/account/account.module').then(m => m.AccountModule)
@@ -82,6 +88,8 @@ const routes: Routes = [
     HomeComponent,
     NotFoundComponent,
     ForbiddenComponent,
+
+    LoginDialog,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -89,8 +97,16 @@ const routes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(routes),
     LoadingBarRouterModule,
+
     MatIconModule,
     MatMenuModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    MatInputModule,
+    MatButtonModule,
+
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [
     ViewShareShareInfoResolver,
@@ -104,13 +120,21 @@ const routes: Routes = [
 
     ProfileStore,
     AuthService,
-    WeShareClient
+    WeShareClient,
+    DialogService,
   ],
   exports: [
     RouterModule,
     LoadingBarRouterModule,
+
     MatIconModule,
     MatMenuModule,
+    MatDialogModule,
+    MatInputModule,
+    MatButtonModule,
+
+    FormsModule,
+    ReactiveFormsModule,
   ],
   bootstrap: [AppComponent]
 })

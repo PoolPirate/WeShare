@@ -33,42 +33,41 @@ export class ShareViewOverviewComponent {
     });
   }
 
-  subscribeStatusUpdate(subscribed: boolean) {
-    if (this.authService.isLoggedOut()) {
-      this.router.navigateByUrl("/login");
+  async subscribeStatusUpdate(subscribed: boolean) {
+    if (this.authService.isLoggedOut() && !await this.authService.requestLogin()) {
       return;
     }
 
     this.openSubscriptionTypeDialog();
   }
 
-  like(liked: boolean) {
-    if (this.authService.isLoggedOut()) {
-      this.router.navigateByUrl("/login");
+  async like() {
+    if (this.authService.isLoggedOut() && !await this.authService.requestLogin()) {
+      return;
     }
+
+    const liked = !this.likebutton.liked;
 
     if (liked) {
       this.weShareClient.addLike(this.shareData.shareInfo.id).subscribe(response => {
         this.shareUserData!.liked = liked;
+        this.likebutton.liked = liked;
         this.shareData.shareInfo.likeCount++;
       }, (error: HttpErrorResponse) => {
         if (error.status == 409) {
           this.likebutton.liked = true;
           this.shareUserData!.liked = true;
-        } else {
-          this.likebutton.liked = !liked;
         }
       });
     } else {
       this.weShareClient.removeLike(this.shareData.shareInfo.id).subscribe(response => {
         this.shareUserData!.liked = liked;
+        this.likebutton.liked = liked;
         this.shareData.shareInfo.likeCount--;
       }, (error: HttpErrorResponse) => {
         if (error.status == 404) {
           this.likebutton.liked = false;
           this.shareUserData!.liked = false;
-        } else {
-          this.likebutton.liked = !liked;
         }
       });
     }   

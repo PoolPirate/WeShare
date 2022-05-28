@@ -51,7 +51,6 @@ import { MatStepperModule } from '@angular/material/stepper';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatIconModule,
-    MatDialogModule,
     MatMenuModule,
   ],
   exports: [
@@ -82,10 +81,6 @@ import { MatStepperModule } from '@angular/material/stepper';
     MatProgressSpinnerModule,
     MatMenuModule,
     MatChipsModule,
-    MatDialogModule,
-  ],
-  providers: [
-    DialogService,
   ]
 })
 export class SharedModule { }

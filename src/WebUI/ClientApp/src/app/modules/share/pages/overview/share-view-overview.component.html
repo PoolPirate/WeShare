@@ -12,7 +12,7 @@
 
   <div class="likebg">
     <share-view-subscribe-button (onStatusUpdate)="subscribeStatusUpdate($event)" [subscribed]="shareUserData != null && shareUserData.subscribed"></share-view-subscribe-button>
-    <shared-like-button class="likebutton" (onLike)="like($event)" [liked]="shareUserData != null && shareUserData.liked"></shared-like-button>
+    <shared-like-button class="likebutton" (onLike)="like()" [liked]="shareUserData != null && shareUserData.liked"></shared-like-button>
   </div>
   <!--
 
@@ -30,7 +30,7 @@
       <mat-card-title>{{ shareData.shareInfo.name }}</mat-card-title>
       <mat-card-subtitle><readme>{{ shareData.shareInfo.readme }}</readme></mat-card-subtitle>
       <mat-card-actions>
-        <button mat-button><shared-like-button (onLike)="like($event)" [liked]="shareUserData != null && shareUserData.liked">LIKE</shared-like-button></button>
+        <button mat-button><shared-like-button (onLike)="like()" [liked]="shareUserData != null && shareUserData.liked">LIKE</shared-like-button></button>
         <button mat-button>SHARE</button>
       </mat-card-actions>
     </mat-card>

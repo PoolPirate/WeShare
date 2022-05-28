@@ -3,10 +3,21 @@ import { MatDialog } from "@angular/material/dialog";
 import { SharedConfirmDialog } from "../app/shared/dialogs/confirm/confirm.dialog";
 import { ComponentType } from "@angular/cdk/portal";
 import { SharedLoadingDialog } from "../app/shared/dialogs/loading/loading.dialog.component";
+import { LoginDialog } from "../app/main/dialogs/login/login.dialog";
 
 @Injectable()
 export class DialogService {
   constructor(private dialog: MatDialog) {
+  }
+
+  async login(): Promise<boolean> {
+    if (this.hasDialog(LoginDialog)) {
+      return false;
+    }
+
+    return this.dialog.open(LoginDialog)
+      .afterClosed()
+      .toPromise();
   }
 
   async confirm(title: string, description: string): Promise<boolean> {

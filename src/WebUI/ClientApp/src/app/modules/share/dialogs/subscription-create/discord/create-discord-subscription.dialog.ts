@@ -45,7 +45,7 @@ export class ShareViewCreateDiscordSubscriptionDialog {
     if (!this.stepperCompleted) {
       return;
     }
-    console.log(this);
+
     this.submitRequest = this.weShareClient.createDiscordSubscription(this.data.shareId, this.name.value, this.serviceConnectionId.value);
 
     this.submitRequest.subscribe(success => {

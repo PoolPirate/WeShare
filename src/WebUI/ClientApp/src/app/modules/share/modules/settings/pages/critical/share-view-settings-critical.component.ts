@@ -1,6 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { async } from 'rxjs';
+import { AuthService } from '../../../../../../../services/authservice';
 import { DialogService } from '../../../../../../../services/dialogservice';
 import { WeShareClient } from '../../../../../../../services/weshareclient';
 import { ShareData, ShareSecrets } from '../../../../../../../types/share-types';
@@ -21,7 +23,7 @@ export class ShareViewSettingsCriticalComponent {
 
   errorCode: number = 0;
 
-  constructor(private weShareClient: WeShareClient, private router: Router, private dialogService: DialogService,
+  constructor(private weShareClient: WeShareClient, private router: Router, private dialogService: DialogService, private authService: AuthService,
     shareSecretsService: ShareSecretsService, shareService: ShareService) {
     this.shareSecrets = shareSecretsService.shareSecrets;
     this.shareData = shareService.shareData;
@@ -39,13 +41,21 @@ export class ShareViewSettingsCriticalComponent {
       .subscribe(response => {
         this.errorCode = 200;
         this.router.navigate(['profile', this.shareData.ownerSnippet.username, 'shares']);
-      }, (error: HttpErrorResponse) => {
+      }, async (error: HttpErrorResponse) => {
         if (error.status == 404) {
           this.router.navigate(['profile', this.shareData.ownerSnippet.username, 'shares']);
           return;
         }
+        if (error.status == 401) {
+          if (!await this.authService.requestLogin()) {
+            this.router.navigate(['/']);
+            return;
+          }
+
+          return;
+        }
         if (error.status == 403) {
-          this.router.navigate(['login']);
+          this.router.navigate(['forbidden']);
           return;
         }
         this.errorCode = error.status;
@@ -64,13 +74,21 @@ export class ShareViewSettingsCriticalComponent {
     this.weShareClient.updateShareVisibility(this.shareData.shareInfo.id, !this.shareData.shareInfo.isPrivate)
       .subscribe(response => {
         this.errorCode = 200;
-      }, (error: HttpErrorResponse) => {
+      }, async (error: HttpErrorResponse) => {
         if (error.status == 404) {
           this.router.navigate(['profile', this.shareData.ownerSnippet.username, 'shares']);
           return;
         }
+        if (error.status == 401) {
+          if (!await this.authService.requestLogin()) {
+            this.router.navigate(['/']);
+            return;
+          }
+
+          return;
+        }
         if (error.status == 403) {
-          this.router.navigate(['login']);
+          this.router.navigate(['forbidden']);
           return;
         }
         this.errorCode = error.status;

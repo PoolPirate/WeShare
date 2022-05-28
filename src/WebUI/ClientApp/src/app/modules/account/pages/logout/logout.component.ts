@@ -15,6 +15,5 @@ export class LogoutComponent {
     }
 
     authService.logout();
-    router.navigateByUrl("/login");
   }
 }

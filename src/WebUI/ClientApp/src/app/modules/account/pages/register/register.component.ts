@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { async } from 'rxjs';
 import { AuthService } from '../../../../../services/authservice';
 import { WeShareClient } from '../../../../../services/weshareclient';
 
@@ -19,7 +20,7 @@ export class RegisterComponent {
   errorCode: number = 0;
 
   constructor(private fb: FormBuilder, private router: Router, private weShareClient: WeShareClient,
-    authService: AuthService) {
+    private authService: AuthService) {
     if (authService.isLoggedIn()) {
       router.navigateByUrl("");
     }
@@ -53,10 +54,17 @@ export class RegisterComponent {
 
     this.weShareClient.createUser(val.username, val.email, val.password)
       .subscribe(response => {
-        this.router.navigateByUrl("/login");
+        this.authService.login(val.username, val.password)
+          .subscribe(_ => this.router.navigate(['/profile', val.username]));
       }, (error: HttpErrorResponse) => {
         this.errorCode = error.status;
       });
+  }
+
+  async openLogin() {
+    if (await this.authService.requestLogin()) {
+      this.router.navigate(['profile', this.authService.getUsername()]);
+    }
   }
 
   get password() {

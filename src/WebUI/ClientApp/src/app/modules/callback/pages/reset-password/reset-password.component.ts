@@ -41,7 +41,7 @@ export class ResetPasswordComponent {
 
     this.weShareClient.resetPassword(this.callbackSecret, val.password)
       .subscribe(response => {
-        this.router.navigateByUrl("/login");
+        this.router.navigateByUrl("/");
       }, (error: HttpErrorResponse) => {
         this.errorCode = error.status;
       });

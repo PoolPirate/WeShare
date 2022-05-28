@@ -39,15 +39,12 @@ export class PagedListHeaderComponent implements OnInit {
       this.activeOrdering = parseInt(queryParams["order"]);
     });
   }
-    ngOnInit(): void {
-      console.log(this.activeOrdering);
-      console.log(this.sortOptionsEnum);
-      console.log(Object.keys(this.sortOptionsEnum));
+  ngOnInit(): void {
 
-      if (!Object.values(this.sortOptionsEnum).includes(this.activeOrdering)) {
-        this.activeOrdering = this.defaultOrdering;
-      }
+    if (this.showSortMenu && !Object.values(this.sortOptionsEnum).includes(this.activeOrdering)) {
+      this.activeOrdering = this.defaultOrdering;
     }
+  }
 
   onPage(pageEvent: PageEvent) {
     const event = { pageEvent: pageEvent, ordering: this.activeOrdering };

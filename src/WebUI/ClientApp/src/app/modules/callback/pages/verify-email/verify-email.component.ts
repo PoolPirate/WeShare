@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../../../../services/authservice';
 import { WeShareClient } from '../../../../../services/weshareclient';
 
 @Component({
@@ -11,11 +12,11 @@ import { WeShareClient } from '../../../../../services/weshareclient';
 export class VerifyEmailComponent {
   errorCode: number = 0;
 
-  constructor(route: ActivatedRoute, router: Router, weShareClient: WeShareClient) {
+  constructor(private authService: AuthService, private router: Router,
+    route: ActivatedRoute, weShareClient: WeShareClient) {
     route.params.subscribe(params => {
       var callbackSecret = params['callbackSecret'];
       if (callbackSecret == null) {
-        console.info("No callbackSecret!");
         router.navigateByUrl("/");
         return;
       }
@@ -28,5 +29,11 @@ export class VerifyEmailComponent {
           router.navigateByUrl("/notfound");
         })
     });
+  }
+
+  async openLogin() {
+    if (await this.authService.requestLogin()) {
+      this.router.navigate(['profile', this.authService.getUsername()]);
+    }
   }
 }

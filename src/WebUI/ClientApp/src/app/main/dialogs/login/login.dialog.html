@@ -1,0 +1,34 @@
+<legend>Login</legend>
+<form>
+  <mat-form-field appearance="fill">
+    <mat-label>Username</mat-label>
+    <input matInput [formControl]="username"
+           placeholder="SuperUser9000" autocomplete="username">
+    <button *ngIf="username.value" matSuffix mat-icon-button (click)="username.reset()" class="borderless">
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-error *ngIf="username.invalid">
+      {{ username.hasError('required') ? "Username is required" : "" }}
+      {{ username.hasError('minlength') ? "Username must have at least 3 characters" : "" }}
+      {{ username.hasError('maxlength') ? "Username must have at most 20 characters" : "" }}
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Password</mat-label>
+    <input matInput [formControl]="password"
+           type="password" autocomplete="password">
+    <button *ngIf="password.value" matSuffix mat-icon-button (click)="password.reset()" class="borderless">
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-error *ngIf="password.invalid">
+      {{ password.hasError('required') ? "Password is required" : "" }}
+      {{ password.hasError('minlength') ? "Password must have at least 8 characters" : "" }}
+      {{ password.hasError('maxlength') ? "Password must have at most 64 characters" : "" }}
+    </mat-error>
+  </mat-form-field>
+</form>
+
+
+<button mat-raised-button (click)="submitLogin()">
+  Submit
+</button>

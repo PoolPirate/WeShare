@@ -7,13 +7,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class LikeButtonComponent {
   @Input()
-  liked: boolean;
+  liked: boolean = false;
 
   @Output()
   onLike = new EventEmitter<boolean>();
 
   like() {
-    this.liked = !this.liked;
     this.onLike.emit(this.liked);
   }
 }

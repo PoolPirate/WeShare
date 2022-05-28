@@ -22,4 +22,8 @@ export class NavMenuComponent {
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }
+
+  async triggerLogin() {
+    await this.authService.requestLogin();
+  }
 }

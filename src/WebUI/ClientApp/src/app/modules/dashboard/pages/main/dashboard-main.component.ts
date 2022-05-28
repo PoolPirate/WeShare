@@ -17,7 +17,8 @@ export class DashboardMainComponent {
 
   constructor(authService: AuthService, router: Router, route: ActivatedRoute, dashboardService: DashboardService) {
     if (authService.isLoggedOut()) {
-      router.navigate(['login']);
+      router.navigate(['/']);
+      authService.requestLogin();
     }
 
     route.data.subscribe(data => {

@@ -17,7 +17,7 @@ export class OAuth2CallbackPage {
     route: ActivatedRoute) {
 
     if (this.authService.isLoggedOut()) {
-      router.navigate(["login"]);
+      router.navigate(["/"]);
       return;
     }
 

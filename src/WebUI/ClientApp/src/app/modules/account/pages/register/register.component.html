@@ -45,4 +45,4 @@
   {{ errorCode == 409 ? "Username or Email already taken" : "" }}
 </p>
 
-<p>Already have an account? <a [routerLink]="['/login']">Login!</a></p>
+<p>Already have an account? <a (click)="openLogin()">Login!</a></p>

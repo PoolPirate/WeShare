@@ -26,7 +26,8 @@ export class ShareViewSubscriptionsComponent {
   constructor(private weShareClient: WeShareClient, private authService: AuthService,
     shareService: ShareService, router: Router, route: ActivatedRoute) {
     if (authService.isLoggedOut()) {
-      router.navigate(['login']);
+      router.navigate(['/']);
+      authService.requestLogin();
     }
 
     this.shareData = shareService.shareData;
