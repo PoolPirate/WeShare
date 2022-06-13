@@ -1,5 +1,6 @@
 ﻿using Common.Services;
 using Microsoft.Extensions.Logging;
+using System.IO;
 using System.Text;
 using System.Text.Json;
 using WeShare.Application.Entities;
@@ -76,10 +77,10 @@ public class PostStorage : Singleton, IPostStorage
         return await File.ReadAllBytesAsync(path, cancellationToken);
     }
 
-    public async Task<PostMetadata> StoreAsync(PostId postId, IDictionary<string, string[]> headers, Stream payload, CancellationToken cancellationToken)
+    public async Task<PostMetadata> StoreAsync(PostId postId, PostContent content, CancellationToken cancellationToken)
     {
-        var storeHeadersTask = StorePostHeadersAsync(postId, headers);
-        var storeBodyTask = StorePostPayloadAsync(postId, payload);
+        var storeHeadersTask = StorePostHeadersAsync(postId, content.Headers);
+        var storeBodyTask = StorePostPayloadAsync(postId, content.Payload);
 
         var headersSize = await storeHeadersTask;
         var bodySize = await storeBodyTask;
@@ -104,7 +105,7 @@ public class PostStorage : Singleton, IPostStorage
         return ByteCount.From(headersBytes.Length);
     }
 
-    private async Task<ByteCount> StorePostPayloadAsync(PostId postId, Stream payload)
+    private async Task<ByteCount> StorePostPayloadAsync(PostId postId, byte[] payload)
     {
         string path = GetPostStoragePath(GetPayloadFilename(postId));
 
@@ -113,19 +114,9 @@ public class PostStorage : Singleton, IPostStorage
             throw new InvalidOperationException("Trying to store post body that has already been stored!");
         }
 
-        var fileStream = File.OpenWrite(path);
-        try
-        {
-            await payload.CopyToAsync(fileStream);
-            await fileStream.FlushAsync();
-
-            Logger.LogInformation("Body save success: PostId={postId} ; Size={size}", postId, fileStream.Position);
-            return ByteCount.From(fileStream.Position);
-        }
-        finally
-        {
-            await fileStream.DisposeAsync();
-        }
+        await File.WriteAllBytesAsync(path, payload);
+        Logger.LogInformation("Body save success: PostId={postId} ; Size={size}", postId, payload.LongLength);
+        return ByteCount.From(payload.LongLength);
     }
 
     public Task DeleteAsync(PostId postId)

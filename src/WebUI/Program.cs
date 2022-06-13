@@ -2,6 +2,7 @@ using AutoMapper;
 using Common.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using WeShare.Application.Common.Security;
 using WeShare.Infrastructure.Persistence;
 using WeShare.WebAPI.Options;
 
@@ -17,6 +18,8 @@ public sealed class Program
     private static readonly Assembly Assembly = Assembly.GetExecutingAssembly();
     private static readonly Assembly InfrastructureAssembly = Assembly.GetAssembly(typeof(ShareDbContext))
             ?? throw new InvalidOperationException("Could not load Infrastructure Assembly!");
+    private static readonly Assembly ApplicationAssembly = Assembly.GetAssembly(typeof(AuthorizationHandler<,>))
+            ?? throw new InvalidOperationException("Could not load Application Assembly!");
 
     private static IHost? Application;
     private static IServiceProvider? Provider;
@@ -33,9 +36,11 @@ public sealed class Program
 
         await Provider.InitializeApplicationAsync(Assembly);
         await Provider.InitializeApplicationAsync(InfrastructureAssembly);
+        await Provider.InitializeApplicationAsync(ApplicationAssembly);
 
         Provider.RunApplication(Assembly);
         Provider.RunApplication(InfrastructureAssembly);
+        Provider.RunApplication(ApplicationAssembly);
 
         await Application.RunAsync();
     }

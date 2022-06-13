@@ -17,7 +17,7 @@ public class ShareUpdateAction
 
         [MinLength(DomainConstraints.ShareNameLengthMinimum)]
         [MaxLength(DomainConstraints.ShareNameLengthMaximum)]
-        public Sharename? Name { get; }
+        public ShareName? Name { get; }
 
         [MaxLength(DomainConstraints.ShareDescriptionLengthMaximum)]
         public string? Description { get; }
@@ -25,7 +25,7 @@ public class ShareUpdateAction
         [MaxLength(DomainConstraints.ShareReadmeLengthMaximum)]
         public string? Readme { get; }
 
-        public Command(ShareId shareId, Sharename? name, string? description, string? readme)
+        public Command(ShareId shareId, ShareName? name, string? description, string? readme)
         {
             ShareId = shareId;
             Name = name;

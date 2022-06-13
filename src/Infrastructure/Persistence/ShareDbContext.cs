@@ -16,6 +16,7 @@ public class ShareDbContext : MergingDbContext, IShareContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Share> Shares { get; set; }
+    public DbSet<PostFilter> PostFilters { get; set; }
     public DbSet<Like> Likes { get; set; }
     public DbSet<Callback> Callbacks { get; set; }
     public DbSet<Post> Posts { get; set; }
@@ -50,6 +51,7 @@ public class ShareDbContext : MergingDbContext, IShareContext
         configurationBuilder.Properties<PostId>().HaveConversion<PostId.EfCoreValueConverter>();
         configurationBuilder.Properties<SubscriptionId>().HaveConversion<SubscriptionId.EfCoreValueConverter>();
         configurationBuilder.Properties<ServiceConnectionId>().HaveConversion<ServiceConnectionId.EfCoreValueConverter>();
+        configurationBuilder.Properties<PostFilterId>().HaveConversion<PostFilterId.EfCoreValueConverter>();
 
         configurationBuilder.Properties<DiscordId>().HaveConversion<DiscordId.EfCoreValueConverter>();
 
@@ -60,7 +62,9 @@ public class ShareDbContext : MergingDbContext, IShareContext
         configurationBuilder.Properties<CallbackSecret>().HaveConversion<CallbackSecret.EfCoreValueConverter>();
 
         configurationBuilder.Properties<ShareSecret>().HaveConversion<ShareSecret.EfCoreValueConverter>();
-        configurationBuilder.Properties<Sharename>().HaveConversion<Sharename.EfCoreValueConverter>();
+        configurationBuilder.Properties<ShareName>().HaveConversion<ShareName.EfCoreValueConverter>();
+
+        configurationBuilder.Properties<PostFilterName>().HaveConversion<PostFilterName.EfCoreValueConverter>();
 
         configurationBuilder.Properties<ByteCount>().HaveConversion<ByteCount.EfCoreValueConverter>();
 
@@ -135,7 +139,7 @@ public class ShareDbContext : MergingDbContext, IShareContext
             throw new InvalidOperationException("This context does not use the given transaction!");
         }
     }
-    private void EnsureNoNestedTransactions(IDbContextTransaction? transaction, TransactionScope? transactionScope)
+    private static void EnsureNoNestedTransactions(IDbContextTransaction? transaction, TransactionScope? transactionScope)
     {
         if (transaction is null || transactionScope is null)
         {

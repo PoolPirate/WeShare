@@ -14,7 +14,7 @@ public class ShareCreateAction
     {
         public UserId OwnerId { get; }
 
-        public Sharename Name { get; }
+        public ShareName Name { get; }
 
         public bool IsPrivate { get; }
 
@@ -24,7 +24,7 @@ public class ShareCreateAction
         [MaxLength(DomainConstraints.ShareReadmeLengthMaximum)]
         public string Readme { get; }
 
-        public Command(UserId ownerId, Sharename name, bool isPrivate, string description, string readme)
+        public Command(UserId ownerId, ShareName name, bool isPrivate, string description, string readme)
         {
             OwnerId = ownerId;
             Name = name;

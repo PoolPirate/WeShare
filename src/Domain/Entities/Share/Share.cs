@@ -29,7 +29,7 @@ public sealed class Share : AuditableEntity
     /// <summary>
     /// The name of the share.
     /// </summary>
-    public Sharename Name { get; set; }
+    public ShareName Name { get; set; }
 
     /// <summary>
     /// Whether or not you need permissions to view this share.
@@ -78,10 +78,15 @@ public sealed class Share : AuditableEntity
     /// </summary>
     public List<Post>? Posts { get; init; } //Navigation Property
 
-    public static Share Create(UserId ownerId, Sharename name, bool isPrivate, string description, string readme, ShareSecret secret)
+    /// <summary>
+    /// The filters each post has to pass to be accepted to the share.
+    /// </summary>
+    public List<PostFilter>? Filters { get; init; } //Navigation Property
+
+    public static Share Create(UserId ownerId, ShareName name, bool isPrivate, string description, string readme, ShareSecret secret)
         => new Share(ownerId, name, isPrivate, description, readme, secret);
 
-    private Share(UserId ownerId, Sharename name, bool isPrivate, string description, string readme, ShareSecret secret)
+    private Share(UserId ownerId, ShareName name, bool isPrivate, string description, string readme, ShareSecret secret)
     {
         OwnerId = ownerId;
         Name = name;

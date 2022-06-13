@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Common.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -6,8 +7,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 using Respawn;
+using System.Reflection;
+using WeShare.Application.Common.Security;
 using WeShare.Application.Services;
+using WeShare.Domain.Common;
 using WeShare.Domain.Entities;
+using WeShare.Infrastructure.Options;
 using WeShare.Infrastructure.Persistence;
 using WeShare.WebAPI;
 
@@ -17,12 +22,11 @@ namespace WeShare.Application.IntegrationTests;
 public class Testing
 {
     private static IConfigurationRoot Configuration = null!;
-    private static IServiceScopeFactory ScopeFactory = null!;
-    private static Checkpoint Checkpoint = null!;
+    public static IServiceScopeFactory ScopeFactory = null!;
     private static UserId? CurrentUserId;
 
     [OneTimeSetUp]
-    public void RunBeforeAnyTests()
+    public async Task RunBeforeAnyTests()
     {
         var builder = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -37,7 +41,7 @@ public class Testing
 
         services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
             w.EnvironmentName == "Development" &&
-            w.ApplicationName == "CleanArchitecture.WebUI"));
+            w.ApplicationName == "WeShare.WebAPI"));
 
         services.AddLogging();
 
@@ -48,32 +52,49 @@ public class Testing
         var currentUserServiceDescriptor = services.FirstOrDefault(d =>
             d.ServiceType == typeof(ICurrentUserService));
 
+        var dispatcherServiceDescriptor = services.FirstOrDefault(d =>
+            d.ServiceType == typeof(IDispatcher));
+
         if (currentUserServiceDescriptor != null)
         {
             services.Remove(currentUserServiceDescriptor);
+        }
+        if (dispatcherServiceDescriptor != null)
+        {
+            services.Remove(dispatcherServiceDescriptor);
         }
 
         // Register testing version
         services.AddTransient(provider =>
             Mock.Of<ICurrentUserService>(s => s.GetUserId() == CurrentUserId));
+        services.AddTransient(provider => 
+            Mock.Of<IDispatcher>());
+        services.AddTransient(provider =>
+            Mock.Of<IPostStorage>(s => s.StoreAsync(It.IsAny<PostId>(), It.IsAny<PostContent>(), It.IsAny<CancellationToken>()) == Task.FromResult(new Entities.PostMetadata(ByteCount.From(10), ByteCount.From(10)))));
+        
+        var provider = services.BuildServiceProvider();
 
-        ScopeFactory = services.BuildServiceProvider().GetRequiredService<IServiceScopeFactory>();
+        await provider.InitializeApplicationAsync(Assembly.GetExecutingAssembly());
+        await provider.InitializeApplicationAsync(Assembly.GetAssembly(typeof(ShareDbContext)));
+        await provider.InitializeApplicationAsync(Assembly.GetAssembly(typeof(AuthorizationHandler<,>)));
 
-        Checkpoint = new Checkpoint
-        {
-            TablesToIgnore = new[] { "__EFMigrationsHistory" }
-        };
+        provider.RunApplication(Assembly.GetExecutingAssembly());
+        provider.RunApplication(Assembly.GetAssembly(typeof(ShareDbContext)));
+        provider.RunApplication(Assembly.GetAssembly(typeof(AuthorizationHandler<,>)));
 
-        EnsureDatabase();
+        ScopeFactory = provider.GetRequiredService<IServiceScopeFactory>();
+
+        await EnsureDatabaseAsync();
     }
 
-    private static void EnsureDatabase()
+    private static async Task EnsureDatabaseAsync()
     {
         using var scope = ScopeFactory.CreateScope();
 
         var context = scope.ServiceProvider.GetRequiredService<ShareDbContext>();
 
-        context.Database.Migrate();
+        await context.Database.EnsureDeletedAsync();
+        await context.Database.MigrateAsync();
     }
 
     public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
@@ -85,10 +106,17 @@ public class Testing
         return await mediator.Send(request);
     }
 
+    public static void SetCurrentUser(UserId? currentUserId)
+    {
+        CurrentUserId = currentUserId;
+    }
+
     public static async Task ResetState()
     {
-        await Checkpoint.Reset(Configuration.GetConnectionString("DefaultConnection"));
-
+        using var scope = ScopeFactory.CreateScope();
+        var dbContext = scope.ServiceProvider.GetService<ShareDbContext>()!;
+        await dbContext.Database.EnsureDeletedAsync();
+        await dbContext.Database.MigrateAsync();
         CurrentUserId = null;
     }
 

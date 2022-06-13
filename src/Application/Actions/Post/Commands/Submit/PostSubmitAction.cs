@@ -29,6 +29,7 @@ public class PostSubmitAction
     {
         Success,
         ShareNotFound,
+        FilterValidationFailed,
     }
 
     public record Result(Status Status);
@@ -39,13 +40,16 @@ public class PostSubmitAction
         private readonly IMapper Mapper;
         private readonly IPostStorage PostStorage;
         private readonly IPostProcessor PostProcessor;
+        private readonly IPostFilterValidator PostFilterValidator;
 
-        public Handler(IShareContext dbContext, IMapper mapper, IPostStorage postStorage, IPostProcessor postProcessor)
+        public Handler(IShareContext dbContext, IMapper mapper, IPostStorage postStorage, 
+            IPostProcessor postProcessor, IPostFilterValidator postFilterValidator)
         {
             DbContext = dbContext;
             Mapper = mapper;
             PostStorage = postStorage;
             PostProcessor = postProcessor;
+            PostFilterValidator = postFilterValidator;
         }
 
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
@@ -60,7 +64,18 @@ public class PostSubmitAction
                 return new Result(Status.ShareNotFound);
             }
 
-            var (processedHeaders, processedPayload) = await PostProcessor.PreProcessAsync(request.Headers, request.Payload, context);
+            var postContent = await PostProcessor.PreProcessAsync(request.Headers, request.Payload, context);
+
+            var filters = await DbContext.PostFilters
+                .Where(x => x.ShareId == context.ShareId)
+                .ToArrayAsync(cancellationToken);
+
+            bool[] validationResults = await Task.WhenAll(filters.Select(x => PostFilterValidator.ValidateFilterAsync(x, postContent)));
+
+            if (validationResults.Any(x => !x))
+            {
+                return new Result(Status.FilterValidationFailed);
+            }
 
             using var transactionScope = new TransactionScope(TransactionScopeOption.Required,
                 new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
@@ -71,7 +86,7 @@ public class PostSubmitAction
 
             await DbContext.SaveChangesAsync(cancellationToken: cancellationToken);
 
-            var metadata = await PostStorage.StoreAsync(post.Id, processedHeaders, processedPayload, cancellationToken);
+            var metadata = await PostStorage.StoreAsync(post.Id, postContent, cancellationToken);
 
             try
             {

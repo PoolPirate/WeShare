@@ -13,14 +13,10 @@ public class ProfileUpdateAction
     public class Command : IRequest<Result>
     {
         public UserId UserId { get; }
-
-        [MinLength(DomainConstraints.NicknameLengthMinimum)]
-        [MaxLength(DomainConstraints.NicknameLengthMaximum)]
-        public Nickname? Nickname { get; }
-
+        public Nickname Nickname { get; }
         public bool? LikesPublished { get; }
 
-        public Command(UserId userId, Nickname? nickname, bool? likesPublished)
+        public Command(UserId userId, Nickname nickname, bool? likesPublished)
         {
             UserId = userId;
             Nickname = nickname;
@@ -74,9 +70,9 @@ public class ProfileUpdateAction
 
         private static void ApplyUpdates(User user, Command request)
         {
-            if (request.Nickname.HasValue)
+            if (request.Nickname != user.Nickname)
             {
-                user.Nickname = request.Nickname.Value;
+                user.Nickname = request.Nickname;
             }
             if (request.LikesPublished.HasValue)
             {

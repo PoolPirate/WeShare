@@ -23,6 +23,8 @@ public static class DomainConstraints
 
     public const int ShareReadmeLengthMaximum = 4096;
 
+    public const int ShareFilterNameLengthMaximum = 24;
+
     public const int ShareSecretLength = 32;
 
     public const int PostDataSizeMaximum = 1024 * 1024 * 10; //10MB

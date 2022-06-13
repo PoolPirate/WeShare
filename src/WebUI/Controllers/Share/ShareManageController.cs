@@ -13,7 +13,7 @@ public class ShareManageController : ExtendedControllerBase
         CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new ShareCreateAction
-            .Command(new UserId(userId), Sharename.From(createForm.Name), createForm.IsPrivate,
+            .Command(new UserId(userId), ShareName.From(createForm.Name), createForm.IsPrivate,
                      createForm.Description, createForm.Readme), cancellationToken);
 
         return result.Status switch
@@ -29,7 +29,7 @@ public class ShareManageController : ExtendedControllerBase
         CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new ShareUpdateAction
-            .Command(new ShareId(shareId), updateForm.Name is not null ? Sharename.From(updateForm.Name) : null,
+            .Command(new ShareId(shareId), updateForm.Name is not null ? ShareName.From(updateForm.Name) : null,
                      updateForm.Description, updateForm.Readme), cancellationToken);
 
         return result.Status switch

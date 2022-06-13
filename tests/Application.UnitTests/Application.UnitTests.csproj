@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <RootNamespace>CleanArchitecture.Application.UnitTests</RootNamespace>
-        <AssemblyName>CleanArchitecture.Application.UnitTests</AssemblyName>
+        <RootNamespace>WeShare.Application.UnitTests</RootNamespace>
+        <AssemblyName>WeShare.Application.UnitTests</AssemblyName>
 
         <IsPackable>false</IsPackable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -27,7 +27,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Common\Behaviours\" />
       <Folder Include="Common\Mappings\" />
     </ItemGroup>
 

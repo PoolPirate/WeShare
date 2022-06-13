@@ -13,7 +13,7 @@ public class ProfileManageController : ExtendedControllerBase
         CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new ProfileUpdateAction
-            .Command(new UserId(userId), Nickname.From(profileUpdateForm.Nickname), profileUpdateForm.LikesPublished), cancellationToken);
+            .Command(new UserId(userId), Nickname.From(profileUpdateForm.Nickname ?? String.Empty), profileUpdateForm.LikesPublished), cancellationToken);
 
         return result.Status switch
         {

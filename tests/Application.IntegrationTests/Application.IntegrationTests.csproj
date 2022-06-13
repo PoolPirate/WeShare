@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <RootNamespace>CleanArchitecture.Application.IntegrationTests</RootNamespace>
-        <AssemblyName>CleanArchitecture.Application.IntegrationTests</AssemblyName>
+        <RootNamespace>WeShare.Application.IntegrationTests</RootNamespace>
+        <AssemblyName>WeShare.Application.IntegrationTests</AssemblyName>
 
         <IsPackable>false</IsPackable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -34,6 +34,12 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\WebUI\WebAPI.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Actions\PostFilters\nameschema.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

@@ -10,6 +10,7 @@ public interface IShareContext
 {
     DbSet<User> Users { get; }
     DbSet<Share> Shares { get; }
+    DbSet<PostFilter> PostFilters { get; }
     DbSet<Like> Likes { get; }
     DbSet<Callback> Callbacks { get; }
     DbSet<Post> Posts { get; }
