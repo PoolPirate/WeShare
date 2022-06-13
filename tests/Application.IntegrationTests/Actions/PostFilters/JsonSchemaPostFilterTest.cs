@@ -10,8 +10,8 @@ public class JsonSchemaPostFilterTest : TestBase
 {
     private readonly string TestJsonSchema = File.ReadAllText("Actions\\PostFilters\\nameschema.json");
 
-    private string TestJson = "{\"firstName\": \"John\",\"lastName\": \"Doe\",\"age\": 21}";
-    private string InvalidTestJson = "{\"firstName\": \"John\",\"lastName\": \"Doe\",\"age\": -1}";
+    private readonly string TestJson = "{\"firstName\": \"John\",\"lastName\": \"Doe\",\"age\": 21}";
+    private readonly string InvalidTestJson = "{\"firstName\": \"John\",\"lastName\": \"Doe\",\"age\": -1}";
 
     [Test]
     public async Task TestValidSchema()
