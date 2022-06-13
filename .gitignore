@@ -6,6 +6,7 @@
 # Config Files
 src/WebUI/appsettings.Development.json
 src/WebUI/appsettings.Production.json
+tests/Application.IntegrationTests/appsettings.json
 
 # User-specific files
 *.rsuser
@@ -365,3 +366,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
