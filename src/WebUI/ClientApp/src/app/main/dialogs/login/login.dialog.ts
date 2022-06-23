@@ -2,6 +2,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { FormControl, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
+import { Router } from "@angular/router";
 import { AuthService } from "../../../../services/authservice";
 
 @Component({
@@ -17,7 +18,7 @@ export class LoginDialog {
   ranForPassword: string = "";
   errorCode: number = 0;
 
-  constructor(private authService: AuthService,
+  constructor(private authService: AuthService, private router: Router,
     private dialogRef: MatDialogRef<LoginDialog>) {
     this.username = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]);
     this.password = new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(64)]);
@@ -53,5 +54,9 @@ export class LoginDialog {
       }, (error: HttpErrorResponse) => {
         this.errorCode = error.status;
       });
+  }
+
+  close() {
+    this.dialogRef.close();
   }
 }
