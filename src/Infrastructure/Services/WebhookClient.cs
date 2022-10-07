@@ -69,7 +69,7 @@ public class WebhookClient : Singleton, IWebhookClient
             }
             if (header.Key == "Content-Type")
             {
-                request.Content.Headers.ContentType = new MediaTypeHeaderValue(header.Value.First());
+                request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(header.Value.First());
                 continue;
             }
 
