@@ -14,6 +14,7 @@ using WeShare.Infrastructure;
 using WeShare.Infrastructure.Options;
 using WeShare.Infrastructure.Persistence;
 using WeShare.WebAPI.Filters;
+using WeShare.WebAPI.Options;
 using WeShare.WebAPI.Services.Configuration;
 using WeShare.WebUI.Filters;
 
@@ -118,7 +119,9 @@ public class Startup
         app.UseHangfireDashboard(options: new DashboardOptions()
         {
             Authorization = new[] { new HangfireDashboardAuthorizationFilter() },
-            IsReadOnlyFunc = _ => env.IsProduction()
+            IsReadOnlyFunc = 
+                ctx => HangfireDashboardAuthorizationFilter.AllowWriteAccess(
+                    ctx, app.ApplicationServices.GetRequiredService<AuthorizationOptions>(), env.IsProduction())
         });
 
         app.UseRouting();
