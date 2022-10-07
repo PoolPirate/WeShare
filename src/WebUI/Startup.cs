@@ -13,6 +13,7 @@ using WeShare.Application.Common.Security;
 using WeShare.Infrastructure;
 using WeShare.Infrastructure.Options;
 using WeShare.Infrastructure.Persistence;
+using WeShare.WebAPI.Filters;
 using WeShare.WebAPI.Services.Configuration;
 using WeShare.WebUI.Filters;
 
@@ -114,7 +115,11 @@ public class Startup
             settings.DocumentPath = "/api/specification.json";
         });
 
-        app.UseHangfireDashboard();
+        app.UseHangfireDashboard(options: new DashboardOptions()
+        {
+            Authorization = new[] { new HangfireDashboardAuthorizationFilter() },
+            IsReadOnlyFunc = _ => env.IsProduction()
+        });
 
         app.UseRouting();
 

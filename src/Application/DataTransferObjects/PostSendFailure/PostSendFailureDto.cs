@@ -25,6 +25,7 @@ public class PostSendFailureDto : IMapFrom<PostSendFailure>
                 {
                     PostSendFailureType.InternalError => new PostSendFailureDto(postSendFailure.Type, postSendFailure.CreatedAt),
                     PostSendFailureType.Webhook => context.Mapper.Map<WebhookPostSendFailureDto>((WebhookPostSendFailure)postSendFailure),
+                    PostSendFailureType.MessagerDiscord => context.Mapper.Map<DiscordPostSendFailureDto>((DiscordPostSendFailure)postSendFailure),
                     _ => throw new NotImplementedException(),
                 });
 

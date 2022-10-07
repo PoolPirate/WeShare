@@ -53,7 +53,9 @@ public sealed class PostPublisher<TSubsbcription> : Scoped
             MaxDegreeOfParallelism = Publisher.DegreeOfParallelism,
         };
 
-        await Parallel.ForEachAsync(await GetTargetSubscriptionChunks(postId, post.CreatedAt, post.ShareId, cancellationToken), options,
+        var subscriptionChunks = await GetTargetSubscriptionChunks(postId, post.CreatedAt, post.ShareId, cancellationToken);
+
+        await Parallel.ForEachAsync(subscriptionChunks, options,
             (subscribers, cancellationToken) => PublishToSubscriberChunkAsync(post, content, subscribers, cancellationToken));
 
         if (RequiresRetry)

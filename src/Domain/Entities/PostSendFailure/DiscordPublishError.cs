@@ -4,5 +4,6 @@ public enum DiscordPublishError
     DiscordUnresponsive,
     MissingRecipient,
     ChannelInaccessible,
+    RateLimitHit,
 }
 

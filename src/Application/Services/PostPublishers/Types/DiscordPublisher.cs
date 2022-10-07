@@ -1,5 +1,6 @@
 ﻿using Common.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using WeShare.Domain.Entities;
 
 namespace WeShare.Application.Services.PostPublishers.Types;
@@ -57,7 +58,7 @@ public class DiscordPublisher : Scoped, ISusbcriptionPostPublisher<DiscordSubscr
                 sentPost.SetFailed();
                 return false;
             case DiscordStatus.RateLimited:
-                DbContext.PostSendFailures.Add(PostSendFailure.CreateInternalError(sentPost.PostId, sentPost.SubscriptionId));
+                DbContext.PostSendFailures.Add(DiscordPostSendFailure.Create(sentPost.PostId, sentPost.SubscriptionId, DiscordPublishError.RateLimitHit));
                 requiresRetry = true;
                 return false;
             case DiscordStatus.Unavailable:
