@@ -83,7 +83,7 @@ public class GetSubscriptionReceivedPostSnippetsPaginated
 
             foreach (var item in postSendInfos.Items)
             {
-                item.PostSendFailures = postSendfailureDtos.Single(x => x.Key.Value == item.PostSnippet.Id).DTOs;
+                item.PostSendFailures = postSendfailureDtos.SingleOrDefault(x => x.Key.Value == item.PostSnippet.Id)?.DTOs ?? new List<object>();
             }
 
             return new Result(Status.Success, postSendInfos);
