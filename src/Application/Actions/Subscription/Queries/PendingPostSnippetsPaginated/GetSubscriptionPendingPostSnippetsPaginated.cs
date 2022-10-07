@@ -60,6 +60,7 @@ public class GetSubscriptionPendingPostSnippetsPaginated
             var postSendInfos = await DbContext.SentPosts
                 .Where(x => x.SubscriptionId == request.SubscriptionId)
                 .Where(x => !x.Received)
+                .OrderByDescending(x => x.PostId)
                 .ProjectTo<PostSendInfoDto>(Mapper.ConfigurationProvider)
                 .PaginatedListAsync(request.Page, request.PageSize, cancellationToken);
 
@@ -76,7 +77,6 @@ public class GetSubscriptionPendingPostSnippetsPaginated
             var postSendfailures = await DbContext.PostSendFailures
                 .Where(x => postIds.Contains(x.PostId))
                 .Where(x => x.SubscriptionId == request.SubscriptionId)
-                .Where(x => !x.SentPost!.Received)
                 .ToListAsync(cancellationToken);
 
             var postSendfailureDtos = postSendfailures.GroupBy(x => x.PostId)
@@ -85,7 +85,7 @@ public class GetSubscriptionPendingPostSnippetsPaginated
 
             foreach (var item in postSendInfos.Items)
             {
-                item.PostSendFailures = postSendfailureDtos.Single(x => x.Key.Value == item.PostSnippet.Id).DTOs;
+                item.PostSendFailures = postSendfailureDtos.SingleOrDefault(x => x.Key.Value == item.PostSnippet.Id)?.DTOs ?? new List<object>();
             }
 
             return new Result(Status.Success, postSendInfos);
