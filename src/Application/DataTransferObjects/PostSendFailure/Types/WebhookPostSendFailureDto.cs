@@ -10,7 +10,7 @@ public class WebhookPostSendFailureDto : PostSendFailureDto, IMapFrom<PostSendFa
     public int ResponseLatency { get; set; }
 
     public WebhookPostSendFailureDto(HttpStatusCode? statusCode, int responseLatency, DateTimeOffset createdAt)
-        : base(createdAt)
+        : base(PostSendFailureType.Webhook, createdAt)
     {
         StatusCode = statusCode;
         ResponseLatency = responseLatency;

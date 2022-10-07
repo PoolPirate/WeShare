@@ -6,10 +6,13 @@ namespace WeShare.Application.DTOs;
 
 public class PostSendFailureDto : IMapFrom<PostSendFailure>
 {
-    public DateTimeOffset CreatedAt { get; set; }
+    public PostSendFailureType Type { get; private set; }
 
-    public PostSendFailureDto(DateTimeOffset createdAt)
+    public DateTimeOffset CreatedAt { get; private set; }
+
+    public PostSendFailureDto(PostSendFailureType type, DateTimeOffset createdAt)
     {
+        Type = type;
         CreatedAt = createdAt;
     }
     public PostSendFailureDto()
@@ -20,7 +23,7 @@ public class PostSendFailureDto : IMapFrom<PostSendFailure>
             .ConstructUsing((postSendFailure, context)
                 => postSendFailure.Type switch
                 {
-                    PostSendFailureType.InternalError => context.Mapper.Map<PostSendFailureDto>(postSendFailure),
+                    PostSendFailureType.InternalError => new PostSendFailureDto(postSendFailure.Type, postSendFailure.CreatedAt),
                     PostSendFailureType.Webhook => context.Mapper.Map<WebhookPostSendFailureDto>((WebhookPostSendFailure)postSendFailure),
                     _ => throw new NotImplementedException(),
                 });
