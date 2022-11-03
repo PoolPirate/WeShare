@@ -14,7 +14,7 @@ public class WebhookPublisher : Scoped, ISusbcriptionPostPublisher<WebhookSubscr
     [Inject]
     private readonly IWebhookClient WebhookClient = null!;
 
-    public async Task<bool> TryPublishPostToSubscriberAsync(Post post, PostContent content, WebhookSubscription subscription, SentPost sentPost, 
+    public async Task<bool> TryPublishPostToSubscriberAsync(Share share, Post post, PostContent content, WebhookSubscription subscription, SentPost sentPost, 
         CancellationToken cancellationToken)
     {
         if (sentPost.Attempts > MaxAttempts)

@@ -9,6 +9,6 @@ public interface ISusbcriptionPostPublisher<TSubscription> : IService
     int ChunkSize { get; }
     int DegreeOfParallelism { get; }
 
-    Task<bool> TryPublishPostToSubscriberAsync(Post post, PostContent content, TSubscription subscription, SentPost sentPost,
+    Task<bool> TryPublishPostToSubscriberAsync(Share share, Post post, PostContent content, TSubscription subscription, SentPost sentPost,
         CancellationToken cancellationToken);
 }

@@ -31,6 +31,7 @@ public sealed class PostPublisher<TSubsbcription> : Scoped
     {
         var post = await DbContext.Posts
                .AsNoTracking()
+               .Include(x => x.Share)
                .Where(x => x.Id == postId)
                .SingleOrDefaultAsync(cancellationToken);
 
@@ -38,6 +39,13 @@ public sealed class PostPublisher<TSubsbcription> : Scoped
         {
             Logger.LogError("Error while publishing post to {subscriberType}s. Post not found: PostId={postId}", nameof(TSubsbcription), postId);
             return;
+        }
+
+        var share = post.Share;
+
+        if (share is null)
+        {
+            throw new InvalidOperationException($"Loading share for post failed: PostId={post.Id} ShareId={post.ShareId}");
         }
 
         var content = await PostStorage.LoadAsync(post.Id, cancellationToken);
@@ -56,7 +64,7 @@ public sealed class PostPublisher<TSubsbcription> : Scoped
         var subscriptionChunks = await GetTargetSubscriptionChunks(postId, post.CreatedAt, post.ShareId, cancellationToken);
 
         await Parallel.ForEachAsync(subscriptionChunks, options,
-            (subscribers, cancellationToken) => PublishToSubscriberChunkAsync(post, content, subscribers, cancellationToken));
+            (subscribers, cancellationToken) => PublishToSubscriberChunkAsync(share, post, content, subscribers, cancellationToken));
 
         if (RequiresRetry)
         {
@@ -73,7 +81,7 @@ public sealed class PostPublisher<TSubsbcription> : Scoped
         }
     }
 
-    private async ValueTask PublishToSubscriberChunkAsync(Post post, PostContent postContent, TSubsbcription[] subscriptions,
+    private async ValueTask PublishToSubscriberChunkAsync(Share share, Post post, PostContent postContent, TSubsbcription[] subscriptions,
         CancellationToken cancellationToken)
     {
         using var scope = Provider.CreateScope();
@@ -97,7 +105,7 @@ public sealed class PostPublisher<TSubsbcription> : Scoped
 
                 sentPost.IncrementAttempts();
 
-                bool success = await chunkPublisher.TryPublishPostToSubscriberAsync(post, postContent, subscription, sentPost, cancellationToken);
+                bool success = await chunkPublisher.TryPublishPostToSubscriberAsync(share, post, postContent, subscription, sentPost, cancellationToken);
 
                 if (!success)
                 {

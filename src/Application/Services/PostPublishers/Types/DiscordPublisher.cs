@@ -1,6 +1,7 @@
 ﻿using Common.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using WeShare.Application.Entities;
 using WeShare.Domain.Entities;
 
 namespace WeShare.Application.Services.PostPublishers.Types;
@@ -15,7 +16,7 @@ public class DiscordPublisher : Scoped, ISusbcriptionPostPublisher<DiscordSubscr
     [Inject]
     private readonly IShareContext DbContext = null!;
 
-    public async Task<bool> TryPublishPostToSubscriberAsync(Post post, PostContent content, DiscordSubscription subscription, SentPost sentPost,
+    public async Task<bool> TryPublishPostToSubscriberAsync(Share share, Post post, PostContent content, DiscordSubscription subscription, SentPost sentPost,
         CancellationToken cancellationToken)
     {
         var recipientsResponse = await DiscordClient.GetDMChannelRecipientsAsync(subscription.ChannelId, cancellationToken);
@@ -35,7 +36,14 @@ public class DiscordPublisher : Scoped, ISusbcriptionPostPublisher<DiscordSubscr
             return false;
         }
 
-        var sendResponse = await DiscordClient.SendMessageAsync(subscription.ChannelId, $"New Post: https://we-share-live.de/post/{post.Id}", cancellationToken);
+        var embed = new DiscordEmbed()
+        {
+            Title = share.Name.Value,
+            Description = "A new post was uploaded!",
+            URL = "https://we-share-live.de/post/{post.Id}"
+        };
+
+        var sendResponse = await DiscordClient.SendMessageAsync(subscription.ChannelId, embed, cancellationToken);
         if (!HandleMessageSendResponse(sendResponse.Status, sentPost, out requiresRetry))
         {
             return !requiresRetry;

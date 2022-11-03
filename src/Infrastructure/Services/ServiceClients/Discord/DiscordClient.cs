@@ -1,6 +1,7 @@
 ﻿using Common.Services;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using WeShare.Application.Entities;
 using WeShare.Application.Services;
 using WeShare.Domain.Entities;
 using WeShare.Infrastructure.Extensions;
@@ -60,15 +61,15 @@ public class DiscordClient : Singleton, IDiscordClient
             : DiscordResponse<IList<DiscordId>>.FromTimeout();
     }
 
-    public async Task<DiscordResponse> SendMessageAsync(DiscordId channelId, string message, CancellationToken cancellationToken)
+    public async Task<DiscordResponse> SendMessageAsync(DiscordId channelId, DiscordEmbed content, CancellationToken cancellationToken)
     {
         var request = new HttpRequestMessage(HttpMethod.Post, DiscordRoutes.CreateMessage(channelId));
         request.Headers.Authorization = new AuthenticationHeaderValue("Bot", ExternalServicesOptions.WeShareDiscordBotToken);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-        request.Content = JsonContent.Create(new Dictionary<string, string>()
+        request.Content = JsonContent.Create(new Dictionary<string, object>()
         {
-            ["content"] = message,
+            ["embed"] = content,
         });
 
         var (received, response) = await HttpClient.SendSafeAsync(request, cancellationToken);
