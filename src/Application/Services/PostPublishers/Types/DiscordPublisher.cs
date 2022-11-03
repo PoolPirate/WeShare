@@ -40,7 +40,7 @@ public class DiscordPublisher : Scoped, ISusbcriptionPostPublisher<DiscordSubscr
         {
             Title = share.Name.Value,
             Description = "A new post was uploaded!",
-            URL = "https://we-share-live.de/post/{post.Id}"
+            URL = $"https://we-share-live.de/post/{post.Id}"
         };
 
         var sendResponse = await DiscordClient.SendMessageAsync(subscription.ChannelId, embed, cancellationToken);
